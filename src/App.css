@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+*{
+    font-family: "DM Sans", sans-serif;
+    font-size: 12px;
+}
+
+h2,h3 {
+	font-weight:500;
+  }
+
+.App-header {
+  padding-left:80px;
+  padding-bottom:20px;
+  align-items: center;
+  justify-content: center;
+  color: black;
+}
+
+.MessageError {
+  color: red;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.MessageSuccess {
+  color: green;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.MessageWarning {
+  color: orange;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.MessageInfo {
+  color: blue;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.MessageDebug {
+  color: purple;
+  font-weight: bold;
+  font-size: 1.2em;
+}
