@@ -15,21 +15,30 @@ export function PageExamples() {
 
   const [showModal, setShowModal] = useState(false);
 
-  const [typeModal, seTypeModal] = useState(1);
+  const [typeModal, setTypeModal] = useState(1);
 
-  const [textModal, seTextModal] = useState('Podemos Cancelar, o podemos Aceptar 👇');
+  const [tituloModal, settituloModal] = useState('');
+  
+  const [subtituloModal, setSubTituloModal] = useState('');
 
   const openAlertModal = () => {
-    seTypeModal(1);
-    seTextModal('Podemos Cancelar, o podemos Aceptar 👇');
+    setTypeModal(1);
+    setSubTituloModal('Podemos Cancelar, o podemos Aceptar 👇');
+    settituloModal('Alert! 👋');
     setShowModal(prev => !prev);
   };
 
   const openErrorModal = () => {
-    seTypeModal(2);
-    seTextModal('Ocurrio un error');
+    setTypeModal(2);
+    setSubTituloModal('Ocurrio un error');
+    settituloModal('Error! ☠️');
     setShowModal(prev => !prev);
+
   };
+  function clickHandler() {
+    setShowModal(prev => !prev);
+    console.log('click');
+  }
 
   return (
     <>
@@ -39,7 +48,7 @@ export function PageExamples() {
 
       <button className="BtnPrincipal" onClick={openErrorModal}>👋 I'm Error modal</button>
       
-      <Modal showModal={showModal} setShowModal={setShowModal} type={typeModal} text={textModal} />
+      <Modal showModal={showModal} setShowModal={setShowModal} type={typeModal} titulo={tituloModal} subtitulo={subtituloModal} clickHandler={clickHandler}/>
 
       </Container>
     </>

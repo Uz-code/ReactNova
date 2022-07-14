@@ -5,15 +5,19 @@ import { Link } from 'react-router-dom';
 
 const SubMenu = ( { item , index, sidebarState } ) => {
 	
+const [classToggle, setclassToggle] = useState(false);
+
+const ToggleSwitch = (  ) => { setclassToggle(!classToggle); }
+
 const [subnav, setSubnav] = useState(false);
 	  
-const showSubNav = () => setSubnav(!subnav);
+const showSubNav = (  ) => { setSubnav(!subnav); }
 	
 	if (Object.keys(item.subNav).length > 0 )
 	{ 
 		return  (
 			
-			<li key={index} className="item">
+			<li key={index} className={classToggle ? 'item active ' : 'item '} onClick={ToggleSwitch} >
 				{/*<a onClick = {item.subNav && sidebarState && showSubNav } >*/}
 				<a onClick = {item.subNav.length > 0 && showSubNav } >
 				<i>{item.icon}</i>	
@@ -39,7 +43,7 @@ const showSubNav = () => setSubnav(!subnav);
 	}else{ 
 	
 		return  (
-			<li key={index} className="item">
+			<li key={index} className={classToggle ? 'item active' : 'item '} onClick={ToggleSwitch} >
 				<Link to={item.path} >
 				<i>{item.icon}</i>	
 				  <span className="links_name">{item.title}</span>
