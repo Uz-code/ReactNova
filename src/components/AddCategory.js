@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 
-export const AddFilter = ({ onNewCategory }) => {
+export const AddCategory = ({ onNewCategory }) => {
 
     const [ inputValue, setInputValue ] = useState('');
 
@@ -14,7 +14,7 @@ export const AddFilter = ({ onNewCategory }) => {
         //if( inputValue.trim().length <= 0) return;
 
         // setCategories( categories => [ inputValue, ...categories ]);
-       //setInputValue('');
+        setInputValue('');
         onNewCategory( inputValue.trim() );
     }
 
@@ -22,16 +22,9 @@ export const AddFilter = ({ onNewCategory }) => {
         <form onSubmit={ onSubmit }>
             <input 
                 type="text"
-                placeholder="Buscar..."
+                placeholder="Buscar gifs"
                 value={ inputValue }
                 onChange={ onInputChange }
-            />
-            
-            <input 
-                className="button btn-submit" 
-                type="submit"
-                value="Filtrar"
-                placeholder="Buscar"
             />
         </form>
     )

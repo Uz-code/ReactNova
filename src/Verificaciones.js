@@ -20,7 +20,7 @@ const foo = function() {
 					</div>
 				   <div>
 					  <div >
-						Click
+					  	Verificadores
 					  </div>
 					</div>
 				</div>

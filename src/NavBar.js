@@ -1,87 +1,70 @@
 import React, { useState } from 'react';
-import './NavBar.css';
 
-import * as FaIcons from 'react-icons/fa';
-import * as AiIcons from 'react-icons/ai';
-//import { Link } from 'react-router-dom';
-import { SidebarData } from './SidebarData';
+import * as RiIcons from 'react-icons/ri';
 
-import { IconContext } from 'react-icons';
+import Navbar2 from './NavBar2';
 
- export const Navbar = () => {
-	  
-  const showSidebar = () => setSidebar(!sidebar);
-  
-  const [sidebar, setSidebar] = useState(false);
+import { Link } from 'react-router-dom';
 
-  const showRecursos = () => setRecursos(!recursos);
-  
-  const [recursos, setRecursos] = useState(false);
+export const Navbar = ({sidebar}) => {
 
-  const [categories,setCategories] = useState([]);
- 
- 
-    return (
-        < >  
-	<div className={sidebar ? 'left-bar left-bar-active' : 'left-bar'} >
-    <div className="upper-part">
-      <div className="actions" onClick={showSidebar}>
-        <div className=""></div>
-        <div className="circle-2"></div>
+const [menuType, setMenuType] = useState(1);
+
+  return (
+    <>
+      <div className="NavigationBar" >
+        <div className={`SideNavBar`}>
+
+          <ul  className='nav-list category-list'> 
+            <Link to={"./"}  >
+            <li key ='1' className={`NavItem ${menuType == 1 && 'nav-active ' }`} onClick={() => {setMenuType(1)}} >	
+                <i className={`NavItem ${menuType == 1 ? 'icon-active' : 'inactive'  }`} > <RiIcons.RiHomeLine /></i>	
+                <span className="tooltip inactive">Inicio</span>
+            </li>
+            </Link>
+
+            <li key ='2' className={`NavItem ${menuType == 2 && 'nav-active '  }`} onClick={() => {setMenuType(2)}} >
+              <i className={`NavItem ${menuType == 2 ? 'icon-active' : 'inactive'  }`} ><RiIcons.RiHomeLine /></i>	
+              <span className="tooltip">Recursos Asignados</span>
+            </li>
+
+            <Link to={"./Verificaciones"}  >
+              <li key ='3' className={`NavItem ${menuType == 3 && 'nav-active ' }`} onClick={() => {setMenuType(3)}} >
+              <i className={`NavItem ${menuType == 3 ? 'icon-active' : 'inactive'  }`} ><RiIcons.RiHomeLine /></i>	
+              <span className="tooltip inactive">Verificaciones</span>
+              </li>
+            </Link>
+
+            <li key ='4' className={`NavItem ${menuType == 4 && 'nav-active ' }`}onClick={() => {setMenuType(4)}} >
+            <i className={`NavItem ${menuType == 4 && 'icon-active ' }`} ><RiIcons.RiHomeLine /></i>	
+            </li>
+
+            <li key ='5' className={`NavItem ${menuType == 5 && 'nav-active ' }`} onClick={() => {setMenuType(5)}} >
+            <i className={`NavItem ${menuType == 5 && 'icon-active ' }`} ><RiIcons.RiHomeLine /></i>	
+            </li>
+
+            <li key ='6' className={`NavItem ${menuType == 6 && 'nav-active ' }`}  onClick={() => {setMenuType(6)}} >
+            <i className={`NavItem ${menuType == 6 && 'icon-active ' }`} ><RiIcons.RiHomeLine /></i>	
+            </li>
+
+            <li key ='7' className={`NavItem ${menuType == 7 && 'nav-active ' }`}  onClick={() => {setMenuType(7)}} >
+            <i className={`NavItem ${menuType == 7 && 'icon-active ' }`} ><RiIcons.RiHomeLine /></i>	
+            </li> 
+
+            <Link to={"./SettingsPage"} onClick={() => {setMenuType(8)}}>
+            <li key ='8' className={`NavItem ${menuType == 8 && 'nav-active ' }`} >	
+                <i className={`NavItem ${menuType == 8 ? 'icon-active' : 'inactive'  }`} > <RiIcons.RiHomeLine /></i>	
+                <span className="tooltip inactive">Settigs</span>
+            </li>
+            </Link>
+            
+          </ul>
+        </div>
       </div>
-    </div>
-    <div className={sidebar ? 'left-content left-content-active ' : 'left-content left-content-inactive'} >
-      <ul className={sidebar ? 'action-list action-list-active' : 'action-list action-list-inactive'} > 
-
-		
-		{SidebarData.map((item, index) => {
-			
-		  return (
-			<>
-				<li key={index} className="item">
-					{item.icon}
-					<span> {item.title}</span>
-				</li>
-		
-				
-			</>
-		  );
-		  
-		  
-		  
-		})}
-		
-      </ul>
-     <ul  className={sidebar ? 'category-list' : 'category-list category-list-inactive'} > 
-        <li className="item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-users">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          <span>Perfil</span>
-        </li>
-        <li className="item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="feather feather-sun" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="5"></circle>
-            <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
-          </svg>
-          <span>Configuracion</span>
-        </li>
-        <li className="item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-trending-up">
-            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-            <polyline points="17 6 23 6 23 12"></polyline></svg>
-          <span>Notificaciones</span>
-        </li>
-        <li className="item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-zap">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-          <span>Contactanos</span>
-        </li>
-      </ul>
-    </div>
-  </div>
-        </>
-    )
+      <Navbar2 
+        sidebar= { sidebar } 
+        MenuType= { menuType } 
+      />
+    </>
+  );
 }

@@ -13,9 +13,8 @@ const showSubNav = () => setSubnav(!subnav);
 	return  (
 		<>
 			<Link key={index} to={item.path} onClick = {item.subNav && showSubNav} >
-			  <span className="links_name">{item.title}</span>
+			  <span className="links_name">{item.title} {item.subNav.length > 0 && '...'} </span>
 			</Link>
-			
 			
 			{ item.subNav.length > 0 && subnav && item.subNav.map((item, index) => {
 			  return (

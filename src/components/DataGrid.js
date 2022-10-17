@@ -1,19 +1,20 @@
 import { TableItem } from './TableItem';
 import { useFetchData } from '../hooks/useFetchData.js';
 
-export const DataGrid = ({ category }) => {
+export const DataGrid = ({ category,limit , MaxItems }) => {
 
-    const { contacts, isLoading } = useFetchData( category );
+    const { contacts, isLoading } = useFetchData( category,limit );
     
+
     return (
         <>
-
-            {/*<tr className='active-row'>{ category }</tr>  */}
             {
-                isLoading && ( <td>Cargando...</td> )
+                isLoading && ( <tr className="center">Cargando...</tr> )
             }
                 
-            {  contacts.map( (contact) => (
+            {  
+            
+            contacts.map( (contact) => (
 
                 <TableItem 
                             key={ contact.id } 

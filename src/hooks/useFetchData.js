@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { getData } from '../helpers/getData';
 
-export const useFetchData = ( category ) => {
+export const useFetchData = ( category,limit ) => {
  
     
     const [contacts, setContacts] = useState([]);
     const [isLoading, setIsLoading] = useState( true );
 
     const getcontacts = async() => {
-        const newcontacts = await getData( category );
+        const newcontacts = await getData( category,limit );
         setContacts(newcontacts);
         setIsLoading(false);
     }
