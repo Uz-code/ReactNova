@@ -5,11 +5,13 @@ import { Navbar } from './NavBar';
 import { HomePage2 } from './HomePage';
 import { RecursosAsignados } from './RecursosAsignados';
 import { Verificaciones } from './Verificaciones';
-import { FormWithCustomHook } from './FormWithCustomHook';
 import { TablaFetchData } from './TablaFetchData';
 import { PageExamples } from './PageExamples';
 import { SettingsPage } from './SettingsPage';
-
+import { ReporteAuditoria } from './ReporteAuditoria';
+import {EditUser } from './EditUser';
+import {SearchForUser } from './SearchForUser';
+import  { PostData } from './PostData';
 import OutsideClick from "./hooks/outsideClick";
 
 import { BrowserRouter as Router,
@@ -42,15 +44,18 @@ const App = () => {
     <>
 	<Menu setSidebar={setSidebar} sidebar={sidebar} />	
 	 <Router>
-	  <Navbar sidebar={sidebar} />	
+	  <Navbar sidebar={sidebar} setSidebar={setSidebar} />	
 		<Routes>
 		<Route exact path= "/" element={<HomePage2 />} />
 		<Route exact path= "/RecursosAsignados" element={<RecursosAsignados />} />
 		<Route exact path= "/Verificaciones" element={<Verificaciones />} />
-		<Route exact path= "/FormWithCustomHook" element={<FormWithCustomHook />} />
 		<Route exact path= "/TablaFetchData" element={<TablaFetchData />} />
 		<Route exact path= "/PageExamples" element={<PageExamples />} />
 		<Route exact path= "/SettingsPage" element={<SettingsPage />} />
+		<Route exact path= "/ReporteAuditoria" element={<ReporteAuditoria />} />
+		<Route exact path= "/SearchForUser" element={<SearchForUser />} />
+		<Route exact path= "/EditUser" element={<EditUser />} />
+		<Route exact path= "/PostData" element={<PostData />} />
 		<Route
 			path="*"
 			element={

@@ -16,36 +16,37 @@ const showSubNav = (  ) => { setSubnav(!subnav); }
 	if (Object.keys(item.subNav).length > 0 )
 	{ 
 		return  (
-			
+			<>
 			<li key={index} className={classToggle ? 'item active ' : 'item '} onClick={ToggleSwitch} >
 				<a onClick = {item.subNav.length > 0 && showSubNav } >
 				  <span className="links_name negrita">{item.title}</span>
 				</a>
-				<div className={sidebarState ? 'subMenu SidebarData-active' : 'subMenu SidebarData-closed'} >
+			</li>
+
 					{ subnav && item.subNav.map((item, index) => {
 					
 					  return (
+						<li className={sidebarState ? 'subMenu SidebarData-active' : 'subMenu SidebarData-closed'} >
+
 						 <TercerNivelMenu 
 						  item= { item } 
 						  key= { index }
 						  />
+						</li>	
+
 					  );
 					  
 					})
 					}	
-				</div>	
-				<span className="tooltip">{item.title}</span>
-			</li>
+			</>
 		)
 	}else{ 
 	
 		return  (
 			<li key={index} className={classToggle ? 'item active' : 'item '} onClick={ToggleSwitch} >
 				<Link to={item.path} >
-				
 				  <span className="links_name negrita">{item.title}</span>
 				</Link>
-				<span className="tooltip">{item.title}</span>
 			</li>
 		)
 	}

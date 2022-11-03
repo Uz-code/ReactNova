@@ -80,7 +80,7 @@ transition: all 0.1s ease;
 }
 
 .sidebar .nav-list{
-  padding: 20px 25px 25px 25px;
+  padding: 20px 0px 0px 0px;
   height: 100%;
 }
 
@@ -125,9 +125,13 @@ color: black;
 }
 .sidebar li{
   position: relative;
-  /*margin: 8px 0;*/
+  padding: 0 25px 0 25px;
   list-style: none;
+  cursor: pointer;
 }
+/*.sidebar li:hover { 
+  background-color: #f5f5f5;
+}*/
 .sidebar li .tooltip{
   color:black;
   position: absolute;

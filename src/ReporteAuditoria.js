@@ -1,28 +1,19 @@
 import { AddFilter } from './components/AddFilter';
-import { DataGrid } from './components/DataGrid';
+import { DataList2 } from './components/DataList2';
 import React, { useState, useEffect , useReducer } from 'react';
 import { Modal } from './components/Modal';
-
-import { FormAltaUsuario } from './FormAltaUsuario';
-
 import { AlertComponent } from './components/AlertComponent';
-
-import { Navigate } from 'react-router'
-import { useNavigate } from 'react-router-dom';
-
-import './Tabla.css';
 import Pagination from './components/Pagination';
 
-export const TablaFetchData = () => {
+export const ReporteAuditoria = () => {
 
     const [ categories, setCategories ] = useState( '' );
 
     const onAddCategory = ( newCategory ) => {
-    //if ( categories.includes(newCategory) ) return;
             setCategories( newCategory );
     }
 
-    const [limit, setLimit] = useState('10');
+    const [limit, setLimit] = useState('5');
 
     const [maxResultados, setMaxResultados] = useState('0');
 
@@ -40,18 +31,23 @@ export const TablaFetchData = () => {
     
     const [MensajeAlerta, setMensajeAlerta] = useState('');
   
+    const [ComponentType , setComponentType] = useState(1);
+
     const [update, forceUpdate] = useReducer((x) => x + 1, 0);
+
+    const [totalPages, setTotalPages ] = useState(3);
 
     const [PaginaActual, setPaginaActual ] = useState(1);
 
-    const [currentPage, setCurrentPage ] = useState(1);
     
     const openModal = () => {
-      setShowModal(prev => !prev);
-    };
-   
-    const openErrorModal = ( value ) => {
-      
+        setComponentType(2); 
+        setShowModal(prev => !prev);
+      };
+  
+      const openErrorModal = ( value ) => {
+        
+        setComponentType(1);
         setTypeButtons(2);
         
         settituloAlerta('Error! ☠️');
@@ -59,74 +55,28 @@ export const TablaFetchData = () => {
   
         setShowModal(prev => !prev);
       };
-
-    const openOptionModal = ( value ) => {
-      
-        setTypeButtons(1);
-        
-        settituloAlerta('Alerta');
-        setMensajeAlerta(value);
-        
-        setShowModal(prev => !prev);
-      };
-
-
-
-    function AcceptHandler() {
-        //alert("usuario pepito eliminado exitosamente");
-
-        setShowModal(false);
-        forceUpdate(1);
-    }
-
-    function cancelHandler() {
-        setShowModal(false);
-    }
-
-    const [user, setUser] = useState(null);
-
-    const crearNuevo = (  ) => {
-        setshouldRedirect(true);
-    };
-
-    const [shouldRedirect, setshouldRedirect] = useState(false);
-    
-    useEffect ( () => {
-        if ( user != null ) {
-            navigateTo();
-        }
-    }, [user]) 
-
-    const PageComponent = () => {
-            
-        return <AlertComponent titulo={tituloAlerta} subtitulo={MensajeAlerta} type={typeButtons} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
-    }
-
-     let navigate = useNavigate();
-
-     function navigateTo() {
-
-        navigate('/EditUser',{state:{id:user}});
-
-    }
+  
+      function AcceptHandler() {
+          setShowModal(false);
+          forceUpdate(1);
+      }
+  
+      function cancelHandler() {
+          setShowModal(false);
+      }
 
     return (
         <>
        
-            <Modal showModal={showModal} setShowModal={setShowModal}  >
-                <PageComponent />
-            </Modal>
-                
+            <Modal showModal={showModal} setShowModal={setShowModal} Page={AlertComponent}  />
+
             <div className= "App-header">
                 <div className= "App-body">
                     <div className= "responsive-wrapper  container-fluid ">
                         <div className= "main-header">
                       
-                            <h1>Tabla de Usuarios</h1>
-                            <div className="button btn-submit" onClick={() => { navigate('/EditUser',{state:{id:0}}); }}> 
-                                <i className="ph-faders-bold"></i>
-                                <span>Crear Nuevo</span>
-                            </div>
+                            <h1>Reporte de Auditoria</h1>
+
                         </div>
                         
                         <div className="content VietnamPro-Font">
@@ -137,10 +87,6 @@ export const TablaFetchData = () => {
                                         <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
                                             <div className= "card shadow border-0 flex card-noheigth" >
 
-                                                {/*<button type='' className="BtnPrincipal" onClick={openModal}> Alet modal</button>*/}
-
-                                                {/*<button type='' className="BtnPrincipal" onClick={openErrorModal}> Error modal</button>*/}
-                                                
                                                 <div className="card-header">
                                                     <div>
                                                         <h3>Filtro</h3>
@@ -156,53 +102,7 @@ export const TablaFetchData = () => {
                                         </div>
                                     </div>
 
-                                    <div className= "row mb-6" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            
-                                            <div className= "card shadow border-0 flex" >
-                                            
-                                                <div className="card-header">
-                                                    <h5 className="mb-0">Usuarios</h5>
-                                                </div>
-                                               
-                                                <table className="table ">
-                                                    <thead className="thead-light">
-                                                        <tr>
-                                                            <th scope="col">Nombre</th>
-                                                            <th scope="col">Direccion</th>
-                                                            <th scope="col">Genero</th>
-                                                            <th scope="col">E-mail</th>
-                                                            <th></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody className='table-body'>
-                                                    { 
-                                                        <DataGrid 
-                                                            key={ categories } 
-                                                            category={ categories }
-                                                            limit={ limit } 
-                                                            setMaxResultados={ setMaxResultados } 
-                                                            PaginaActual={ PaginaActual }
-                                                            forceUpdate = { update }
-                                                            onError={ (value) => openErrorModal(value) }
-                                                            setUser = {setUser}
-                                                            onDelete = { (value) => openOptionModal(value) }
-
-                                                        />
-                                                    }
-                                                    </tbody>
-                                                </table>
-
-                                                <div className="card-footer footer-start">
-                                                    <span className="text-muted text-sm">Mostrando {limit > maxResultados ? maxResultados : limit } items de {maxResultados} resultados encontrados</span>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div className= "row g-6 mb-6" style={{ display: "flex", flexDirection: "row" }}>
+                                    <div className= "row g-6 mb-6 mh-1" style={{ display: "flex", flexDirection: "row" }}>
                                         <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
                                             
                                             <div className= "card shadow border-0 flex card-noheigth" >
@@ -211,10 +111,64 @@ export const TablaFetchData = () => {
 
                                                     <Pagination
                                                     className="pagination-bar"
-                                                    currentPage={currentPage}
+                                                    currentPage={PaginaActual}
                                                     totalCount={maxResultados}
                                                     pageSize={limit}
-                                                    onPageChange={page => setCurrentPage(page)}
+                                                    onPageChange={page => setPaginaActual(page)}
+                                                    siblingCount={1}
+                                                    />
+
+                                                    </nav>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div className= "row mb-6 mh-5" style={{ display: "flex", flexDirection: "row" }}>
+                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
+                                            
+                                            <div className= "card shadow border-0 flex" >
+                                                <div className="card-body" >
+
+                                                { 
+                                                    <DataList2
+                                                        key={ categories } 
+                                                        category={ categories }
+                                                        limit={ limit } 
+                                                        setMaxResultados={ setMaxResultados } 
+                                                        PaginaActual={ PaginaActual }
+                                                        forceUpdate = { update }
+                                                        onError={ (value) => openErrorModal(value) }
+                                                        cardSize={1}
+                                                    />
+                                                }
+                                                </div>
+
+                                                <div className="card-footer footer-start">
+                                                    <span className="text-muted text-sm">Mostrando {limit > maxResultados ? maxResultados : limit } items de {maxResultados} resultados encontrados</span>
+                                                </div>
+
+                                            </div>
+
+                                            
+
+                                        </div>
+                                    </div>
+
+                                    <div className= "row g-6 mb-6 mh-1" style={{ display: "flex", flexDirection: "row" }}>
+                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
+                                            
+                                            <div className= "card shadow border-0 flex card-noheigth" >
+                                                <div className="card-header">
+                                                    <nav aria-label="">
+
+                                                    <Pagination
+                                                    className="pagination-bar"
+                                                    currentPage={PaginaActual}
+                                                    totalCount={maxResultados}
+                                                    pageSize={limit}
+                                                    onPageChange={page => setPaginaActual(page)}
                                                     siblingCount={1}
                                                     />
 

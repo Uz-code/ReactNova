@@ -3,20 +3,33 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 
-const TercerNivelMenu = ( { item , index , sidebarState} ) => {
+const TercerNivelMenu = ( { item , index } ) => {
 	
 const [subnav, setSubnav] = useState(false);
 	  
 const showSubNav = () => setSubnav(!subnav);
 
-
-	return  (
-		<>
-			<Link key={index} to={item.path} onClick = {item.subNav && showSubNav} >
-			  <span className="links_name">{item.title} {item.subNav.length > 0 && '...'} </span>
+	if( item.subNav.length <= 0 ) {
+		return  (
+			<>
+			<Link to={item.path}  key={index} className={subnav ? 'item active' : 'item '}  >
+				<a>
+				  <span className="links_name ">{item.title}</span>	
+				</a>
 			</Link>
+			</>
+		)
+	}else{
+		return  (
+			<>
+			<div key={index} onClick={item.subNav && showSubNav} className='negrita flex' >
+				<a onClick = {showSubNav } >
+				<span className="links_name ">{item.title}</span>	
+				<span className={subnav ? 'filter-small rotation-180' : 'filter-small '} ></span>	
+				</a>
+			</div>
 			
-			{ item.subNav.length > 0 && subnav && item.subNav.map((item, index) => {
+			{  subnav && item.subNav.map((item, index) => {
 			  return (
 				<>
 				<div className="tercerNivel">
@@ -31,7 +44,9 @@ const showSubNav = () => setSubnav(!subnav);
 			}
 
 		</>
-	)
+		)
+	}
+
 }
 
 export default TercerNivelMenu

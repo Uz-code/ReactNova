@@ -14,8 +14,7 @@ const Background = styled.div`
 
 const ModalWrapper = styled.div`
   width: 470px;
-  height: 100%;
-  padding:20px;
+  height: 220px;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.1);
   background: #fff;
   color: #000;
@@ -24,6 +23,7 @@ const ModalWrapper = styled.div`
   position: relative;
   z-index: 10;
   border-radius: 1rem;
+  
 `;
 
 const ModalImg = styled.img`
@@ -58,7 +58,7 @@ const CloseModalButton = styled.div`
   z-index: 10;
 `;
 
-export const Modal = ({ showModal, setShowModal, children}) => {
+export const Modal = ({ showModal, setShowModal , type , titulo, subtitulo, clickHandler}) => {
   const modalRef = useRef();
 
   const animation = useSpring({
@@ -66,7 +66,7 @@ export const Modal = ({ showModal, setShowModal, children}) => {
       duration:150
     },
     opacity: showModal ? 1 : 1,
-    transform: showModal ? `translateY(-90%)` : `translateY(-80%)`
+    transform: showModal ? `translateY(-15%)` : `translateY(-20%)` ? `translateY(-0%)` : `translateY(-10%)`
     
   });
 
@@ -99,9 +99,44 @@ export const Modal = ({ showModal, setShowModal, children}) => {
         <Background onClick={closeModal} ref={modalRef}>
           <animated.div style={animation}>
             <ModalWrapper showModal={showModal}>
+
               <ModalContent>
-                  {children}
-               </ModalContent>
+              <component/>
+                <h1> {titulo}</h1> 
+             
+                <p>
+                {subtitulo}
+                </p>
+                <div className="buttons">
+
+                { type === 1 ? (
+                  <>
+                  
+                  <button className="BtnPrincipal" onClick={() => setShowModal(prev => !prev)} >Cancelar</button>
+
+                  <button className="BtnPrincipal" onClick={() => clickHandler() } >Aceptar</button>
+
+                  </>
+                  ) : (
+                  <>
+                  
+                    <button className="BtnPrincipal" onClick={() => setShowModal(prev => !prev)} >Cancelar</button>
+
+                  </>
+                )}
+                
+                </div>
+              </ModalContent>
+              { type === 1 ? (
+                  <>
+                  
+                  </>
+                  ) : (
+                  <>
+                  <a href="#" title="Close" className="modal-close" onClick={() => setShowModal(prev => !prev)} >Cerrar</a>
+                  </>
+                )}
+
             </ModalWrapper>
           </animated.div>
         </Background>

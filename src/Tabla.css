@@ -126,6 +126,7 @@ a {
   color: #16192c;
   background-color: #fff;
   border-color: #e7eaf0;
+  margin: 3px !important;
 }
 
 .btn-neutral:hover {
@@ -174,8 +175,7 @@ a {
 
 .page-link {
   padding: 0.6rem .75rem;
-}
-.page-link {
+  cursor:pointer;
   position: relative;
   display: block;
   color: #0d6efd;

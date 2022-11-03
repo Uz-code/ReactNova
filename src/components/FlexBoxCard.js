@@ -8,10 +8,9 @@ export const FlexBoxCard = ({ title, index, subtitle, img , checkboxState }) => 
 		
 		setState(!checked);
 	}
-
     return (
         <>
-            <div key={index} className= "card shadow border-0 flex" >
+            <div className= "card mh-2 shadow border-0 " >
                 <div className="card-header">
                     <div>
                         <span>

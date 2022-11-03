@@ -1,4 +1,4 @@
-
+import { FaDownload, FaCloud } from 'react-icons/fa';
 import { FlexBoxCard } from './components/FlexBoxCard';
 import { SettingsData } from './SettingsData';
 
@@ -6,8 +6,8 @@ export const HomePage2 = () => {
 
   return (
     <>
-		<div className= "App-header">
-
+		<div className= "App-header App-body">
+	
 			<div className= "responsive-wrapper container-fluid ">
 				<div className= "main-header">
 					<h1>Dashboard</h1>
@@ -16,8 +16,8 @@ export const HomePage2 = () => {
 				<div className='content' >
 					<div className="content-main">
 						<div className= "container-fluid">
-							<div className= "row g-6 mb-6" style={{ display: "flex", flexDirection: "row" }}>
-								<div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
+							<div className= "row g-6 mb-6" >
+								<div className= "col-xl-3 col-sm-6 col-12 main-section" style={{  flex:1 }}>
 									
 									{SettingsData.map((item, index) => {
 					
@@ -42,8 +42,8 @@ export const HomePage2 = () => {
 
 				<div className= "content-main">
 					<div className= "row g-6 mb-6" style={{ display: "flex", flexDirection: "row" }}>
-						<div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-							<div className= "card card-center shadow border-0 flex" >
+						<div className= "col-xl-3 col-sm-6 col-12 main-section " style={{  flex:1 }}>
+							<div className= "card card-center shadow border-0" >
 
 								<table className="table ">
 									<thead>
@@ -122,6 +122,43 @@ export const HomePage2 = () => {
 										
 								<div className="card-footer">
 									<a href="#">Ver más</a>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+
+				<div className= "content-main">
+					<div className= "row g-6 mb-6" style={{ display: "flex", flexDirection: "row" }}>
+						<div className= "col-xl-3 col-sm-6 col-12 flex" style={{ flex:1 }}>
+							<div className= "card shadow border-0 flex" >
+
+								<div className='card-header'>
+								</div>
+
+								<div className= "card-body center">
+									<div className='GrayCircle mb-6' >
+										<FaCloud className='icon center' />
+									</div>
+
+									<h1> Descargar Archivos </h1>
+									<div className= "mx-w-300 mb-6" >
+									<p>Loren ipsum dolor sit amet, Clientes de conexion, Archivos Excel, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+									</div>
+
+								
+									<a href="#" class="btn btn-sm btn-neutral btn-icon flex">	
+									<FaDownload className='icon ' />
+									 Descargar Archivos
+									</a>								
+									
+								</div>
+								
+
+								<div className="card-footer">
+
 								</div>
 							</div>
 

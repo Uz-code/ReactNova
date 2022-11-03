@@ -6,7 +6,7 @@ import Navbar2 from './NavBar2';
 
 import { Link } from 'react-router-dom';
 
-export const Navbar = ({sidebar}) => {
+export const Navbar = ({sidebar,setSidebar}) => {
 
 const [menuType, setMenuType] = useState(1);
 
@@ -17,37 +17,37 @@ const [menuType, setMenuType] = useState(1);
 
           <ul  className='nav-list category-list'> 
             <Link to={"./"}  >
-            <li key ='1' className={`NavItem ${menuType == 1 && 'nav-active ' }`} onClick={() => {setMenuType(1)}} >	
+            <li key ='1' className={`NavItem ${menuType == 1 && 'nav-active ' }`} onClick={() => {setMenuType(1);if( !sidebar) {setSidebar(true)}}} >	
                 <i className={`NavItem ${menuType == 1 ? 'icon-active' : 'inactive'  }`} > <RiIcons.RiHomeLine /></i>	
                 <span className="tooltip inactive">Inicio</span>
             </li>
             </Link>
 
-            <li key ='2' className={`NavItem ${menuType == 2 && 'nav-active '  }`} onClick={() => {setMenuType(2)}} >
+            <li key ='2' className={`NavItem ${menuType == 2 && 'nav-active '  }`} onClick={() => {setMenuType(2);if( !sidebar) {setSidebar(true)}}} >
               <i className={`NavItem ${menuType == 2 ? 'icon-active' : 'inactive'  }`} ><RiIcons.RiHomeLine /></i>	
               <span className="tooltip">Recursos Asignados</span>
             </li>
 
             <Link to={"./Verificaciones"}  >
-              <li key ='3' className={`NavItem ${menuType == 3 && 'nav-active ' }`} onClick={() => {setMenuType(3)}} >
+              <li key ='3' className={`NavItem ${menuType == 3 && 'nav-active ' }`} onClick={() => {setMenuType(3);if( !sidebar) {setSidebar(true)}}} >
               <i className={`NavItem ${menuType == 3 ? 'icon-active' : 'inactive'  }`} ><RiIcons.RiHomeLine /></i>	
               <span className="tooltip inactive">Verificaciones</span>
               </li>
             </Link>
 
-            <li key ='4' className={`NavItem ${menuType == 4 && 'nav-active ' }`}onClick={() => {setMenuType(4)}} >
+            <li key ='4' className={`NavItem ${menuType == 4 && 'nav-active ' }`}onClick={() => {setMenuType(4); if( !sidebar) {setSidebar(true)}}} >
             <i className={`NavItem ${menuType == 4 && 'icon-active ' }`} ><RiIcons.RiHomeLine /></i>	
             </li>
 
-            <li key ='5' className={`NavItem ${menuType == 5 && 'nav-active ' }`} onClick={() => {setMenuType(5)}} >
+            <li key ='5' className={`NavItem ${menuType == 5 && 'nav-active ' }`} onClick={() => {setMenuType(5);if( !sidebar) {setSidebar(true)}}} >
             <i className={`NavItem ${menuType == 5 && 'icon-active ' }`} ><RiIcons.RiHomeLine /></i>	
             </li>
 
-            <li key ='6' className={`NavItem ${menuType == 6 && 'nav-active ' }`}  onClick={() => {setMenuType(6)}} >
+            <li key ='6' className={`NavItem ${menuType == 6 && 'nav-active ' }`}  onClick={() => {setMenuType(6);if( !sidebar) {setSidebar(true)}}} >
             <i className={`NavItem ${menuType == 6 && 'icon-active ' }`} ><RiIcons.RiHomeLine /></i>	
             </li>
 
-            <li key ='7' className={`NavItem ${menuType == 7 && 'nav-active ' }`}  onClick={() => {setMenuType(7)}} >
+            <li key ='7' className={`NavItem ${menuType == 7 && 'nav-active ' }`}  onClick={() => {setMenuType(7);if( !sidebar) {setSidebar(true)}}} >
             <i className={`NavItem ${menuType == 7 && 'icon-active ' }`} ><RiIcons.RiHomeLine /></i>	
             </li> 
 
