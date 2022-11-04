@@ -280,11 +280,11 @@ background-color: var(--tag-color-two);
 }
 
 .FormContainer {
-  width: 35% !important;
+  width: 50rem !important;
 }
 
 @media
-   (max-width: 768px) {
+   (max-width: 1024px) {
     .FormContainer {
       width: 100% !important;
     }
