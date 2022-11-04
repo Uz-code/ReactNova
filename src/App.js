@@ -1,5 +1,6 @@
 import React, {useEffect,useCallback, useState} from 'react';
 import './App.css';
+
 import { Menu } from './Menu';
 import { Navbar } from './NavBar';
 import { HomePage2 } from './HomePage';
@@ -9,10 +10,12 @@ import { TablaFetchData } from './TablaFetchData';
 import { PageExamples } from './PageExamples';
 import { SettingsPage } from './SettingsPage';
 import { ReporteAuditoria } from './ReporteAuditoria';
-import {EditUser } from './EditUser';
-import {SearchForUser } from './SearchForUser';
-import  { PostData } from './PostData';
-import OutsideClick from "./hooks/outsideClick";
+import { EditUser } from './EditUser';
+import { SearchForUser } from './SearchForUser';
+import { PostData } from './PostData';
+import { LogIn } from './LogIn';
+import { useAuth } from './components/Auth';
+import { RequiredAuth } from './components/RequiredAuth';
 
 import { BrowserRouter as Router,
 		Routes,
@@ -21,6 +24,8 @@ import { BrowserRouter as Router,
 
 const App = () => {
 	
+const auth = useAuth();
+
  const [sidebar, setSidebar] = useState(false);
 
   const keyPress = useCallback(
@@ -39,45 +44,46 @@ const App = () => {
     },
     [keyPress]
   );
-
-  return (
+	
+return (
     <>
-	<Menu setSidebar={setSidebar} sidebar={sidebar} />	
-	 <Router>
-	  <Navbar sidebar={sidebar} setSidebar={setSidebar} />	
-		<Routes>
-		<Route exact path= "/" element={<HomePage2 />} />
-		<Route exact path= "/RecursosAsignados" element={<RecursosAsignados />} />
-		<Route exact path= "/Verificaciones" element={<Verificaciones />} />
-		<Route exact path= "/TablaFetchData" element={<TablaFetchData />} />
-		<Route exact path= "/PageExamples" element={<PageExamples />} />
-		<Route exact path= "/SettingsPage" element={<SettingsPage />} />
-		<Route exact path= "/ReporteAuditoria" element={<ReporteAuditoria />} />
-		<Route exact path= "/SearchForUser" element={<SearchForUser />} />
-		<Route exact path= "/EditUser" element={<EditUser />} />
-		<Route exact path= "/PostData" element={<PostData />} />
-		<Route
-			path="*"
-			element={
-			<main>
-				<div className="center">
-					<div className="task-box red">
-						<div className="description-task">
-							<div className="time">10:00 - 11:00 AM</div>
-							<div className="task-name">Error 404</div>
-						</div>
-						<div className="more-button"></div>
-						<div className="members">
-						</div>	
-						</div>
-					</div>  
-			</main>
-			}	
-		/>
-		</Routes>
-    </Router>
+		<Router>
+			<Menu setSidebar={setSidebar} sidebar={sidebar} />
+			{ 
+				auth.user && <Navbar sidebar={sidebar} setSidebar={setSidebar} />	
+			}
+			<Routes>
+				<Route exact path= "/" element={<RequiredAuth><HomePage2/></RequiredAuth>} />
+				<Route exact path= "/RecursosAsignados" element={<RequiredAuth><RecursosAsignados/></RequiredAuth>} />
+				<Route exact path= "/Verificaciones" element={<RequiredAuth><Verificaciones/></RequiredAuth>} />
+				<Route exact path= "/TablaFetchData" element={<RequiredAuth><TablaFetchData/></RequiredAuth>} />
+				<Route exact path= "/PageExamples" element={<RequiredAuth><PageExamples/></RequiredAuth>} />
+				<Route exact path= "/SettingsPage" element={<RequiredAuth><SettingsPage/></RequiredAuth>} />
+				<Route exact path= "/ReporteAuditoria" element={<RequiredAuth><ReporteAuditoria/></RequiredAuth>} />
+				<Route exact path= "/SearchForUser" element={<RequiredAuth><SearchForUser /></RequiredAuth>} />
+				<Route exact path= "/EditUser" element={<RequiredAuth><EditUser/></RequiredAuth>} />
+				<Route exact path= "/PostData" element={<RequiredAuth><PostData/></RequiredAuth>} />
+				{!auth.user ? <Route exact path= "/LogIn" element={<LogIn/>} /> : <Route exact path= "/LogIn" element={<RequiredAuth><HomePage2/></RequiredAuth>} />}
+				
+				<Route
+					path="*"
+					element={<RequiredAuth>
+						<>
+							<div className="center">
+								<div className="task-box red">
+									<div className="description-task">
+										<div className="time">---------</div>
+										<div className="task-name">Error 404</div>
+									</div>
+								</div>
+							</div>  	
+						</>
+					</RequiredAuth>
+					}	
+				/>
+			</Routes>
+		</Router>
     </>
   );
-  
 }
 export default App;

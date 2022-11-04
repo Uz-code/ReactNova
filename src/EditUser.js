@@ -8,12 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import { SearchForUser } from './SearchForUser';
 import  Tabs  from './components/Tabs';
 
+// import react use form from react-hook-form
+//import { useForm as useFormReactHookForm } from 'react-hook-form';
+
 export const EditUser = () => {
    
-    const [ usersId, setUsersId ] = useState( '' );
     const [ ArchivoAdjunto_pk, setArchivoAdjunto_pk ] = useState( true );
+    
+    const [ usersId, setUsersId ] = useState( '' );
     useEffect ( () => {
-        handleSubmitData("notificadores", usersId);
+        setValue("notificadores", usersId);
     }, [usersId] );
 
     const 
@@ -24,7 +28,7 @@ export const EditUser = () => {
     handleChange,
     handleSubmit,
     handleClear,
-    handleSubmitData,
+    setValue,
     StateMessageError,
     setStateMessageError,
     UsrSo,
@@ -38,6 +42,7 @@ export const EditUser = () => {
     vpassword,   
     txtPassphrase_pk,
     } = useForm({
+    //Datos por defecto del formulario mas adelante ver como cargarlos desde la base de datos
     username: '',
     password: '',
     vpassword: '',
@@ -554,9 +559,7 @@ export const EditUser = () => {
                         <div className= "content-main mb-6">
                             <div className= "row g-6 mb-6" style={{ display: "flex", flexDirection: "row" }}>
                                 <div className= "col-xl-3 col-sm-6 col-12 main-section form-user" style={{  flex:1 }}>
-
                                     <div className= " a45w  border-0 " >
-
                                         <div className='card-body'>
                                             <div className='input-group-flex mb-3'>
                                                 <div type='input' className="btn btn-sm btn-neutral flex" onClick={() => navigate(-1)}>Cancelar </div>

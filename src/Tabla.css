@@ -110,6 +110,10 @@ thead, tbody, tfoot, tr, td, th {
   border-radius: .375rem;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+.btn:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.05);
+}
 .btn-sm, .btn-group-sm>.btn {
   padding: .5rem 1rem;
   font-size: 0.875rem;
@@ -170,8 +174,6 @@ a {
   padding-left: 0;
   list-style: none;
 }
-
-
 
 .page-link {
   padding: 0.6rem .75rem;

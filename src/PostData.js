@@ -4,7 +4,7 @@ export const PostData = () => {
     
     const [getBody, setBody] = useState(JSON.stringify({
         NroFactorAutenticacion: 1,
-        CodigoMetodoAutenticacion: 2,
+        CodigoMetodoAutenticacion: 1,
         Usuario: "nova\\administrador",
         IdentificadorOrigen: 
           {

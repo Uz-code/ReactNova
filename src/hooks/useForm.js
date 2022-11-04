@@ -1,7 +1,15 @@
 import { useState,useEffect } from 'react';
+import { useAuth } from '../components/Auth';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const useForm = ( initialForm = {} ) => {
-  
+    
+    // Auth
+    const auth = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const redirectPath = location.state?.from || '/';
     // use State
     const [ formState, setFormState ] = useState( initialForm );
     const [ StateMessageError,setStateMessageError ] = useState('');
@@ -17,7 +25,7 @@ export const useForm = ( initialForm = {} ) => {
         });
     } 
 
-    const handleSubmitData = ( name, value ) => {
+    const setValue = ( name, value ) => {
        
         setFormState({
             ...formState,
@@ -27,21 +35,22 @@ export const useForm = ( initialForm = {} ) => {
     
     useEffect( () => {
 
-        if (formState.UsrSo === '11')
-        {
-           
-            if( formState.Protocol === '4' ){
-                handleSubmitData('puertoDeConexion','22');
+        if( formState.UsrSo != undefined){
+            if (formState.UsrSo === '11')
+            {
+            
+                if( formState.Protocol === '4' ){
+                    setValue('puertoDeConexion','22');
+                }
+                else if( formState.Protocol === '1' ){
+                    setValue('puertoDeConexion','23');
+                }
             }
-            else if( formState.Protocol === '1' ){
-                handleSubmitData('puertoDeConexion','23');
+            else
+            {
+                setValue('puertoDeConexion','3840');
             }
         }
-        else
-        {
-            handleSubmitData('puertoDeConexion','3840');
-        }
-        
 
     },[formState.Protocol,formState.UsrSo] );
     
@@ -57,10 +66,24 @@ export const useForm = ( initialForm = {} ) => {
        if(validateForm()){ 
 
             SubmitForm(formState);
-            return true;
        }
     
-       setShowModal(true);
+    }
+    const handleLogIn = ( e ) => {
+        e.preventDefault();
+        // todo hacerla async
+       if(validateForm()){
+            // adentro de auth.login se validara el usuario y se guardara en el localstorage 
+            if (auth.login(formState).length === 0) {
+                //todo traer el error de la api y mostrarlo en el modal
+                setStateMessageError('Usuario o Password incorrecta.');
+                setShowModal(true);
+                return false;
+            }         
+            
+            navigate(redirectPath, { replace: true }); 
+            return true;
+       }
 
         return false;
 
@@ -76,29 +99,77 @@ export const useForm = ( initialForm = {} ) => {
             validateInput( formState[ key ] , key )
         );
 
+        if(!isValid) {
+            setShowModal(true);
+        }
+        
         return isValid;
     }
 
 
     const validateInput = ( value , key ) => {
         
-        if (key === "username") {
-           if( !ValidarLength( value , "Nombre de Usuario", 0, 6 ) ){
-                return false;
-           }
-        }
-        /*if (key === "email") {
-        
-            return validateEmail( value );
-        }*/
-        if (key === "password") {
-          
-            return validatePassword( value );
-        }
-     
-        if (key === "vpassword") {
-          
-            return validateConfirmPassword( value );
+        switch (key) {
+            case 'Protocol':
+                if ( value === '' ) {
+                    setStateMessageError('Protocolo no puede estar vacio');
+                    return false;
+                }
+                break;
+            case 'UsrSo':
+                if ( value === '' ) {
+                    setStateMessageError('Sistema Operativo no puede estar vacio');
+                    return false;
+                }
+                break;
+            case 'puertoDeConexion':
+                if(!ChkNotNull(value)){
+                    setStateMessageError('Puerto de Conexion no puede estar vacio');
+                    return false;
+                }
+                if (!ValidarNumeroLimites( value , "Puerto de Conexion", 0, 65535 )){
+                    return false;
+                }
+                break;
+            case 'ip':
+                if ( value === '' ) {
+                    setStateMessageError('IP no puede estar vacio');
+                    return false;
+                }
+                break;
+            case 'username':
+                if( !ValidarLength( value , "Nombre de Usuario", null, 30 ) ){
+                    return false;
+               }
+                break;
+            case 'password':
+                if( !ValidarLength( value , "Contraseña", null, 20 ) ){
+                    return false;
+                }
+                break;
+            case 'localizacion':
+                if ( value === '' ) {
+                    setStateMessageError('Nombre no puede estar vacio');
+                    return false;
+                }
+                break;
+            case 'description':
+                if ( value === '' ) {
+                    setStateMessageError('Descripcion no puede estar vacio');
+                    return false;
+                }
+                break;
+            case 'vpassword':
+                if(!validateConfirmPassword( value ) ){
+                    return false;
+                }
+                if(!ValidarLength( value , "Contraseña", null, 20 ) ){
+                    return false;
+                }
+                break;
+            default:
+                return true;
+                break;
         }
 
         return true;
@@ -117,7 +188,7 @@ export const useForm = ( initialForm = {} ) => {
     const validateConfirmPassword = ( value ) => {
         const isValid = (value === formState.password);
         if (!isValid) {
-            setStateMessageError('Las contraseñas no coinciden');
+            setStateMessageError('Las contraseña no coincide con su verificacion');
         }   
         return isValid;
     }
@@ -133,51 +204,79 @@ export const useForm = ( initialForm = {} ) => {
 
     }
 
-    const ChkNotNull = ( value , name ) => {
+    const ChkNotNull = ( value ) => {
 
-        const isValid = value.length > 0;
-        if ( !isValid ) {
-            setStateMessageError(`El campo ${ name } no puede estar vacío`);
-        }
-
-        return isValid;
+        return value.length > 0;
 
     }
 
     const ValidarNumeroLimites = ( value , name, min , max ) => {
 
-        const isNumeric = /^\d+$/.test( value );
-        if ( !isNumeric ) {
+        if (!isNumeric(value)) {
             setStateMessageError(`El campo ${ name } debe ser un número`);
             return false;
         }
-        
-        const isValid = ( value >= min && value <= max );
-        if ( !isValid ) {
-            setStateMessageError(`El valor de ${name} debe estar entre ${min} y ${max}`);
+
+        // if max is null or min is null, do someting else 
+        if ( max === null || min === null ) {
+          
+            if ( max === null ) { // if max is null, only check min
+                if ( value < min ) {
+                    setStateMessageError(`El campo ${ name } debe ser mayor o igual a ${ min }`);
+                    return false;
+                }
+            }
+
+            if ( min === null ) { // if min is null, only check max
+                if ( value > max ) {
+                    setStateMessageError(`El campo ${ name } debe ser menor o igual a ${ max }`);
+                    return false;
+                }
+            }
+
+        }else { // if max and min are not null, check both
+            if ( value < min || value > max ) {
+                setStateMessageError(`El campo ${ name } debe estar entre ${ min } y ${ max }`);
+                return false;
+            }
         }
 
-        return isValid;
-
+        return true;
     }
 
     const ValidarLength = ( value , name, min, max) => {
 
-        var isValid = ChkNotNull( value , name );
-        
-        if (!isValid) {
+        if (!ChkNotNull( value )) {
+            setStateMessageError(`El campo ${ name } no puede estar vacío`);
             return false;
         }
 
-        isValid = ( value.length >= min && value.length <= max );
-       
-        if (!isValid) {
-            setStateMessageError(`El campo ${ name } debe tener entre ${min} y ${max} caracteres`);
+        if( min == null || max == null ){
+            if( max == null ){
+                if( value.length < min ){
+                    setStateMessageError(`El campo ${ name } debe tener al menos ${ min } caracteres`);
+                    return false;
+                }
+            }
+            if( min == null ){
+                if( value.length > max ){
+                    setStateMessageError(`El campo ${ name } debe tener menos de ${ max } caracteres`);
+                    return false;
+                }
+            }
+        }else{
+            if( value.length < min || value.length > max ){
+                setStateMessageError(`El campo ${ name } debe tener entre ${ min } y ${ max } caracteres`);
+                return false;
+            }
         }
-
-        return isValid;
+        
+        return true;
     }
 
+    const isNumeric = ( value ) => {
+        return /^\d+$/.test( value );
+    }
     
 
     return {
@@ -187,8 +286,9 @@ export const useForm = ( initialForm = {} ) => {
         showModal,
         handleChange,
         handleSubmit,
+        handleLogIn,
         handleClear,
-        handleSubmitData,
+        setValue,
         StateMessageError,
         setStateMessageError
     }

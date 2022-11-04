@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './card.css';
 
  export const RecursosAsignados = () => {
 	   

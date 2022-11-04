@@ -12,35 +12,31 @@ const showSubNav = () => setSubnav(!subnav);
 	if( item.subNav.length <= 0 ) {
 		return  (
 			<>
-			<Link to={item.path}  key={index} className={subnav ? 'item active' : 'item '}  >
-				<a>
+			<Link to={item.path}  key={item.title} className={subnav ? 'item active' : 'item '}  >
 				  <span className="links_name ">{item.title}</span>	
-				</a>
 			</Link>
 			</>
 		)
 	}else{
 		return  (
 			<>
-			<div key={index} onClick={item.subNav && showSubNav} className='negrita flex' >
-				<a onClick = {showSubNav } >
+			<div key={item.title} onClick={item.subNav && showSubNav} className='negrita flex' >
+				<a onClick = {showSubNav} >
 				<span className="links_name ">{item.title}</span>	
 				<span className={subnav ? 'filter-small rotation-180' : 'filter-small '} ></span>	
 				</a>
 			</div>
 			
-			{  subnav && item.subNav.map((item, index) => {
+			{subnav && item.subNav.map((item, index) => {
 			  return (
 				<>
-				<div className="tercerNivel">
-					<Link to={item.path}  key={index} >
+				<div className="tercerNivel" key={item.title}>
+					<Link to={item.path} >
 					  <span className="links_name">{item.title}</span>
 					</Link>
 				</div>
 				</>
-			  	);
-			  
-				})
+			  	)})
 			}
 
 		</>

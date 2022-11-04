@@ -1,5 +1,4 @@
 import React from 'react';
-import './card.css';
 import { useState, useEffect } from "react";
 
 export const Verificaciones = () => {
@@ -8,7 +7,6 @@ const foo = function() {
 	
 }
 
-	
     return (
         < >  
 		

@@ -1,16 +1,16 @@
-import * as IoIcons from 'react-icons/io5';
-import { SetState } from './hooks/SetState';
-import img from './img/logo.png';
-
-import React, { useState } from 'react';
-
+import { useAuth } from './components/Auth';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
  export const Menu = ({setSidebar,sidebar}) => {
+
+	const navigate = useNavigate();
 
 	const onButtonClick = () => {
 
 		setSidebar(!sidebar);
 	}
 	
+	const auth = useAuth();
     return (
         < >
 		
@@ -19,9 +19,14 @@ import React, { useState } from 'react';
 				<div className="actions" >
 			
 					<a>
-						<button className="close" onClick={()=>onButtonClick()}  >
+						{ 
+						!auth.user ? <button type='submit' className="btn btn-sm btn-neutral flex" onClick={ () => navigate('/LogIn') }> Iniciar Sesion </button>
+						: 
+						<button className="close" onClick={()=>onButtonClick()}>
 							<svg focusable="false" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg>
 						</button>
+						}
+						
 					</a>
 				
 					{/*<a className="gb_je gb_uc gb_he" aria-label="" href="" title="">

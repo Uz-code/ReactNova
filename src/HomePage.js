@@ -149,7 +149,7 @@ export const HomePage2 = () => {
 									</div>
 
 								
-									<a href="#" class="btn btn-sm btn-neutral btn-icon flex">	
+									<a  className="btn btn-sm btn-neutral btn-icon flex">	
 									<FaDownload className='icon ' />
 									 Descargar Archivos
 									</a>								

@@ -26,11 +26,11 @@ const showSubNav = (  ) => { setSubnav(!subnav); }
 					{ subnav && item.subNav.map((item, index) => {
 					
 					  return (
-						<li className={sidebarState ? 'subMenu SidebarData-active' : 'subMenu SidebarData-closed'} >
+						<li className={sidebarState ? 'subMenu SidebarData-active' : 'subMenu SidebarData-closed'} key= { index } >
 
 						 <TercerNivelMenu 
 						  item= { item } 
-						  key= { index }
+						  index= { index }
 						  />
 						</li>	
 
