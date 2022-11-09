@@ -1,12 +1,17 @@
-import { useState, useEffect, useContext, createContext } from 'react';
+import { useState, useContext, createContext } from 'react';
 
 const AuthContext = createContext(null);
 
  export const AuthProvider = ( { children } ) => {
-    const [user, setUser] = useState(null);
-    
-    useEffect(() => {
 
+    // variable that saves localStorage.getItem("user") 
+    const loggedInUser = localStorage.getItem("user");
+
+    const [user, setUser] = useState(JSON.parse(loggedInUser) || null);
+    const [message, setMessage] = useState('');
+    const [title, setTitle] = useState('');
+
+    /*useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
     
         if (loggedInUser) {
@@ -15,7 +20,7 @@ const AuthContext = createContext(null);
         }
         
       }, []);
-
+*/
     //const [loading, setLoading] = useState(true);
 
     /*useEffect(() => {
@@ -32,6 +37,7 @@ const AuthContext = createContext(null);
    
 
     const login = ( user ) => {
+        
         //TODO VALIDAR LOGIN
         /* 
         const user = { username, password };
@@ -47,6 +53,7 @@ const AuthContext = createContext(null);
         console.log(response.data)*/
         //todo return empty array en error
 
+        //setMessage('Usuario o Password incorrecta.');
         setUser(user);
         
         localStorage.setItem('user', JSON.stringify(user));
@@ -56,13 +63,18 @@ const AuthContext = createContext(null);
 
 
     const logout = () => {
+        //setMessage('No tiene Autoridad para ver la Pantalla Solicitada o su Sesion no es valida.');
+        //setMessage('Ud ha estado inactivo por un tiempo superior a 59 minuto/s.');
+
+        //setTitle('Su sesion ha expirado');
+        //setMessage('Ud ha estado inactivo por un tiempo superior a 59 minuto/s.');
+        
         setUser(null);
         localStorage.clear();
     };
 
-
     return (
-        <AuthContext.Provider value={{user, login, logout}}>
+        <AuthContext.Provider value={{user, login, logout, message, title}}>
             {/*!loading && children*/}
             {children}
         </AuthContext.Provider>

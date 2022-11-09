@@ -1,13 +1,12 @@
-import React , { useState } from 'react';
-import { useForm } from './hooks/useForm';
+import React from 'react';
+import { useFormSimple } from './hooks/useFormSimple';
 import { Modal } from './components/Modal';
 import { AlertComponent } from './components/AlertComponent';
-
-// import react use form from react-hook-form
-//import { useForm as useFormReactHookForm } from 'react-hook-form';
+import { useLocation } from 'react-router'
+import { useEffect } from 'react';
 
 export const LogIn = () => {    
-
+    
     const 
     {
     formState,
@@ -16,15 +15,20 @@ export const LogIn = () => {
     handleChange,
     handleLogIn,
     StateMessageError,
+    setStateMessageError,
+    setTitulo,
+    titulo,
     username,
     password,
-    } = useForm({
+    } = useFormSimple({
     username: '',
     password: ''
     });
     
-    const openModal = () => {
-        setShowModal(prev => !prev);
+    const openModal = (message,titulo) => {
+        setStateMessageError(message);
+        setTitulo(titulo);
+        setShowModal(true);
       };
     
     function AcceptHandler() {
@@ -35,10 +39,30 @@ export const LogIn = () => {
         setShowModal(false);
     }
 
+    const location = useLocation();
+   
+    var message = '';
+    var title = '';
+
+    if(location.state != null )
+    {
+
+        message = location?.state.message; 
+
+        title = location?.state.title; 
+    }
+
+    useEffect (() => {
+        if( message != null && message != '' )
+        {
+            openModal(message, title);
+        }
+    },[message]);
+
     return (
         <>
         <Modal showModal={showModal} setShowModal={setShowModal} >
-            <AlertComponent titulo="Error" subtitulo={StateMessageError} type={2} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
+            <AlertComponent titulo={titulo} subtitulo={StateMessageError} type={2} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
         </Modal> 
         
         <div className="App-body">

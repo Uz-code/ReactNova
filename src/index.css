@@ -401,6 +401,15 @@ margin-left: 20px;
     border-radius: .25rem;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+.button-fancy {
+    display: block;
+    margin: 3px;
+    padding: .675rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+}
+
 .input-large {
     width: 100%;
 }
@@ -995,6 +1004,7 @@ img {
 .shadow {
     box-shadow: 0px 3px 3px -1px rgb(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !important;
 }
+
 .border-0 {
     border-width: 0 !important;
 }
@@ -1016,7 +1026,6 @@ img {
     flex: 0 0 auto;
     width: 25%;
 }
-
 
 /** S E T T I N G S */
 
@@ -1144,6 +1153,7 @@ img {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    padding-top: 1rem;
 } 	
 
 .content-header-intro h2 {
@@ -1167,9 +1177,23 @@ img {
     width: 100%;
 }
 
+
 .rotation-180 {
     transform: rotate(180deg);
 }
+
+.rotation-90 {
+    transform: rotate(90deg);
+}
+
+.rotation-270 {
+    transform: rotate(270deg);
+}
+
+.rotation-360 {
+    transform: rotate(360deg);
+}
+
 .button {
     cursor: pointer;
     font: inherit;
@@ -1253,6 +1277,9 @@ img {
     width: 11px;
     height: 11px;
     background-position: 0rem center;
+    -webkit-transition: -webkit-transform .2s ease-in-out;
+    -ms-transition: -ms-transform .2s ease-in-out;
+    transition: transform .2s ease-in-out; 
 }
 
 .filter-content {

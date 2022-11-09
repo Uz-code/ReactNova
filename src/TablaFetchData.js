@@ -28,7 +28,7 @@ export const TablaFetchData = () => {
 
     const onAddLimit = ( newLimit ) => {
         if ( newLimit <= 0 ){ return; }
-        if ( newLimit > maxResultados ){ return; }
+        //if ( newLimit > maxResultados ){ setLimit(newLimit); return; }
         setLimit( newLimit );
     }
 
@@ -70,8 +70,6 @@ export const TablaFetchData = () => {
         setShowModal(prev => !prev);
       };
 
-
-
     function AcceptHandler() {
         //alert("usuario pepito eliminado exitosamente");
 
@@ -83,19 +81,13 @@ export const TablaFetchData = () => {
         setShowModal(false);
     }
 
-    const [user, setUser] = useState(null);
+    const [userID, setUser] = useState(null);
 
-    const crearNuevo = (  ) => {
-        setshouldRedirect(true);
-    };
-
-    const [shouldRedirect, setshouldRedirect] = useState(false);
-    
     useEffect ( () => {
-        if ( user != null ) {
+        if (userID != null) {
             navigateTo();
         }
-    }, [user]) 
+    }, [userID]) 
 
     const PageComponent = () => {
             
@@ -105,16 +97,14 @@ export const TablaFetchData = () => {
      let navigate = useNavigate();
 
      function navigateTo() {
-
-        navigate('/EditUser',{state:{id:user}});
-
+        navigate('/EditUser',{state:{id:userID}});
     }
 
     return (
         <>
        
             <Modal showModal={showModal} setShowModal={setShowModal}  >
-                <PageComponent />
+                <PageComponent/>
             </Modal>
                 
             <div className= "App-header">
@@ -123,7 +113,7 @@ export const TablaFetchData = () => {
                         <div className= "main-header">
                       
                             <h1>Tabla de Usuarios</h1>
-                            <div className="button btn-submit" onClick={() => { navigate('/EditUser',{state:{id:0}}); }}> 
+                            <div className="button btn-submit" onClick={() => { navigate('/EditUser'); }}> 
                                 <i className="ph-faders-bold"></i>
                                 <span>Crear Nuevo</span>
                             </div>
@@ -187,7 +177,6 @@ export const TablaFetchData = () => {
                                                             onError={ (value) => openErrorModal(value) }
                                                             setUser = {setUser}
                                                             onDelete = { (value) => openOptionModal(value) }
-
                                                         />
                                                     }
                                                     </tbody>
@@ -209,14 +198,14 @@ export const TablaFetchData = () => {
                                                 <div className="card-header">
                                                     <nav aria-label="">
 
-                                                    <Pagination
-                                                    className="pagination-bar"
-                                                    currentPage={currentPage}
-                                                    totalCount={maxResultados}
-                                                    pageSize={limit}
-                                                    onPageChange={page => setCurrentPage(page)}
-                                                    siblingCount={1}
-                                                    />
+                                                        <Pagination
+                                                        className="pagination-bar"
+                                                        currentPage={currentPage}
+                                                        totalCount={maxResultados}
+                                                        pageSize={limit}
+                                                        onPageChange={page => setCurrentPage(page)}
+                                                        siblingCount={1}
+                                                        />
 
                                                     </nav>
                                                 </div>

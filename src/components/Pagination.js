@@ -30,7 +30,6 @@ const Pagination = props => {
     onPageChange(currentPage - 1);
   };
 
-
   let lastPage = paginationRange[paginationRange.length - 1];
   
   // If there are less than 2 times in pagination range we shall not render the component

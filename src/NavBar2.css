@@ -80,8 +80,12 @@ transition: all 0.1s ease;
 }
 
 .sidebar .nav-list{
-  padding: 20px 0px 0px 0px;
+  padding: 1.4rem 0.5rem 0.5rem 0.5rem;
   height: 100%;
+}
+
+.menu__link--active{
+color: var(--c-accent-primary) !important;
 }
 
 .NavigationBar  {
@@ -124,10 +128,17 @@ color: black;
   background-color: #f5f5f5;
 }
 .sidebar li{
+
   position: relative;
-  padding: 0 25px 0 25px;
+  padding: 0;
+  margin: 0.5rem;
   list-style: none;
   cursor: pointer;
+}
+
+.sidebar li:hover :hover{
+  border-radius: 0.25rem;
+  background-color: #f5f5f5;
 }
 /*.sidebar li:hover { 
   background-color: #f5f5f5;
@@ -201,13 +212,13 @@ color: black;
   display: -webkit-flex;
   display: flex;
   height: 32px;
+  padding: 0.7rem;
   -webkit-transition: margin .15s cubic-bezier(0.4,0,0.2,1),padding .15s cubic-bezier(0.4,0,0.2,1);
   transition: margin .15s cubic-bezier(0.4,0,0.2,1),padding .15s cubic-bezier(0.4,0,0.2,1);
 }
 
 .sidebar li a .links_name{
   cursor:pointer;
-  padding-top: 3px;
   color: black;
   font-size: 12px;
   font-weight: 400;
@@ -215,11 +226,6 @@ color: black;
   display:none;
   pointer-events: none;
   transition: 0.4s;
-}
-
-
-.tercerNivel  a{
-margin-left: 10px;
 }
 
 .links_name{
@@ -231,6 +237,15 @@ margin-left: 10px;
   letter-spacing: normal;
   color: #202124;
   text-shadow: none;
+  font-weight: 500 !important;
+
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
 }
 
 .nZ .nU, .nZ .n0 {

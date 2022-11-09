@@ -20,10 +20,10 @@ const showSubNav = () => setSubnav(!subnav);
 	}else{
 		return  (
 			<>
-			<div key={item.title} onClick={item.subNav && showSubNav} className='negrita flex' >
+			<div key={item.title} onClick={item.subNav && showSubNav} className=' flex' >
 				<a onClick = {showSubNav} >
 				<span className="links_name ">{item.title}</span>	
-				<span className={subnav ? 'filter-small rotation-180' : 'filter-small '} ></span>	
+				<span className={subnav ? 'filter-small rotation-360' : 'filter-small rotation-270'} ></span>	
 				</a>
 			</div>
 			

@@ -6,11 +6,10 @@ export const RequiredAuth = ( { children } ) => {
     const auth = useAuth();
     const location = useLocation();
     // TODO Verificar si el nivel de usuario permite ver esta pagina actual
-    const loggedInUser = localStorage.getItem("user");
-    if (!loggedInUser) {
+    if (!auth.user) {
         return (
             <Navigate to={{ pathname: '/LogIn' }} 
-            state = {{ from: location.pathname }} />
+            state = {{ from: location.pathname , message: auth.message, title: auth.title}} />
         );
     }
 

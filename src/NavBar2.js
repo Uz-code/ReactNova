@@ -4,6 +4,7 @@ import './NavBar2.css';
 import SubMenu from './SubMenu';
 import * as IoMdIcons from 'react-icons/io';
 import { useAuth } from './components/Auth';
+
 //TODO Hacer un componente que me retorne los datos de la barra lateral dependiendo los permisos del usuario logueado
 import { SidebarData1 } from './SidebarData1';
 import { SidebarData2 } from './SidebarData2';

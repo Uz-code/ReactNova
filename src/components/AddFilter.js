@@ -18,17 +18,12 @@ export const AddFilter = ({ onNewCategory, limit, onNewLimit , forceUpdate  }) =
     }
 
     const onLimitChange = ({ target }) => {
-        //if ( isNaN(target.value) ){  return; }
-        
-        //sif ( target.value <= "0" ){  return; }
-        
         setlimitValue( target.value );
     }
 
     const onSubmit = ( event ) => {
         event.preventDefault();
         //if( inputValue.trim().length <= 0) return;
-
         // setCategories( categories => [ inputValue, ...categories ]);
        //setInputValue('');
        Submitting();
@@ -39,7 +34,7 @@ export const AddFilter = ({ onNewCategory, limit, onNewLimit , forceUpdate  }) =
 
         onNewCategory( inputValue.trim() );
        
-        if ( isNaN(limitValue)  ){  return; }
+        if (isNaN(limitValue)){  return; }
  
         onNewLimit( limitValue.trim() );
     }

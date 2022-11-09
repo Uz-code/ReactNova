@@ -19,7 +19,7 @@ const showSubNav = (  ) => { setSubnav(!subnav); }
 			<>
 			<li key={index} className={classToggle ? 'item active ' : 'item '} onClick={ToggleSwitch} >
 				<a onClick = {item.subNav.length > 0 && showSubNav } >
-				  <span className="links_name negrita">{item.title}</span>
+				  <span className="links_name menu__link--active">{item.title}</span>
 				</a>
 			</li>
 

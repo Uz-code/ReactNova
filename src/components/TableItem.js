@@ -1,4 +1,4 @@
-import { BsTrash } from 'react-icons/bs';
+import { BsArchive, BsTrash } from 'react-icons/bs';
 
 export const TableItem = ({ address, fullName, email, id , university, setUser, onDelete}) => {
 
@@ -9,10 +9,13 @@ export const TableItem = ({ address, fullName, email, id , university, setUser, 
         <td>{university}</td>
         <td>{email}</td>
         <td className="text-end">
-            <button className="btn btn-sm btn-neutral" onClick={() => { setUser(id); }}> Editar </button>
-            <button type="button" className="btn btn-sm btn-square btn-neutral text-danger-hover" onClick={() => { onDelete('Estas seguro de querer eliminar el usuario seleccionado?'); }}>
-            <BsTrash />
-            </button>
+          <button className="btn btn-sm btn-neutral" onClick={() => { setUser(id); }}> Editar </button>
+          <button className="btn btn-sm btn-neutral" onClick={() => { onDelete('Estas seguro de querer desactivar el usuario seleccionado?'); }}>
+            <BsArchive/>
+          </button>
+          <button type="button" className="btn btn-sm btn-square btn-neutral text-danger-hover" onClick={() => { onDelete('Estas seguro de querer eliminar el usuario seleccionado?'); }}>
+            <BsTrash/>
+          </button>
         </td>
       </tr>
     )
