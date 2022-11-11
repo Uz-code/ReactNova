@@ -63,7 +63,7 @@ return (
 				<Route exact path= "/SearchForUser" element={<RequiredAuth><SearchForUser /></RequiredAuth>} />
 				<Route exact path= "/EditUser" element={<RequiredAuth><EditUser/></RequiredAuth>} />
 				<Route exact path= "/PostData" element={<RequiredAuth><PostData/></RequiredAuth>} />
-				{!auth.user ? <Route exact path= "/LogIn" element={<LogIn/>} /> : <Route exact path= "/LogIn" element={<RequiredAuth><HomePage2/></RequiredAuth>} />}
+				{!auth.user && <Route exact path= "/LogIn" element={<LogIn/>} /> }
 				
 				<Route
 					path="*"

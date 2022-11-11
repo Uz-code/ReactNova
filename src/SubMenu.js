@@ -10,46 +10,35 @@ const [classToggle, setclassToggle] = useState(false);
 const ToggleSwitch = (  ) => { setclassToggle(!classToggle); }
 
 const [subnav, setSubnav] = useState(true);
-	  
+const [current , setCurrent] = useState('');
+
 const showSubNav = (  ) => { setSubnav(!subnav); }
-	
-	if (Object.keys(item.subNav).length > 0 )
-	{ 
+
 		return  (
 			<>
-			<li key={index} className={classToggle ? 'item active ' : 'item '} onClick={ToggleSwitch} >
-				<a onClick = {item.subNav.length > 0 && showSubNav } >
+			<li key={index} className={classToggle ? 'item active ' : 'item '} onClick= { () => ToggleSwitch() } >
+				<a onClick = { showSubNav } >
 				  <span className="links_name menu__link--active">{item.title}</span>
 				</a>
 			</li>
 
-					{ subnav && item.subNav.map((item, index) => {
-					
+					{ subnav && item.subNav.map((item2, index) => {
 					  return (
-						<li className={sidebarState ? 'subMenu SidebarData-active' : 'subMenu SidebarData-closed'} key= { index } >
-
+						<div className={sidebarState ? 'SidebarData-active' : 'subMenu SidebarData-closed'} key= { index } onClick = { () => !item2.subNav.length && setCurrent(item2.title) }  >
 						 <TercerNivelMenu 
-						  item= { item } 
+						  item= { item2 } 
 						  index= { index }
+						  current = { current }
+						  setCurrent = { setCurrent }
 						  />
-						</li>	
-
+						</div>	
 					  );
 					  
 					})
 					}	
 			</>
 		)
-	}else{ 
 	
-		return  (
-			<li key={index} className={classToggle ? 'item active' : 'item '} onClick={ToggleSwitch} >
-				<Link to={item.path} >
-				  <span className="links_name negrita">{item.title}</span>
-				</Link>
-			</li>
-		)
-	}
 }
 
 export default SubMenu

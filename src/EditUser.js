@@ -12,15 +12,16 @@ import { BsKeyFill } from 'react-icons/bs';
 export const EditUser = () => {
    
 
-    const [ ArchivoAdjunto_pk, setArchivoAdjunto_pk ] = useState( false );
+    const [ chkArchivoAdjunto_pk, setChkArchivoAdjunto_pk ] = useState( false );
     
+    const [ UsrADDescripcion, setUsrADDescripcion ] = useState( 'Administrador de dominio' );
+
     const [ usersId, setUsersId ] = useState( '' );
     useEffect ( () => {
         setValue("notificadores", usersId);
     }, [usersId] );
 
- 
-    const 
+    var 
     {
     formState,
     setShowModal,
@@ -31,6 +32,8 @@ export const EditUser = () => {
     setValue,
     StateMessageError,
     setStateMessageError,
+    utilCadenaConexion,
+    setUtilCadenaConexion,
     title,
     UsrSo,
     UsrScript,
@@ -45,6 +48,7 @@ export const EditUser = () => {
     username,
     puertoDeConexion,
     localizacion,
+    Nservice,
     descripcion,
     Password,
     passchk,
@@ -62,6 +66,21 @@ export const EditUser = () => {
     UserPrompt,
     Shell,
     ServidorX11,
+    selRegistrarLog,
+    SegundosScreenshot,
+    selConexionSinLog,
+    ControlUsr,
+    CambioAct,
+    TipoPeriodoCtrlClaveAuto,
+    Responsable,
+    GrupoResp,
+    hdArchivoAdjuntoAttachId_adj1,
+    ArchivoAdjunto_pk,
+    NombreBD,
+    CadenaConexionUsuario,
+    AcountID,
+    SecretAccessKey,
+    AccessKeyID,
     } = useForm({
     //Datos por defecto del formulario mas adelante ver como cargarlos desde la base de datos
     username: '',
@@ -72,22 +91,38 @@ export const EditUser = () => {
     cambiarPassword : false,
     puertoDeConexion: '3840',
     localizacion: '',
+    Nservice : '',
     descripcion: '',
     notificadores : '',
-    UsrSo: 99,
+    UsrSo: '99',
     Protocol: '4',
-    UsrScript: 0,
+    UsrScript: '0',
     txtPassphrase_pk : '',
-    x11Opt: 0,
-    TipoAutorizacion: 0,
-    IdModelos : 1,
-    PoliticaConfiguracion : 0,
-    UsrAdmin : 0,
-    Sistema : 2,
-    selTipoAutenticacionUsr : 0,
+    x11Opt: '0',
+    TipoAutorizacion: '0',
+    IdModelos : '1',
+    PoliticaConfiguracion : '0',
+    UsrAdmin : '0',
+    Sistema : '2',
+    selTipoAutenticacionUsr : '0',
     UserPrompt : 'regex:[\\.\\$\\]%#>~@]( )?$',
     Shell : '/bin/bash',
     ServidorX11: 'localhost',
+    selRegistrarLog: 1,
+    SegundosScreenshot: '0',
+    selConexionSinLog:1,
+    ControlUsr: '1',
+    CambioAct: '1',
+    TipoPeriodoCtrlClaveAuto: "0",
+    Responsable: '1',
+    GrupoResp: '1',
+    ArchivoAdjunto_pk : null,
+    hdArchivoAdjuntoAttachId_adj1: null,
+    NombreBD:'',
+    CadenaConexionUsuario: '',
+    AcountID: '',
+    SecretAccessKey: '',
+    AccessKeyID: '',
     });
     
     let navigate = useNavigate();
@@ -122,37 +157,33 @@ export const EditUser = () => {
         EditUser = true;
     }
 
-
-
-
     return (
         <>
         
         <Modal showModal={showModal} setShowModal={setShowModal} >
-            <AlertComponent titulo="Error" subtitulo={StateMessageError} type={2} cancelHandler={cancelHandler} AcceptHandler={cancelHandler}  />
+            <AlertComponent titulo="Error" subtitulo={StateMessageError} type={2} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler} />
         </Modal> 
         
         <div className="App-header App-body">
             <div className= "responsive-wrapper container-fluid ">
                 <div className= "main-header">
-                    <h1> { EditUser ? `Editar Usuario ${id}`: 'Crear Usuario' } </h1>
+                    <h1> Usuarios Controlados / { EditUser ? `Editar Usuario ${id}`: 'Crear Usuario' } </h1>
                 </div>
                 
-                <form onSubmit={handleSubmit} className = '' >
+                <form onSubmit={handleSubmit}>
 
                 </form>
 
-                    <div >
+                    <div>
                         <Tabs> 
                             <div label = "Datos del Usuario">
                                 <div className= "content-main">
                                     <div className= "row g-6" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 main-section form-user" style={{  flex:1 }}>
+                                        <div className= "col-xl-3 col-sm-6 col-12 main-section form-user" style={{ flex:1 }}>
 
                                             <div className= "card a45w shadow border-0 " >
 
                                                 <div className='card-body'>
-
                                                     <div className='input-group mb-3'>
                                                         <label className='LabelForm'>Datos Basicos </label>
                                                     </div>
@@ -166,7 +197,13 @@ export const EditUser = () => {
                                                     <div className='input-group mb-3'>
                                                         <input type="text"  className="input-fancy"name="localizacion" placeholder="Localizacion" value={localizacion || ''} onChange={handleChange} />
                                                     </div>
-                                            
+                                                    { 
+                                                    (UsrSo == 5 || UsrSo == 60) && 
+                                                    <div className='input-group mb-3'>
+                                                        <input type="text"  className="input-fancy"name="Nservice" placeholder="Nservice" value={Nservice || ''} onChange={handleChange} />
+                                                    </div>
+                                                    }
+
                                                     <div className='input-group mb-3'>
                                                         <label className='LabelForm'>Seguridad </label>
                                                     </div>
@@ -338,17 +375,50 @@ export const EditUser = () => {
                                                             <option value="1">Asignado</option>
                                                         </select>
                                                     </div> 
-
+                                                    
+                                                    { 
+                                                    (UsrSo != 191 && UsrSo != 21 && UsrSo != 3 && UsrSo != 23 && UsrSo != 24) && 
+                                                    <>
                                                     <div className='input-group-flex  mb-3'>
                                                         <div  className="input-tag no-select">
                                                             Usuario Administrador Asignado:
                                                         </div>
                                                         
                                                         <select className="form-select form-select-lg " aria-label="" value={UsrAdmin} onChange={handleChange} name="UsrAdmin">
-                                                            <option value="1">No tiene</option>
-                                                            <option value="2">Ascendiente</option>
+                                                            <option value="0">Sin Administrador</option>
+                                                            <option value="1">nova\administrador</option>
                                                         </select>
                                                     </div> 
+                                                    </>
+                                                    }
+
+                                                    { 
+                                                    UsrAdmin != "0" && 
+                                                    <>
+
+                                                 
+
+                                                    <div className='flex mb-3'  style={{flexDirection: "row-reverse"}} >
+                                                
+                                                        <div  className="input-tag no-select">
+                                                        <label className='LabelForm'> Expirar Password en Reset: </label>
+                                                        </div>
+                                                        <input type='checkbox'  name='chk' checked={false} disabled onChange={handleChange} />
+
+                                                        <div  className="input-tag no-select">
+                                                            <label className='LabelForm'> Desbloquear Usuario en Reset: </label>
+                                                        </div>
+                                                        <input type='checkbox'  name='chk' checked={false} disabled onChange={handleChange} />
+                                                    </div>
+
+                                                    <div className='input-group-flex  mb-3'>
+                                                        <div  className="input-tag no-select">
+                                                            Descripcion del Usuario Administrador:
+                                                        </div>
+                                                        <input type="text" className="form-input" value={UsrADDescripcion} name="UsrADDescripcion" readOnly />
+                                                    </div>
+                                                    </>
+                                                    }
 
                                                     <div className='input-group-flex  mb-3'>
                                                         <div  className="input-tag no-select">
@@ -373,33 +443,104 @@ export const EditUser = () => {
 
                                                 <div className='card-body'>
                                                     <div className='input-group mb-3'>
-                                                        <label className='LabelForm'>Datos de Conexion</label>
+                                                        <label className='LabelForm'></label>
                                                     </div>
-                                
                                                     { 
-                                                    UsrSo == 11 && 
+                                                    UsrSo == 63  && 
                                                     <>
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Script para Cambio Clave:
+                                                        <div className='input-group-flex mb-3'>
+                                                            <div  className="input-tag no-select">
+                                                                ID Clave de Acceso: (aws)
+                                                            </div>
+                                                            <input type="text" className="form-input" value={AccessKeyID || ''} name="AccessKeyID" onChange={handleChange} />
+                                                        </div> 
+                                                        <div className='input-group-flex mb-3'>
+                                                            <div  className="input-tag no-select">
+                                                                Clave de Acceso Secreta: (aws)
+                                                            </div>
+                                                            <input type="text" className="form-input" value={SecretAccessKey || ''} name="SecretAccessKey" onChange={handleChange} />
+                                                        </div> 
+                                                        <div className='input-group-flex mb-3'>
+                                                            <div  className="input-tag no-select">
+                                                                ID o Alias: (aws)
+                                                            </div>
+                                                            <input type="text" className="form-input" value={AcountID || ''} name="AcountID" onChange={handleChange} />
+                                                        </div> 
+                                                    </>
+                                                    }
+
+                                                    { 
+                                                    (UsrSo == 2 || UsrSo == 60 || UsrSo == 57 || UsrSo == 58 || UsrSo == 64 || UsrSo == 65) && 
+                                                    <>
+                                                        { 
+                                                        UsrSo == 65 && 
+                                                        <>
+                                                            <div className='input-group-flex mb-3'>
+                                                                <div  className="input-tag no-select">
+                                                                Nombre Base de Datos:
+                                                                </div>
+                                                                <input type="text" className="form-input" value={NombreBD || ''} name="NombreBD" onChange={handleChange} />
+                                                            </div> 
+                                                        </>
+                                                        }
+
+                                                        <div className='input-group-flex  mb-3'>
+                                                            <div  className="input-tag no-select">
+                                                                Utilizar Cadena de Conexion:
+                                                            </div>
+                                                            <div className="form-check form-switch" style={{ width: "50%"}}>
+                                                                <label className="toggle">
+                                                                    <input type="checkbox" checked={utilCadenaConexion} name="utilCadenaConexion" onChange={ () => setUtilCadenaConexion(!utilCadenaConexion) } />
+                                                                    <span  style={{ top: "10px"}}></span>
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                        <select className="form-select form-select-lg " aria-label="" value={UsrScript} name="UsrScript" onChange={handleChange}>
-                                                            <option value="0">Sin Script</option>
-                                                            <option value="1">Con Script</option>
-                                                        </select>                                                   
-                                                    </div> 
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Protocolo de Conexión:
-                                                        </div>
-                                                        <select className="form-select form-select-lg " aria-label="" value={Protocol} name="Protocol" onChange={handleChange}>
-                                                            <option value="4">SSH Automatico</option>
-                                                            <option value="1">Telnet</option>
-                                                        </select>                                                   
-                                                    </div> 
-                                                
-                                                </>
-                                                }
+
+                                                        { 
+                                                        utilCadenaConexion && 
+                                                        <>
+                                                            <div className='input-group-flex mb-3'>
+                                                                <div  className="input-tag no-select">
+                                                                    Cadena Conexion Usuario:
+                                                                </div>
+                                                                <div className="form-check form-switch" style={{ width: "51%"}}>
+                                                                    <textarea type="text" rows={4} style={{ width: "99%", resize:"none" }} className="form-input" value={CadenaConexionUsuario || ''} name="CadenaConexionUsuario" onChange={handleChange} />
+                                                                </div>
+                                                            </div> 
+                                                        </>
+                                                        }
+
+                                                    </>
+                                                    }
+                                                        
+                                                    { 
+                                                    (UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17 || UsrSo == 40 || UsrSo == 41 || UsrSo == 50 || UsrSo == 51 || UsrSo == 20 || UsrSo == 55 || UsrSo == 59) && 
+                                                    <>
+                                                        <div className='input-group-flex  mb-3'>
+                                                            <div  className="input-tag no-select">
+                                                                Script para Cambio Clave:
+                                                            </div>
+                                                            <select className="form-select form-select-lg " aria-label="" value={UsrScript} name="UsrScript" onChange={handleChange}>
+                                                                <option value="0">Sin Script</option>
+                                                                <option value="1">Con Script</option>
+                                                            </select>                                                   
+                                                        </div> 
+
+                                                        {
+                                                        UsrSo != 40 &&
+                                                            <div className='input-group-flex  mb-3'>
+                                                                <div  className="input-tag no-select">
+                                                                    Protocolo de Conexión:
+                                                                </div>
+                                                                <select className="form-select form-select-lg " aria-label="" value={Protocol} name="Protocol" onChange={handleChange}>
+                                                                    <option value="4">SSH Automatico</option>
+                                                                    <option value="1">Telnet</option>
+                                                                </select>                                                   
+                                                            </div> 
+                                                        }
+
+                                                    </>
+                                                    }
 
                                                 <div className='input-group-flex mb-3'>
                                                     <div  className="input-tag no-select">
@@ -418,28 +559,30 @@ export const EditUser = () => {
                                                         </div>
                                                         <div className="form-check form-switch" style={{ width: "50%"}}>
                                                             <label className="toggle">
-                                                                <input type="checkbox" checked={ArchivoAdjunto_pk} name="chkArchivoAdjunto_pk" onChange={ () => setArchivoAdjunto_pk(!ArchivoAdjunto_pk) } />
+                                                                <input type="checkbox" checked={chkArchivoAdjunto_pk} name="chkArchivoAdjunto_pk" onChange={ () => setChkArchivoAdjunto_pk(!chkArchivoAdjunto_pk) } />
                                                                 <span  style={{ top: "10px"}}></span>
                                                             </label>
                                                         </div>
-                                                        
                                                     </div>
                                                     
                                                     { 
-                                                    ArchivoAdjunto_pk && 
+                                                    chkArchivoAdjunto_pk && 
                                                     <>
                                                         <div className='input-group-flex  mb-3'>
                                                             <div  className="input-tag no-select">
                                                                 Archivo Pk:
                                                             </div>
-                                                            <div type='file' name="file" className="btn btn-neutral flex" >Upload File </div>
+                                                            <label for="ArchivoAdjunto_pk" className="btn btn-neutral flex">
+                                                               Upload File
+                                                            </label>
+                                                            <input id="ArchivoAdjunto_pk"  value={ArchivoAdjunto_pk} name="ArchivoAdjunto_pk" type="file" onChange={handleChange} />
                                                         </div>
 
                                                         <div className='input-group-flex  mb-3'>
                                                             <div  className="input-tag no-select">
                                                                 Phassphrase:
                                                             </div>
-                                                            <input type="text" className="form-input"  name="txtPassphrase_pk" value={txtPassphrase_pk || ''} onChange={handleChange} />
+                                                            <input type="text" className="form-input"  name="txtPassphrase_pk" value={txtPassphrase_pk || ''}  />
                                                         </div>
 
                                                         <div className='input-group-flex  mb-3'>
@@ -513,10 +656,11 @@ export const EditUser = () => {
                                     <div className= "row g-6" style={{ display: "flex", flexDirection: "row" }}>
                                         <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
                                             { 
-                                            UsrSo == 11 && 
+                                            (UsrSo == 40 || UsrSo == 50) && 
                                             <>
                                             <div className= "card  shadow border-0 flex" >
                                                 <div className='card-body'>
+                                                    
                                                     <div className='input-group mb-3'>
                                                         <label className='LabelForm'>Datos Telnet</label>
                                                     </div>
@@ -549,13 +693,13 @@ export const EditUser = () => {
                                                         </select>
                                                     </div>
 
-                                                    <div className='input-group-flex  mb-3'>
+                                                    <div className='input-group-flex mb-3 '>
                                                         <div  className="input-tag no-select">
                                                             Prompt de Password:
                                                         </div>
                                                         <input type="text" className="form-input"  name="PwdPrompt" value={PwdPrompt} onChange={handleChange} />
                                                     </div>
-                                                    <div className='input-group-flex  mb-3'>
+                                                    <div className='input-group-flex mb-3 '>
                                                         <div  className="input-tag no-select">
                                                             Prompt de Usuario:
                                                         </div>
@@ -580,28 +724,27 @@ export const EditUser = () => {
 
                                                 <div className='card-body'>
                                                     <div className='input-group mb-3'>
-                                                        <label className='LabelForm'>Datos de Conexion</label>
+                                                        <label className='LabelForm'>Informacion</label>
                                                     </div>
 
                                                     <div className='input-group-flex mb-3'>
                                                         
                                                     <div  className="input-tag no-select">
-                                                            Log de Conexion:
+                                                        Log de Conexion:
                                                     </div>
-
-                                                        <select className="form-select form-select-lg " aria-label="" value={'1'}>
-                                                            <option value="1">Registrar Log</option>
-                                                            <option value="2">Ascendiente</option>
-                                                        </select>
+                                                    <select className="form-select form-select-lg "  value={selRegistrarLog} onChange={handleChange} name="selRegistrarLog">
+                                                        <option value="1">Registrar Log</option>
+                                                        <option value="2">Ascendiente</option>
+                                                    </select>
 
                                                     </div> 
 
                                                     <div className='input-group-flex mb-3'>
 
                                                     <div  className="input-tag no-select">
-                                                            Segundos Log:
+                                                        Segundos Log:
                                                     </div>
-                                                        <input type="text" className="form-input"  placeholder="Segundos" value={'0'} />
+                                                        <input type="text" className="form-input"  placeholder="SegundosScreenshot" value={SegundosScreenshot} onChange={handleChange} />
                                                     </div> 
                                                 
                                                     <div className='input-group-flex  mb-3'>
@@ -609,9 +752,9 @@ export const EditUser = () => {
                                                             Conexion sin Registro de Log:
                                                         </div>
                                                         
-                                                        <select className="form-select form-select-lg " aria-label="" value={'1'}>
+                                                        <select className="form-select form-select-lg " name="selConexionSinLog" value={selConexionSinLog} onChange={handleChange} >
                                                             <option value="1">Pemritir</option>
-                                                            <option value="2">Ascendiente</option>
+                                                            <option value="2">No Permitir</option>
                                                         </select>
                                                     </div> 
 
@@ -620,9 +763,9 @@ export const EditUser = () => {
                                                             Control de la Clave del Usuario	:
                                                         </div>
                                                         
-                                                        <select className="form-select form-select-lg " aria-label="" value={'1'}>
+                                                        <select className="form-select form-select-lg " name="ControlUsr" value={ControlUsr} onChange={handleChange} >
                                                             <option value="1">Manual</option>
-                                                            <option value="2">Ascendiente</option>
+                                                            <option value="2">Automatico</option>
                                                         </select>
                                                     </div>  
                                                     
@@ -631,29 +774,32 @@ export const EditUser = () => {
                                                             Cambio de Clave por Tiempo de No Uso:
                                                         </div>
                                                         
-                                                        <select className="form-select form-select-lg " aria-label="" value={'1'}>
+                                                        <select className="form-select form-select-lg " name="CambioAct" value={CambioAct} onChange={handleChange} >
                                                             <option value="1">Utilizar Por Defecto</option>
                                                             <option value="2">Ascendiente</option>
                                                         </select>
                                                     </div>   
-
+                                                    { 
+                                                    UsrSo != 63 &&
                                                     <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
+                                                        <div  className="input-tag">
                                                             Periodo Control Automatico de Clave:
                                                         </div>
                                                         
-                                                        <select className="form-select form-select-lg " aria-label="" value={'1'}>
-                                                            <option value="1">Utilizar Por Defecto</option>
-                                                            <option value="2">Ascendiente</option>
+                                                        <select className="form-select form-select-lg " name="TipoPeriodoCtrlClaveAuto" value={TipoPeriodoCtrlClaveAuto} onChange={handleChange} >
+                                                            <option value="0">Utilizar Por Defecto</option>
+                                                            <option value="1">Utilizar el Especificado</option>
+                                                            <option value="2">No realizar Control Automatico de Clave</option>
                                                         </select>
                                                     </div> 
+                                                    }
 
                                                     <div className='input-group-flex  mb-3'>
                                                         <div  className="input-tag no-select">
                                                             Usuario Responsable	:
                                                         </div>
                                                         
-                                                        <select className="form-select form-select-lg " aria-label="" value={'1'}>
+                                                        <select className="form-select form-select-lg " name="Responsable" value={Responsable} onChange={handleChange} >
                                                             <option value="1">No responsable</option>
                                                             <option value="2">Ascendiente</option>
                                                         </select>
@@ -664,7 +810,7 @@ export const EditUser = () => {
                                                             Grupo Responsable:
                                                         </div>
                                                         
-                                                        <select className="form-select form-select-lg " aria-label="" value={'1'}>
+                                                        <select className="form-select form-select-lg " name="GrupoResp" value={GrupoResp} onChange={handleChange} >
                                                             <option value="1">No responsable</option>
                                                             <option value="2">Ascendiente</option>
                                                         </select>
@@ -674,10 +820,12 @@ export const EditUser = () => {
                                                         <div  className="input-tag no-select">
                                                             Archivo Relacionado	:
                                                         </div>
-                                                        <div type='file' name="file" className="btn btn-neutral flex" >Upload File </div>
 
+                                                        <label for="hdArchivoAdjuntoAttachId_adj1"  className="btn btn-neutral flex">
+                                                                Upload File
+                                                        </label>
+                                                        <input  type="file" id="hdArchivoAdjuntoAttachId_adj1" value={hdArchivoAdjuntoAttachId_adj1} name="hdArchivoAdjuntoAttachId_adj1" onChange={handleChange} />                                                        
                                                     </div> 
-
                                                 </div>
                                             </div>
                                         </div>
@@ -706,7 +854,6 @@ export const EditUser = () => {
                                     </div>
                                 </div>
                             </div>
-                            
                             
                             <div label= { EditUser && 'Datos Estadisticos' } >
                                 { EditUser && 'content' }

@@ -23,7 +23,10 @@ export const useForm = ( initialForm = {} ) => {
 
     const [ formState, setFormState ] = useState( initialForm );
     const [ StateMessageError,setStateMessageError ] = useState('');
-    const [ titulo, setTitulo] = useState('Error');
+    const [ title, settitle] = useState('Error');
+
+    const [ utilCadenaConexion,setUtilCadenaConexion ] = useState(false);
+
 
     const [showModal, setShowModal] = useState(false);
 
@@ -47,6 +50,15 @@ export const useForm = ( initialForm = {} ) => {
         });
     } 
 
+
+    const setValues = ( values ) => {
+       
+        setFormState({
+            ...formState,
+            ...values
+        });
+    } 
+
     const setPasswordPorSatCS = (password,verificacion,valorPorDefecto,prevPassValue,prevVerifValue,toggle) => {
 
         if (toggle) {
@@ -65,6 +77,16 @@ export const useForm = ( initialForm = {} ) => {
 
             
     } 
+
+    useEffect (() => {
+
+        var objCadenaConexion =  utilCadenaConexion ? setCadenaConexion() : { CadenaConexionUsuario: '' }
+        
+        setValues({
+            ...objCadenaConexion
+        });
+
+    },[utilCadenaConexion]);
 
     useEffect (() => {
         if(formState.Passwordc != 'Generada por SATCS')
@@ -93,28 +115,145 @@ export const useForm = ( initialForm = {} ) => {
     
     useEffect( () => {
 
+        var port = setPort();
+
+        setValues({
+            ...port
+        });
+
+    },[formState.Protocol] );
+
+    useEffect( () => {
+        //Metodo con valores por defecto dependiendo del sistema operativo
+
+        var objCadenaConexion = utilCadenaConexion && (objCadenaConexion =  setCadenaConexion());
+        var objPeriodoCtrlClaveAuto = setTipoPeriodoCtrlClaveAuto();
+        var objPort = setPort();
+
+        //Objeto que se agrega al FormState 
+        setValues({
+            ...objPeriodoCtrlClaveAuto,
+            ...objPort,
+            ...objCadenaConexion
+        });
+
+    },[formState.UsrSo] );
+    
+    const setTipoPeriodoCtrlClaveAuto = () => {
+        var objPeriodoCtrlClaveAuto = {};
+
         if( formState.UsrSo != undefined){
-            if (formState.UsrSo === '11')
+            if (formState.UsrSo == 63)
+            {
+                objPeriodoCtrlClaveAuto = { TipoPeriodoCtrlClaveAuto: '0' };
+            }
+        }
+        
+        return objPeriodoCtrlClaveAuto;
+    }
+
+    const setPort = () => {
+
+        var port = {};
+        if(formState.UsrSo != undefined){
+            
+            if (formState.UsrSo == 7 || formState.UsrSo == 9 || formState.UsrSo == 11 || formState.UsrSo == 13 || formState.UsrSo == 15 || formState.UsrSo == 17  || formState.UsrSo == 41 || formState.UsrSo == 50 || formState.UsrSo == 51 || formState.UsrSo == 20 || formState.UsrSo == 55 || formState.UsrSo == 59)
             {
                 if( formState.Protocol === '4' ){
-                    setValue('puertoDeConexion','22');
+                    port = {
+                        'puertoDeConexion': '22'
+                    };
                 }
                 else if( formState.Protocol === '1' ){
-                    setValue('puertoDeConexion','23');
+                    port = {
+                        'puertoDeConexion': '23'
+                    };
                 }
             }
             else
             {
-                setValue('puertoDeConexion','3840');
+                if (formState.UsrSo == 1 || formState.UsrSo == 3 || formState.UsrSo == 30 || formState.UsrSo == 99)
+				{
+                    port = {
+                        'puertoDeConexion': '3389'
+                    };
+				}
+				else if (formState.UsrSo == 40 || formState.UsrSo == 50 || formState.UsrSo == 20)
+				{
+                    port = {
+                        'puertoDeConexion': '23'
+                    };
+				}
+				else if (formState.UsrSo == 58)
+				{
+                    port = {
+                        'puertoDeConexion': '3306'
+                    };
+				}
+				else if (formState.UsrSo == 2)
+				{
+                    port = {
+                        'puertoDeConexion': '1433'
+                    };
+				}
+				else if (formState.UsrSo == 64)
+				{
+                    port = {'puertoDeConexion': '5432'};
+				}
+				else if (formState.UsrSo == 65)
+				{
+                    port = {'puertoDeConexion': '27001'};
+				}
+				else
+				{
+                    port = {'puertoDeConexion': '22'};
+				} 
             }
         }
 
-    },[formState.Protocol,formState.UsrSo] );
-    
+        return port;
+    }
+    const setCadenaConexion = () => {
+        var objCadenaConexion = {};
+        if( formState.UsrSo != undefined){
+           
+            if (formState.UsrSo == '2')//SQL Server
+            {
+                objCadenaConexion = { CadenaConexionUsuario: 'Server={SatUsrLocalizacion}; User ID={SatUsr}; Password="{OldPass}' };
+            }
+            else if(formState.UsrSo == '60')//Oracle
+            {
+                objCadenaConexion = { CadenaConexionUsuario: 'Data Source={SatUsrLocalizacion}; User ID={SatUsr}; Password="{OldPass}"; Pooling=False;' };
+            }
+            else if(formState.UsrSo == '58')//MySQL Server 
+            {
+                objCadenaConexion = { CadenaConexionUsuario: 'Data Source={SatUsrLocalizacion}; Port={SatPortUC}; User ID={SatUsr}; Password="{OldPass}"; Pooling=False;' };
+            }
+            else if(formState.UsrSo == '57')//SAP Ase
+            {
+                objCadenaConexion = { CadenaConexionUsuario: 'Data Source={SatUsrLocalizacion}; User ID={SatUsr}; Password="{OldPass}"; Pooling=False; Charset=iso_1;' };
+            }
+            else if(formState.UsrSo == '64')//PosgreSQL
+            {
+                objCadenaConexion = { CadenaConexionUsuario: 'Server={SatUsrLocalizacion}; Port={SatPortUC}; UID={SatUsr}; PWD="{OldPass}"; DB=postgres; Pooling=False;' };
+            }
+            else if(formState.UsrSo == '65')//MongoDB
+            {   
+                objCadenaConexion = { CadenaConexionUsuario: 'mongodb://{SatUsr}:{OldPass}@{SatUsrLocalizacion}:{SatPortUC}/{SatUsrDB}?maxPoolSize=1&maxIdleTime=20s&connectTimeout=10s&waitQueueTimeout=10s&serverSelectionTimeout=10s' };
+            }
+            else
+            {
+                objCadenaConexion = { CadenaConexionUsuario: '' };
+            }
+        }
+
+        return objCadenaConexion;
+    }
+
+
     const handleClear = ( e ) => {
         e.preventDefault();
         setFormState( initialForm );
-        //setStateMessageError('');
     }
 
     const handleSubmit = ( e ) => {
@@ -125,6 +264,7 @@ export const useForm = ( initialForm = {} ) => {
        }
     
     }
+
     const handleLogIn = ( e ) => {
         e.preventDefault();
         console.log(formState);
@@ -133,8 +273,10 @@ export const useForm = ( initialForm = {} ) => {
        if(VerifDatos()){
             // adentro de auth.login se validara el usuario y se guardara en el localstorage 
             if (auth.login(formState).length === 0) {
-                //todo traer el error de la api y mostrarlo en el modal
-                setStateMessageError('Usuario o Password incorrecta.');
+                
+                //setStateMessageError('Usuario o Password incorrecta.');
+                setStateMessageError(auth.message);
+                settitle();
                 setShowModal(true);
                 return false;
             }         
@@ -153,7 +295,7 @@ export const useForm = ( initialForm = {} ) => {
     }
     
     const VerifDatos = () => {
-        setTitulo("Error");
+        settitle("Error");
 
         const isValid = Object.keys( formState ).every( key => 
             validateInput( formState[ key ] , key )
@@ -195,6 +337,20 @@ export const useForm = ( initialForm = {} ) => {
                 if ( value === '' ) {
                     setStateMessageError('IP no puede estar vacio');
                     return false;
+                }
+                break;
+            case 'NombreBD':
+                if ( formState.UsrSo == 65 ) {
+                    if( !ValidarLength( value , "NombreBD", null, 200 ) ){
+                        return false;
+                    }
+                }
+                break;
+            case 'CadenaConexionUsuario':
+                if(utilCadenaConexion && (formState.UsrSo == 2 || formState.UsrSo == 60 || formState.UsrSo == 58 || formState.UsrSo == 57 || formState.UsrSo == 64 || formState.UsrSo == 65)){
+                    if( !ValidarLength( value , "Cadena de Conexion", null, 4000 ) ){
+                        return false;
+                    }
                 }
                 break;
             case 'username':
@@ -369,8 +525,9 @@ export const useForm = ( initialForm = {} ) => {
         setValue,
         StateMessageError,
         setStateMessageError,
-        titulo,
+        title,
         toggleGenerarPass, setToggleGenerarPass,
         toggleGenerarPassc, setToggleGenerarPassc,
+        utilCadenaConexion, setUtilCadenaConexion,
     }
 }

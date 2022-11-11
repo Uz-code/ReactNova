@@ -17,10 +17,10 @@ const [menuType, setMenuType] = useState(1);
 
           <ul  className='nav-list category-list'> 
             <Link to={"./"}  >
-            <li key ='1' className={`NavItem ${menuType == 1 && 'nav-active ' }`} onClick={() => {setMenuType(1);if( !sidebar) {setSidebar(true)}}} >	
-                <i className={`NavItem ${menuType == 1 ? 'icon-active' : 'inactive'  }`} > <RiIcons.RiHomeLine /></i>	
-                <span className="tooltip inactive">Inicio</span>
-            </li>
+              <li key ='1' className={`NavItem ${menuType == 1 && 'nav-active ' }`} onClick={() => {setMenuType(1);if( !sidebar) {setSidebar(true)}}} >	
+                  <i className={`NavItem ${menuType == 1 ? 'icon-active' : 'inactive'  }`} > <RiIcons.RiHomeLine /></i>	
+                  <span className="tooltip inactive">Inicio</span>
+              </li>
             </Link>
 
             <li key ='2' className={`NavItem ${menuType == 2 && 'nav-active '  }`} onClick={() => {setMenuType(2);if( !sidebar) {setSidebar(true)}}} >
@@ -52,10 +52,10 @@ const [menuType, setMenuType] = useState(1);
             </li> 
 
             <Link to={"./SettingsPage"} onClick={() => {setMenuType(8)}}>
-            <li key ='8' className={`NavItem ${menuType == 8 && 'nav-active ' }`} >	
-                <i className={`NavItem ${menuType == 8 ? 'icon-active' : 'inactive'  }`} > <RiIcons.RiHomeLine /></i>	
-                <span className="tooltip inactive">Settigs</span>
-            </li>
+              <li key ='8' className={`NavItem ${menuType == 8 && 'nav-active ' }`} >	
+                  <i className={`NavItem ${menuType == 8 ? 'icon-active' : 'inactive'  }`} > <RiIcons.RiHomeLine /></i>	
+                  <span className="tooltip inactive">Settigs</span>
+              </li>
             </Link>
             
           </ul>

@@ -17,9 +17,10 @@ export const PostData = () => {
 
     const prueba = async() => {
         
-        const post = await postData( getUrl, JSON.parse( getBody ) );
+        const post = await postData( getUrl, getBody );
 
         console.log(post);
+
     }
     
     useEffect( () => {
@@ -29,10 +30,11 @@ export const PostData = () => {
     const postData = async( url, body ) => {
         const params = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type' : 'application/json' },
             body: body
         };
         var response = null;
+
         try {
             
             response = await fetch( url, params );
@@ -41,12 +43,12 @@ export const PostData = () => {
                 return json;
             }
             else {
-                return [response.status,response.statusText];
+                return [response.statusText];
             }
     
         } catch ( ex ){
 
-            return [response.status,ex.message];
+            return [ex.message];
         
         }
     
@@ -64,4 +66,3 @@ export const PostData = () => {
         
 
 } 
-

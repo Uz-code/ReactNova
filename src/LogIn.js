@@ -65,7 +65,7 @@ export const LogIn = () => {
             <AlertComponent titulo={titulo} subtitulo={StateMessageError} type={2} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
         </Modal> 
         
-        <div className="App-body">
+        <div className="App-body"> 
             <div className= "responsive-wrapper FormContainer container-fluid ">
                 <div className= "main-header">
                     <h1> Log In </h1>

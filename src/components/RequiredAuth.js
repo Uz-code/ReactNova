@@ -5,7 +5,7 @@ import { useAuth } from '../components/Auth';
 export const RequiredAuth = ( { children } ) => {
     const auth = useAuth();
     const location = useLocation();
-    // TODO Verificar si el nivel de usuario permite ver esta pagina actual
+    // TODO Verificar si el nivel de usuario permite ver esta pagina actualç
     if (!auth.user) {
         return (
             <Navigate to={{ pathname: '/LogIn' }} 

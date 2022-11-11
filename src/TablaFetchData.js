@@ -111,8 +111,7 @@ export const TablaFetchData = () => {
                 <div className= "App-body">
                     <div className= "responsive-wrapper  container-fluid ">
                         <div className= "main-header">
-                      
-                            <h1>Tabla de Usuarios</h1>
+                            <h1>Usuarios Controlados</h1>
                             <div className="button btn-submit" onClick={() => { navigate('/EditUser'); }}> 
                                 <i className="ph-faders-bold"></i>
                                 <span>Crear Nuevo</span>
@@ -177,7 +176,7 @@ export const TablaFetchData = () => {
                                                             onError={ (value) => openErrorModal(value) }
                                                             setUser = {setUser}
                                                             onDelete = { (value) => openOptionModal(value) }
-                                                        />
+                                                            />
                                                     }
                                                     </tbody>
                                                 </table>
@@ -187,13 +186,11 @@ export const TablaFetchData = () => {
                                                 </div>
 
                                             </div>
-
                                         </div>
                                     </div>
 
                                     <div className= "row g-6 mb-6" style={{ display: "flex", flexDirection: "row" }}>
                                         <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            
                                             <div className= "card shadow border-0 flex card-noheigth" >
                                                 <div className="card-header">
                                                     <nav aria-label="">
@@ -210,15 +207,11 @@ export const TablaFetchData = () => {
                                                     </nav>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
-
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
