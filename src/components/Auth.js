@@ -38,6 +38,8 @@ const AuthContext = createContext(null);
 
     const login = ( user ) => {
         
+        let response = null;
+
         //TODO VALIDAR LOGIN
         /* 
         const user = { username, password };
@@ -48,17 +50,29 @@ const AuthContext = createContext(null);
         );
         // set the state of the user
         setUser(response.data)
+        
         // store the user in localStorage
         localStorage.setItem('user', response.data)
         console.log(response.data)*/
+        
         //todo return empty array en error
 
         //setMessage('Usuario o Password incorrecta.');
-        setUser(user);
         
+        //Caso correcto
+        response = { message: '', title: '', user: user }; // user = token, id , username
+        setUser(user);
         localStorage.setItem('user', JSON.stringify(user));
+        
+        //Caso incorrecto
+        //response = { title: 'Error', message: 'Usuario o Password incorrecta.' , user: null };
+        //logout();
+        // 
 
-        return user;
+        return response;
+
+        
+        
     };
 
 

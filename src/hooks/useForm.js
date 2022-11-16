@@ -11,6 +11,8 @@ export const useForm = ( initialForm = {} ) => {
     const redirectPath = location.state?.from || '/';
 
     // use State
+    const [ chkArchivoAdjunto_pk, setChkArchivoAdjunto_pk ] = useState( false );
+
     const [toggleGenerarPass, setToggleGenerarPass] = useState(false);
     const [toggleGenerarPassc, setToggleGenerarPassc] = useState(false);
     
@@ -20,6 +22,8 @@ export const useForm = ( initialForm = {} ) => {
     const [prevPassword,setPrevPassword ] = useState('');
     const [prevPasschk,setPrevPasschk ] = useState('');
 
+    const [ typePassC, setTypePassC ] = useState( 'password' );
+    const [ typePass, setTypePass ] = useState( 'password' );
 
     const [ formState, setFormState ] = useState( initialForm );
     const [ StateMessageError,setStateMessageError ] = useState('');
@@ -27,8 +31,29 @@ export const useForm = ( initialForm = {} ) => {
 
     const [ utilCadenaConexion,setUtilCadenaConexion ] = useState(false);
 
-
     const [showModal, setShowModal] = useState(false);
+
+    const [hdnSOAnterior, setHdnSOAnterior] = useState('');
+
+    const [ listLocalizacion, setListLocalizacion ] = useState( [] );
+
+    const [ nombreLocalizacion, SetNombreLocalizacion ] = useState( '' );
+
+    const guardarLocalizacion = ( arr ) => {
+        
+        if (arr.length > 0) {
+            
+            setListLocalizacion(arr);
+            
+            SetNombreLocalizacion(arr[0][0]);
+
+            setValue("LocalizacionID", arr[0][1]); //  mepa mejor retornar un objeto que un array por ahora safa, todo
+
+        }
+
+        setShowModal(false);
+
+    }
 
     //Handlers
     const handleChange = ( e ) => {
@@ -89,6 +114,10 @@ export const useForm = ( initialForm = {} ) => {
     },[utilCadenaConexion]);
 
     useEffect (() => {
+        !chkArchivoAdjunto_pk && setValues({ ArchivoAdjunto_pk: '' });
+    },[chkArchivoAdjunto_pk]);
+
+    useEffect (() => {
         if(formState.Passwordc != 'Generada por SATCS')
         {
             setPrevPasswordc(formState.Passwordc);
@@ -99,6 +128,9 @@ export const useForm = ( initialForm = {} ) => {
         }
 
         setPasswordPorSatCS('Passwordc','passcchk','Generada por SATCS', prevPasswordc , prevPasscchk, toggleGenerarPassc);
+       
+        toggleGenerarPassc && typePassC === 'text' && setTypePassC('password');
+
     },[toggleGenerarPassc]);
 
     useEffect (() => {
@@ -110,7 +142,11 @@ export const useForm = ( initialForm = {} ) => {
         {
             setPrevPasschk(formState.passchk);
         }
+        
         setPasswordPorSatCS('Password','passchk','Generada por SATCS', prevPassword, prevPasschk, toggleGenerarPass);
+        toggleGenerarPass && typePass === 'text' && setTypePass('password');
+
+        //toggleGenerarPass && setValues({ Passwordc: 'Generada por SATCS', passcchk: 'Generada por SATCS' });
     },[toggleGenerarPass]);
     
     useEffect( () => {
@@ -123,19 +159,26 @@ export const useForm = ( initialForm = {} ) => {
 
     },[formState.Protocol] );
 
+
     useEffect( () => {
         //Metodo con valores por defecto dependiendo del sistema operativo
 
         var objCadenaConexion = utilCadenaConexion && (objCadenaConexion =  setCadenaConexion());
         var objPeriodoCtrlClaveAuto = setTipoPeriodoCtrlClaveAuto();
         var objPort = setPort();
+        var objLocalizacionID = {'LocalizacionID': ''};
+        SetNombreLocalizacion(''); //Se limpia el nombre de la localizacion
+        setListLocalizacion([]); //Se limpia el arreglo de localizaciones
 
         //Objeto que se agrega al FormState 
         setValues({
             ...objPeriodoCtrlClaveAuto,
             ...objPort,
-            ...objCadenaConexion
+            ...objCadenaConexion,
+            ...objLocalizacionID
         });
+
+        //setHdnSOAnterior(formState.UsrSo);
 
     },[formState.UsrSo] );
     
@@ -400,10 +443,21 @@ export const useForm = ( initialForm = {} ) => {
                 }
                 break;
             case 'localizacion':
-                if ( value === '' ) {
-                    setStateMessageError('localizacion no puede estar vacio');
-                    return false;
+                
+                if(formState.UsrSo == 61 || formState.UsrSo == 62 || formState.UsrSo == 56){
+                    if(formState.LocalizacionID == undefined || formState.LocalizacionID == null || formState.LocalizacionID == '')
+                    {
+                        setStateMessageError('Debe seleccionar una Localizacion');
+                        return false;
+                    }
                 }
+                else
+                {
+                    if( !ValidarLength( value , "Localizacion", null, 200 ) ){
+                        return false;
+                    }
+                }
+                
                 break;
             case 'description':
                 if ( value === '' ) {
@@ -516,18 +570,25 @@ export const useForm = ( initialForm = {} ) => {
     return {
         ...formState,
         formState,
+        nombreLocalizacion, SetNombreLocalizacion,
         setShowModal,
         showModal,
         handleChange,
         handleSubmit,
         handleLogIn,
         handleClear,
+        guardarLocalizacion,
         setValue,
         StateMessageError,
         setStateMessageError,
         title,
         toggleGenerarPass, setToggleGenerarPass,
         toggleGenerarPassc, setToggleGenerarPassc,
+        typePassC, setTypePassC,
+        typePass, setTypePass,
+        chkArchivoAdjunto_pk, setChkArchivoAdjunto_pk,
         utilCadenaConexion, setUtilCadenaConexion,
+        listLocalizacion, setListLocalizacion,
+        
     }
 }

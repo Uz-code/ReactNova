@@ -42,6 +42,15 @@ thead, tbody tr {
   table-layout:fixed;
 }
 
+.user-selected { 
+  color: #3384f3 !important;
+    background: #f6f7f9;
+    cursor: pointer;
+}
+.selectable { 
+    cursor: pointer !important;
+}
+
 .table tbody tr:hover  {
   background-color: var(--x-table-hover-bg);
   color: var(--x-table-hover-color);
@@ -49,17 +58,53 @@ thead, tbody tr {
 
 .table td {
   font-size: .8125rem;
+  word-break: break-word;
+
+}
+
+@media
+   (min-width: 1320px) {
+    .table td {
+      white-space: nowrap;
+    }
+  
+  }
+
+  @media
+   (max-width: 860px) {
+    .table td {
+      font-size: .7rem;
+    }
+    .table>:not(caption)>*>* {
+      padding: .3rem !important;
+    }
+   
+  }
+  @media
+  (max-width: 1000px) {
+   
+  .table td .btn-sm {
+    padding: .4rem .6rem;
+    font-size: .7rem;
+    line-height: 1.5;
+    border-radius: 0rem;
+  }
+
+ }
+
+/*last td on a table */
+/*td:last-child {*/
+.last-child {
+  text-align: right; 
   white-space: nowrap;
+  max-width: 10px;
+  overflow: hidden;
 }
 .table>:not(caption)>*>* {
   padding: 1rem 1.5rem;
   background-color: var(--x-table-bg);
   border-bottom-width: 1px;
   box-shadow: inset 0 0 0 9999px var(--x-table-accent-bg);
-}
-/*last td on a table */
-td:last-child {
-  text-align: right; 
 }
 thead, tbody, tfoot, tr, td, th {
   border-color: inherit;
@@ -84,11 +129,6 @@ thead, tbody, tfoot, tr, td, th {
   white-space: nowrap;
   vertical-align: middle;
   text-align: left;
-}
-
-.table td {
-  font-size: .8125rem;
-  white-space: nowrap;
 }
 
 .btn {

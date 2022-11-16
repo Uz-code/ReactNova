@@ -1,22 +1,22 @@
 import { AddFilter } from './components/AddFilter';
 import { DataList } from './components/DataList';
+import { useMemo } from 'react';
 
 import Pagination from './components/Pagination';
 
 import React, { useState, useEffect , useReducer } from 'react';
 
-export const SearchForUser = ({ setMensajeAlerta , usersId , setUsersId }) => {
+export const SearchForUser = ({ setMensajeAlerta ,  setUsersId }) => {
     
-    const [ listUsers, setListUsers ] = useState( [] );
+    const [listUsers, setListUsers ] = useState( [] );
 
-    const [ categories, setCategories ] = useState( '' );
+    const [campoBusqueda, setCampoBusqueda ] = useState( '' );
 
     const [update, forceUpdate] = useReducer((x) => x + 1, 0);
 
     const [PaginaActual, setPaginaActual ] = useState(1);
 
     const onAddUserToList = ( userName, id ) => {
-       
         
         // validar si el usuario se encuentra en la lista 
         const userAlreadyInList = listUsers.find( user => user[1] === id );
@@ -54,8 +54,8 @@ export const SearchForUser = ({ setMensajeAlerta , usersId , setUsersId }) => {
         setListUsers( [] );
     }
     
-    const onAddCategory = ( newCategory ) => {
-        setCategories( newCategory );
+    const onAddCampoBusqueda = ( newCampoBusqueda ) => {
+        setCampoBusqueda( newCampoBusqueda );
     }
 
     const [limit, setLimit] = useState('4');
@@ -70,7 +70,9 @@ export const SearchForUser = ({ setMensajeAlerta , usersId , setUsersId }) => {
 
       useEffect( () => {
         SetshowItems(true);
-    }, [categories]);
+    }, [campoBusqueda]);
+
+    const options = useMemo( () => ({ campoBusqueda , limit , PaginaActual}), [campoBusqueda, limit, PaginaActual] );
 
     return (
         <>
@@ -78,7 +80,7 @@ export const SearchForUser = ({ setMensajeAlerta , usersId , setUsersId }) => {
         </div>
         <div className="card-body">
             <div className="content-header-actions">
-                <AddFilter  onNewCategory={ (value) => onAddCategory(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update }  />
+                <AddFilter  onNewCategory={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update }  />
             </div>
             
             <div className="container-filter " >
@@ -87,14 +89,14 @@ export const SearchForUser = ({ setMensajeAlerta , usersId , setUsersId }) => {
                     {
                         listUsers.map( (user,index) => {
                             return (
-                                <div key={index} className="clear-btn search-item">
+                                <div key={index} className="clear-btn search-item no-select">
                                     <a className="" >{user[0]} </a> <a className="search-item__close" onClick={ () => onRemoveUserToList(user[1]) } >x</a>
                                 </div>
                             )
                         }
                         )
                     }
-                    { listUsers.length > 0 ? <a className="clear-btn save-btn" onClick={ () => SaveList() } > { showItems ? 'Guardar' : 'Editar' } </a> : '' }
+                    {/* listUsers.length > 0 ? <a className="clear-btn save-btn" onClick={ () => SaveList() } > { showItems ? 'Guardar' : 'Editar' } </a> : '' */}
                 </div>
             </div>
         </div>
@@ -104,15 +106,13 @@ export const SearchForUser = ({ setMensajeAlerta , usersId , setUsersId }) => {
         <div className="card-body start-section" style={{  flex:1 }}>
         { 
             <DataList 
-                key={ categories } 
-                category={ categories }
-                limit={ limit } 
+                key={ campoBusqueda } 
                 setMaxResultados={ setMaxResultados } 
-                PaginaActual={ PaginaActual }
+                options={ options }
                 forceUpdate = { update }
                 onError={ (value) => setMensajeAlerta(value)}
                 cardSize={2} 
-                onAddUser={ (userName, id) => onAddUserToList(userName, id) }
+                onSelectUser ={ (userName, id) => onAddUserToList(userName, id) }
                 listUsers = { listUsers } 
             />
         }

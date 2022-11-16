@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormSimple } from './hooks/useFormSimple';
+import { useFormLogIn } from './hooks/useFormLogIn';
 import { Modal } from './components/Modal';
 import { AlertComponent } from './components/AlertComponent';
 import { useLocation } from 'react-router'
@@ -20,7 +20,7 @@ export const LogIn = () => {
     titulo,
     username,
     password,
-    } = useFormSimple({
+    } = useFormLogIn({
     username: '',
     password: ''
     });
@@ -46,10 +46,10 @@ export const LogIn = () => {
 
     if(location.state != null )
     {
-
         message = location?.state.message; 
 
         title = location?.state.title; 
+
     }
 
     useEffect (() => {
@@ -61,8 +61,8 @@ export const LogIn = () => {
 
     return (
         <>
-        <Modal showModal={showModal} setShowModal={setShowModal} >
-            <AlertComponent titulo={titulo} subtitulo={StateMessageError} type={2} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
+        <Modal showModal={showModal} setShowModal={setShowModal}>
+            <AlertComponent title={titulo} message={StateMessageError} type={2} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
         </Modal> 
         
         <div className="App-body"> 

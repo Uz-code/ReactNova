@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const Background = styled.div`
   width: 100%;
-  height: 100%;
+  height: 90%;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -13,9 +13,13 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  width: 470px;
+  min-width: 470px;
+  max-width: 1100px;
   height: 100%;
-  padding:20px;
+  
+  padding-top:20px;
+  padding-bottom:20px;
+
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.1);
   background: #fff;
   color: #000;
@@ -27,7 +31,6 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalImg = styled.img`
-
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -66,8 +69,7 @@ export const Modal = ({ showModal, setShowModal, children}) => {
       duration:150
     },
     opacity: showModal ? 1 : 1,
-    transform: showModal ? `translateY(-90%)` : `translateY(-80%)`
-    
+    transform: showModal ? `translateY(-10%)` : `translateY(-20%)`
   });
 
   const closeModal = e => {

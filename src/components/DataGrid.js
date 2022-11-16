@@ -1,10 +1,10 @@
 import { TableItem } from './TableItem';
 import { useFetchData } from '../hooks/useFetchData.js';
 
-export const DataGrid = ({ category , limit, setMaxResultados, PaginaActual, forceUpdate, onError , setUser ,onDelete }) => {
+export const DataGrid = ({ options, setMaxResultados, forceUpdate, onError , setUser ,onDelete , onSelectUser , listUsers }) => {
 
-    const { contacts, isLoading } = useFetchData( category, limit , setMaxResultados , PaginaActual, forceUpdate, onError);
-    
+    //console.log(options);
+    const { contacts, isLoading } = useFetchData( options, setMaxResultados , forceUpdate, onError);
 
     return (
         <>
@@ -26,6 +26,10 @@ export const DataGrid = ({ category , limit, setMaxResultados, PaginaActual, for
                     { ...contact }
                     setUser = {setUser}
                     onDelete = {onDelete}
+                    onSelectUser = {onSelectUser}
+                    listUsers = {listUsers}
+                    hasActions = { listUsers ? false : true }
+                    isSelectable = { listUsers ? true : false }
                 />
 
                 ))

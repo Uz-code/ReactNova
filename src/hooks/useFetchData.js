@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react';
 import { getData } from '../helpers/getData';
 
-export const useFetchData = ( category, limit, setMaxResultados,PaginaActual, forceUpdate , onError) => {
+export const useFetchData = ( options , setMaxResultados, forceUpdate , onError) => {
  
     const [contacts, setContacts] = useState([]);
     const [isLoading, setIsLoading] = useState( true );
 
     const getcontacts = async() => {
-        const newcontacts = await getData( category, limit , setMaxResultados, PaginaActual, onError);
+        const newcontacts = await getData( options, setMaxResultados, onError);
         setContacts(newcontacts);
         setIsLoading(false);
     }
     
     useEffect( () => {
+
+        //console.log("useEffect useFetchData");
         setIsLoading(true);
         setContacts([]);
+
         getcontacts();
-    }, [category,limit, PaginaActual,forceUpdate]);
+        
+    }, [options, forceUpdate]);
 
     return {
         contacts,

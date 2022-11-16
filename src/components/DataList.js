@@ -1,9 +1,9 @@
 import { DataListContent } from './DataListContent';
 import { useFetchData } from '../hooks/useFetchData.js';
 
-export const DataList = ({ category , limit, setMaxResultados, PaginaActual, forceUpdate, onError, cardSize , onAddUser,listUsers  }) => {
+export const DataList = ({ options , setMaxResultados, forceUpdate, onError, cardSize , onSelectUser,listUsers  }) => {
 
-    const { contacts, isLoading } = useFetchData( category, limit , setMaxResultados , PaginaActual, forceUpdate, onError );
+    const { contacts, isLoading } = useFetchData( options, setMaxResultados , forceUpdate, onError );
     
 
     return (
@@ -20,7 +20,7 @@ export const DataList = ({ category , limit, setMaxResultados, PaginaActual, for
                         key={ contact.id } 
                         { ...contact }
                         size={cardSize}
-                        onAddUser = { onAddUser }
+                        onSelectUser = { onSelectUser }
                         listUsers = { listUsers }
                     />
                 )) 

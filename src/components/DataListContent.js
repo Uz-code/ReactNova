@@ -1,9 +1,9 @@
 
-export const DataListContent = ({ address, fullName, email, id , university, company, size, onAddUser, listUsers }) => {
+export const DataListContent = ({ address, fullName, email, id , university, company, size, onSelectUser, listUsers }) => {
 
     return (
     
-        <div className={size === 1 ? "card card-full" : "card list-item card-half"} onClick = { () => onAddUser(fullName, id) }>
+        <div className={size === 1 ? "card card-full" : "card list-item card-half"} onClick = { () => onSelectUser(fullName, id) }>
         <div className="flex">
     
 

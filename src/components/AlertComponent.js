@@ -30,7 +30,7 @@ const ModalContent = styled.div`
   }
   `;
 
-export const AlertComponent = ({ type , titulo, subtitulo, cancelHandler, AcceptHandler}) => {
+export const AlertComponent = ({ type , title, message, cancelHandler, AcceptHandler}) => {
   /*const keyPress = useCallback(
     e => {
 
@@ -52,9 +52,9 @@ export const AlertComponent = ({ type , titulo, subtitulo, cancelHandler, Accept
 */
   return (
     <>
-        <h1> {titulo}</h1> 
+        <h1>{title}</h1> 
         
-        <p>{subtitulo}</p>
+        <p>{message}</p>
 
         <div className="buttons">
 

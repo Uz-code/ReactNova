@@ -7,19 +7,44 @@ import { AlertComponent } from './components/AlertComponent';
 import { useNavigate } from 'react-router-dom';
 import { SearchForUser } from './SearchForUser';
 import  Tabs  from './components/Tabs';
-import { BsKeyFill } from 'react-icons/bs';
+import { BsAlarm, BsArchive, BsArchiveFill, BsEye, BsEyeSlash, BsKeyFill, BsUpload } from 'react-icons/bs';
+import { SeleccionarUc } from './SeleccionarUC';
 
 export const EditUser = () => {
-   
-
-    const [ chkArchivoAdjunto_pk, setChkArchivoAdjunto_pk ] = useState( false );
-    
+       
     const [ UsrADDescripcion, setUsrADDescripcion ] = useState( 'Administrador de dominio' );
+    
+    const [ notificadoresId, setNotificadoresId ] = useState( '' );
 
-    const [ usersId, setUsersId ] = useState( '' );
+    const CancelarLocalizacion = (  ) => {
+        
+        cancelHandler();
+
+    }
+
     useEffect ( () => {
-        setValue("notificadores", usersId);
-    }, [usersId] );
+        setValue("notificadores", notificadoresId);
+        //console.log("notificadoresId", notificadoresId);
+    }, [notificadoresId] );
+
+
+    /*useEffect ( () => {
+
+        if (listUser.length > 0) {
+            
+            console.log("LocalizacionID", listUser[0][1]);
+
+            console.log("Nombre Seleccionado", listUser[0][0]);
+            SetNombreLocalizacion(listUser[0][0]);
+        }
+        else
+        {
+            SetNombreLocalizacion('');
+
+            console.log("empty");
+        }
+
+    }, [listUser] );*/
 
     var 
     {
@@ -29,6 +54,7 @@ export const EditUser = () => {
     handleChange,
     handleSubmit,
     handleClear,
+    guardarLocalizacion,
     setValue,
     StateMessageError,
     setStateMessageError,
@@ -48,6 +74,7 @@ export const EditUser = () => {
     username,
     puertoDeConexion,
     localizacion,
+    LocalizacionID,
     Nservice,
     descripcion,
     Password,
@@ -58,6 +85,11 @@ export const EditUser = () => {
     txtPassphrase_pk,
     toggleGenerarPass, setToggleGenerarPass,
     toggleGenerarPassc, setToggleGenerarPassc,
+    typePass, setTypePass,
+    typePassC, setTypePassC,
+    chkArchivoAdjunto_pk,setChkArchivoAdjunto_pk,
+    nombreLocalizacion,
+    listLocalizacion,
     IdModelos,
     PoliticaConfiguracion,
     UsrAdmin,
@@ -91,6 +123,7 @@ export const EditUser = () => {
     cambiarPassword : false,
     puertoDeConexion: '3840',
     localizacion: '',
+    LocalizacionID : '',
     Nservice : '',
     descripcion: '',
     notificadores : '',
@@ -116,8 +149,8 @@ export const EditUser = () => {
     TipoPeriodoCtrlClaveAuto: "0",
     Responsable: '1',
     GrupoResp: '1',
-    ArchivoAdjunto_pk : null,
-    hdArchivoAdjuntoAttachId_adj1: null,
+    ArchivoAdjunto_pk : '',
+    hdArchivoAdjuntoAttachId_adj1: '',
     NombreBD:'',
     CadenaConexionUsuario: '',
     AcountID: '',
@@ -131,6 +164,18 @@ export const EditUser = () => {
         setShowModal(prev => !prev);
     };
     
+    const toggleTypePassc = () => {
+        if (!toggleGenerarPassc) {
+            typePassC == 'password' ? setTypePassC( 'text' ) : setTypePassC( 'password' ) ? setTypePassC( 'text' ) : setTypePassC( 'password' );
+        }
+    };
+
+    const toggleTypePass = () => {
+        if (!toggleGenerarPass) {
+            typePass == 'password' ? setTypePass( 'text' ) : setTypePass( 'password' ) ? setTypePass( 'text' ) : setTypePass( 'password' );
+        }
+    };
+
     const togglePassc = () => {
         setToggleGenerarPassc(!toggleGenerarPassc);
     };
@@ -157,14 +202,37 @@ export const EditUser = () => {
         EditUser = true;
     }
 
+    const [ typeModal, setTypeModal ] = useState( 1 );
+    // Tipo 1 = Alerta
+    // Tipo 2 = Formulario, Tabla, etc
+
+    useEffect ( () => {
+       !showModal && setTypeModal(1);
+    }, [showModal] );
+
+    const openModalUc = () => {
+        setTypeModal(2);
+        setShowModal(prev => !prev);
+        
+    };
+
     return (
         <>
-        
-        <Modal showModal={showModal} setShowModal={setShowModal} >
-            <AlertComponent titulo="Error" subtitulo={StateMessageError} type={2} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler} />
-        </Modal> 
-        
         <div className="App-header App-body">
+            <Modal showModal={showModal} setShowModal={setShowModal} >
+            {typeModal == 1 ? <AlertComponent showModal={showModal} type={1} setShowModal={setShowModal} title={title} message={StateMessageError} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler} />
+            : 
+            UsrSo == 61 ? // Tabla Azure AD seleccion de Localizacion
+                <SeleccionarUc  setMensajeAlerta={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={cancelHandler}  listaExterna={listLocalizacion}  /> 
+            :
+            UsrSo == 62 ? // Tabla Google WS seleccion de Localizacion
+                <SeleccionarUc  setMensajeAlerta={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={cancelHandler}  listaExterna={listLocalizacion}  /> 
+            :
+            UsrSo == 56 && // Tabla SAP seleccion de Localizacion
+                <SeleccionarUc  setMensajeAlerta={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={cancelHandler}  listaExterna={listLocalizacion}  /> 
+            }
+            </Modal> 
+
             <div className= "responsive-wrapper container-fluid ">
                 <div className= "main-header">
                     <h1> Usuarios Controlados / { EditUser ? `Editar Usuario ${id}`: 'Crear Usuario' } </h1>
@@ -181,44 +249,92 @@ export const EditUser = () => {
                                     <div className= "row g-6" style={{ display: "flex", flexDirection: "row" }}>
                                         <div className= "col-xl-3 col-sm-6 col-12 main-section form-user" style={{ flex:1 }}>
 
-                                            <div className= "card a45w shadow border-0 " >
+                                            <div className= "card shadow border-0 " >
 
-                                                <div className='card-body'>
-                                                    <div className='input-group mb-3'>
-                                                        <label className='LabelForm'>Datos Basicos </label>
+                                                <div className='card-body mb-3'>
+                                                    <div className='mb-4'></div>
+                                                    {
+                                                    //<div className='input-group mb-6'>
+                                                    //<label className='LabelForm'>Datos Basicos </label>
+                                                     //<p className='subtitulo'>Datos Basicos</p>
+                                                    //</div>
+                                                    }
+                                                    <div className='mb-5 flex'>
+                                                        <label className='input-group'>
+                                                            <input type="text"  className="input-fancy" name="username" placeholder=" " value={username} onChange={handleChange} />
+                                                            <p>Nombre</p>
+                                                        </label>
+                                                    </div>
+                                                    
+                                                    <div className='mb-5 flex'>
+                                                        <label className='input-group'>
+                                                            <input type="text"  className="input-fancy" name="descripcion" placeholder="  " value={descripcion || ''} onChange={handleChange} />
+                                                            <p>Descripcion</p>
+                                                        </label>
                                                     </div>
 
-                                                    <div className='input-group mb-3'>
-                                                        <input type="text"  className="input-fancy"name="username" placeholder="Nombre" value={username} onChange={handleChange} />
+                                                    <div className='mb-5 flex'>
+                                                        <label className='input-group'>
+                                                            <input type="text"className="input-fancy" name="localizacion" placeholder="  " value={(UsrSo == 61  || UsrSo == 62 || UsrSo == 56) ?  nombreLocalizacion : localizacion } {...(UsrSo == 61  || UsrSo == 62 || UsrSo == 56) && {disabled: true}} onChange={handleChange} />
+                                                            <p>Localizacion </p>
+                                                        </label>
+                                                        { 
+                                                        (UsrSo == 61  || UsrSo == 62 || UsrSo == 56) && 
+                                                            <button className="btn btn-neutral clear-btn" onClick={openModalUc}>Seleccionar</button>
+                                                        }
                                                     </div>
-                                                    <div className='input-group mb-3'>
-                                                        <input type="text"  className="input-fancy"name="descripcion" placeholder="Descripcion" value={descripcion || ''} onChange={handleChange} />
-                                                    </div>
-                                                    <div className='input-group mb-3'>
-                                                        <input type="text"  className="input-fancy"name="localizacion" placeholder="Localizacion" value={localizacion || ''} onChange={handleChange} />
-                                                    </div>
+
                                                     { 
                                                     (UsrSo == 5 || UsrSo == 60) && 
-                                                    <div className='input-group mb-3'>
-                                                        <input type="text"  className="input-fancy"name="Nservice" placeholder="Nservice" value={Nservice || ''} onChange={handleChange} />
+                                                    <div className='mb-5 flex'>
+                                                        <label className='input-group'>
+                                                            <input type="text"  className="input-fancy"name="Nservice" placeholder="  " value={Nservice || ''} onChange={handleChange} />
+                                                            <p>Nservice</p>
+                                                        </label>
                                                     </div>
                                                     }
 
-                                                    <div className='input-group mb-3'>
-                                                        <label className='LabelForm'>Seguridad </label>
+                                                    <div className='input-group mb-1'>
+                                                        {/* <p className='subtitulo'>Seguridad</p>*/}
                                                     </div>
 
-                                                    <div className='input-group-flex mb-3'>
-                                                        <input type="password"  className="input-fancy" name="Password" placeholder="Password" value={Password}  {...toggleGenerarPass && {readOnly: true}} onChange={handleChange} /> 
-                                                        <input type="password"  className="input-fancy" name="passchk" placeholder="Verificacion" value={passchk} {...toggleGenerarPass && {readOnly: true}} onChange={handleChange} />
-                                                        <div className="button-fancy" onClick={togglePass} title="Generar Password" > <BsKeyFill style={toggleGenerarPass && { color: "blue" }} /> </div>
-                                                    </div> 
-                                            
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <input type="password"  className="input-fancy"name="Passwordc" placeholder="Password Combinada" value={Passwordc} {...toggleGenerarPassc && {readOnly: true}}  onChange={handleChange} />
-                                                        <input type="password"  className="input-fancy"name="passcchk" placeholder="Verificacion" value={passcchk} {...toggleGenerarPassc && {readOnly: true}}  onChange={handleChange} />
-                                                        <div className="button-fancy" onClick={togglePassc} title="Generar Password" > <BsKeyFill style={toggleGenerarPassc && { color: "blue" }} /> </div>
-                                                    </div> 
+                                                    <div className='mb-5 flex'>
+                                                        <label className='input-group'>
+                                                            <input type={typePass} id='password'  className="input-fancy" name="Password" placeholder=" " value={Password}  {...toggleGenerarPass && {readOnly: true}} onChange={handleChange} />
+                                                            <p>Password</p>
+                                                            <div className="password-icon" {...toggleGenerarPass && {style: {display: 'none'}}} onClick={toggleTypePass}>
+                                                                <i data-feather="eye">{typePass == 'password' ? <BsEye></BsEye> : <BsEyeSlash></BsEyeSlash>}</i>
+                                                            </div>
+                                                        </label>
+
+                                                        <label className='input-group'>
+                                                            <input type={typePass}  className="input-fancy" name="passchk" placeholder=" " value={passchk} {...toggleGenerarPass && {readOnly: true}} onChange={handleChange} />
+                                                            <p>Verificacion</p>
+                                                            <div className="password-icon" {...toggleGenerarPass && {style: {display: 'none'}}} onClick={toggleTypePass}>
+                                                                <i data-feather="eye">{typePass == 'password' ? <BsEye></BsEye> : <BsEyeSlash></BsEyeSlash>} </i>
+                                                            </div>
+                                                        </label>
+                                                        <div className="button-fancy" onClick={togglePass} title="Generar Password" > <BsKeyFill style={toggleGenerarPass && { color: "#434ce8" }} /> </div>
+                                                    </div>
+
+                                                    <div className='mb-5 flex'>
+                                                        <label className='input-group'>
+                                                        <input type={typePassC}  className="input-fancy" name="Passwordc" placeholder="  " value={Passwordc} {...toggleGenerarPassc && {readOnly: true}}  onChange={handleChange} />
+                                                            <p>Password Combinada</p>
+                                                            <div className="password-icon" {...toggleGenerarPassc && {style: {display: 'none'}}} onClick={toggleTypePassc}>
+                                                                <i data-feather="eye"> {typePassC == 'password' ? <BsEye></BsEye> : <BsEyeSlash></BsEyeSlash>} </i>
+                                                            </div>
+                                                        </label>
+                                                    
+                                                        <label className='input-group'>
+                                                        <input type={typePassC}  className="input-fancy" name="passcchk" placeholder="  " value={passcchk} {...toggleGenerarPassc && {readOnly: true}}  onChange={handleChange} />
+                                                            <p>Verificacion</p>
+                                                            <div className="password-icon" {...toggleGenerarPassc && {style: {display: 'none'}}} onClick={toggleTypePassc}>
+                                                                <i data-feather="eye"> {typePassC == 'password' ? <BsEye></BsEye> : <BsEyeSlash></BsEyeSlash>} </i>
+                                                            </div>
+                                                        </label>
+                                                        <div className="button-fancy" onClick={togglePassc} title="Generar Password" > <BsKeyFill style={toggleGenerarPassc && { color: "#434ce8" }} /> </div>
+                                                    </div>
 
                                                     { EditUser && 
                                                         <div className='input-group-flex mb-3'>
@@ -240,8 +356,8 @@ export const EditUser = () => {
                                             <div className= "card shadow border-0 flex" >
 
                                                 <div className='card-body'>
-                                                    <div className='input-group mb-3'>
-                                                        <label className='LabelForm'>Datos Adicionales </label>
+                                                    <div className='input-group mb-1' style= {{ paddingLeft : "8.5px" }}>
+                                                        <p className='subtitulo'>Datos Adicionales</p>
                                                     </div>
 
                                                     <div className='input-group-flex mb-3'>
@@ -396,19 +512,24 @@ export const EditUser = () => {
                                                     UsrAdmin != "0" && 
                                                     <>
 
-                                                 
-
-                                                    <div className='flex mb-3'  style={{flexDirection: "row-reverse"}} >
+                                                    <div className='flex main-header mb-3'  >
                                                 
                                                         <div  className="input-tag no-select">
                                                         <label className='LabelForm'> Expirar Password en Reset: </label>
-                                                        </div>
                                                         <input type='checkbox'  name='chk' checked={false} disabled onChange={handleChange} />
-
+                                                        </div>
                                                         <div  className="input-tag no-select">
-                                                            <label className='LabelForm'> Desbloquear Usuario en Reset: </label>
-                                                        </div>
+                                                        <label className='LabelForm'> Desbloquear Usuario en Reset: </label>
                                                         <input type='checkbox'  name='chk' checked={false} disabled onChange={handleChange} />
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div className='input-group-flex  mb-3'>
+                                                        <div  className="input-tag no-select">
+                                                            Descripcion del Usuario Administrador:
+                                                        </div>
+                                                        <input type="text" className="form-input" value={UsrADDescripcion} name="UsrADDescripcion" readOnly />
                                                     </div>
 
                                                     <div className='input-group-flex  mb-3'>
@@ -572,11 +693,23 @@ export const EditUser = () => {
                                                             <div  className="input-tag no-select">
                                                                 Archivo Pk:
                                                             </div>
-                                                            <label for="ArchivoAdjunto_pk" className="btn btn-neutral flex">
-                                                               Upload File
+                                                            <label for="ArchivoAdjunto_pk" className="btn btn-neutral flex" {...ArchivoAdjunto_pk != '' && { style : { backgroundColor: "#f5f9fc" , fontWeight : "100", fontSize:"12px" } }}>
+                                                                {ArchivoAdjunto_pk != '' ?  ArchivoAdjunto_pk = ArchivoAdjunto_pk.replace(/C:\\fakepath\\/i, '')  : 'Seleccionar Archivo'}{ArchivoAdjunto_pk != '' ?  <BsArchiveFill style={{ marginLeft: "10px"}} /> : <BsArchive style={{ marginLeft: "10px"}} />}
                                                             </label>
-                                                            <input id="ArchivoAdjunto_pk"  value={ArchivoAdjunto_pk} name="ArchivoAdjunto_pk" type="file" onChange={handleChange} />
+                                                            <input id="ArchivoAdjunto_pk"  filename={ArchivoAdjunto_pk} name="ArchivoAdjunto_pk" type="file" onChange={handleChange} />
                                                         </div>
+                                                        {
+                                                            /*
+                                                        <div className='input-group-flex  mb-3'>
+                                                            <div  className="input-tag no-select" style={{ width: "50%"}}>
+                                                                
+                                                            </div>
+                                                            <div className="content-header-intro" style={{ width: "50%"}}>
+                                                                <p>{ ArchivoAdjunto_pk}</p>
+                                                            </div>
+                                                        </div>
+                                                        */
+                                                       }
 
                                                         <div className='input-group-flex  mb-3'>
                                                             <div  className="input-tag no-select">
@@ -661,8 +794,8 @@ export const EditUser = () => {
                                             <div className= "card  shadow border-0 flex" >
                                                 <div className='card-body'>
                                                     
-                                                    <div className='input-group mb-3'>
-                                                        <label className='LabelForm'>Datos Telnet</label>
+                                                    <div className='input-group mb-1' style= {{ paddingLeft : "8.5px" }}>
+                                                        <p className='subtitulo'>Datos Telnet</p>
                                                     </div>
 
                                                     <div className='input-group-flex  mb-3'>
@@ -713,9 +846,8 @@ export const EditUser = () => {
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
+                            
                             <div label="Informacion">
                                 <div className= "content-main">
                                     <div className= "row g-6" style={{ display: "flex", flexDirection: "row" }}>
@@ -723,8 +855,8 @@ export const EditUser = () => {
                                             <div className= "card  shadow border-0 flex" >
 
                                                 <div className='card-body'>
-                                                    <div className='input-group mb-3'>
-                                                        <label className='LabelForm'>Informacion</label>
+                                                    <div className='input-group mb-1' style= {{ paddingLeft : "8.5px" }}>
+                                                        <p className='subtitulo'>Informacion</p>
                                                     </div>
 
                                                     <div className='input-group-flex mb-3'>
@@ -818,14 +950,14 @@ export const EditUser = () => {
 
                                                     <div className='input-group-flex  mb-3'>
                                                         <div  className="input-tag no-select">
-                                                            Archivo Relacionado	:
+                                                            Archivo Relacionado:
                                                         </div>
-
-                                                        <label for="hdArchivoAdjuntoAttachId_adj1"  className="btn btn-neutral flex">
-                                                                Upload File
+                                                        <label htmlFor="hdArchivoAdjuntoAttachId_adj1" className="btn btn-neutral flex" {...hdArchivoAdjuntoAttachId_adj1 != '' && { style : { backgroundColor: "#f5f9fc" , fontWeight : "100", fontSize:"12px" } }}>
+                                                            {hdArchivoAdjuntoAttachId_adj1 != '' ?  hdArchivoAdjuntoAttachId_adj1.replace(/C:\\fakepath\\/i, '')  : 'Seleccionar Archivo'}{hdArchivoAdjuntoAttachId_adj1 != '' ?  <BsArchiveFill style={{ marginLeft: "10px"}} /> : <BsArchive style={{ marginLeft: "10px"}} />}
                                                         </label>
-                                                        <input  type="file" id="hdArchivoAdjuntoAttachId_adj1" value={hdArchivoAdjuntoAttachId_adj1} name="hdArchivoAdjuntoAttachId_adj1" onChange={handleChange} />                                                        
-                                                    </div> 
+                                                        <input id="hdArchivoAdjuntoAttachId_adj1"  filename={hdArchivoAdjuntoAttachId_adj1} name="hdArchivoAdjuntoAttachId_adj1" type="file" onChange={handleChange} />
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -840,15 +972,14 @@ export const EditUser = () => {
                                         <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
                                             <div className= "card  shadow border-0 flex" >
                                                 <div className='card-body'>
-
-                                                    <div className='input-group mb-3'>
-                                                        <label className='LabelForm'>Usuarios Notificadores </label>
-                                                    </div>
-                                                    
+                                                    {/*
+                                                    <div className='input-group' style= {{ paddingLeft : "8.5px" }}>
+                                                        <p className='subtitulo'>Notificadores</p>
+                                                    </div>*/
+                                                    }
                                                 </div>
 
-                                                <SearchForUser setMensajeAlerta={ setStateMessageError }  usersId = { usersId } setUsersId = { setUsersId }   />
-                                                
+                                                <SearchForUser setMensajeAlerta = { setStateMessageError }  setUsersId = {setNotificadoresId} />
                                             </div>
                                         </div>
                                     </div>
@@ -856,7 +987,80 @@ export const EditUser = () => {
                             </div>
                             
                             <div label= { EditUser && 'Datos Estadisticos' } >
-                                { EditUser && 'content' }
+                                { EditUser &&
+                                <>
+
+<div label="Informacion">
+                                <div className= "content-main">
+                                    <div className= "row g-6" style={{ display: "flex", flexDirection: "row" }}>
+                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
+                                            <div className= "card  shadow border-0 flex" >
+
+                                                <div className='card-body'>
+                                                    
+                                                    <div className='input-group mb-1' style= {{ paddingLeft : "8.5px" }}>
+                                                        <p className='subtitulo'>Datos Estadisticos</p>
+                                                    </div>
+                                                    
+                                                    <div className='input-group-flex  mb-3'>
+                                                        <div  className="input-tag no-select">
+                                                            Fecha Ultima Modificacion	
+                                                        </div>
+                                                        <input type="text" className="form-input" readOnly  name="xxx" value={"13/11/2022  22:39:36" || ''}  />
+                                                    </div>
+
+                                                    <div className='input-group-flex  mb-3'>
+                                                        <div  className="input-tag no-select">
+                                                            Usuario Ultima Modificacion
+                                                        </div>
+                                                        <input type="text" className="form-input" readOnly  name="xx1" value={"nova\\administrador" || ''}  />
+                                                    </div>
+
+                                                    <div className='input-group-flex  mb-3'>
+                                                        <div  className="input-tag no-select">
+                                                            Fecha Ultimo Cambio de Clave Exitoso	                                                        
+                                                        </div>
+                                                        <input type="text" className="form-input" readOnly  name="xx3" value={"06/10/2022  16:13:38" || ''}  />
+                                                    </div>
+
+                                                    <div className='input-group-flex  mb-3'>
+                                                        <div  className="input-tag no-select">
+                                                            Fecha Proximo Cambio Clave Automatico		                                                        
+                                                        </div>
+                                                        <input type="text" className="form-input" readOnly  name="xx4" value={"06/10/2022  16:13:38" || ''}  />
+                                                    </div>
+
+                                                    <div className='input-group-flex  mb-3'>
+                                                        <div  className="input-tag no-select">
+                                                            Estado Ultimo Cambio Clave	                                                        
+                                                        </div>
+                                                        <input type="text" className="form-input" readOnly  name="xx6" value={"No se Efectuo el Cambio" || ''}  />
+                                                    </div>
+
+                                                    <div className='input-group-flex  mb-3'>
+                                                        <div  className="input-tag no-select">
+                                                            Fecha Proximo Control Clave Automatico	                                                       
+                                                        </div>
+                                                        <input type="text" className="form-input" readOnly  name="xx7" value={"25/10/2022  15:02:34" || ''}  />
+                                                    </div>  
+                                                    
+                                                    <div className='input-group-flex  mb-3'>
+                                                        <div  className="input-tag no-select">
+                                                            Estado Ultimo Control Clave Automatico	                                                
+                                                        </div>
+                                                        <input type="text" className="form-input" readOnly  name="xx8" value={"25/10/2022  15:02:34" || ''}  />
+                                                    </div>
+                                                  
+                                                  
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                        
+                            </div>
+                               
+                                </>
+                                }
                             </div>
                         </Tabs>
 
