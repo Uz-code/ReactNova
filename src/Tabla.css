@@ -72,11 +72,9 @@ thead, tbody tr {
 
   @media
    (max-width: 860px) {
-    .table td {
-      font-size: .7rem;
-    }
+   
     .table>:not(caption)>*>* {
-      padding: .3rem !important;
+      padding: .9rem !important;
     }
    
   }

@@ -1,7 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../components/Auth';
 
-
 export const RequiredAuth = ( { children } ) => {
     const auth = useAuth();
     const location = useLocation();

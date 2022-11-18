@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../components/Auth';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ export const useFormLogIn = ( initialForm = {} ) => {
     const [ formState, setFormState ] = useState( initialForm );
     const [ StateMessageError, setStateMessageError] = useState('');
     const [ titulo, setTitulo] = useState('');
-
+    
     const [ showModal, setShowModal] = useState(false);
 
     //Handlers
@@ -42,18 +42,16 @@ export const useFormLogIn = ( initialForm = {} ) => {
         // todo hacerla async
        if(VerifDatos()){
 
-        // adentro de auth.login se validara el usuario y se guardara en el localstorage 
+            //adentro de auth.login se validara el usuario y se guardara en el localstorage 
             const logIn = auth.login(formState);
 
-            console.log(logIn);
+            const { errorMessage, title } = logIn;
 
-            const { message, title , user } = logIn;
-
-            if (user === null) {
+            if (errorMessage) {
                 
                 setShowModal(true);
                 setTitulo(title);
-                setStateMessageError(message);
+                setStateMessageError(errorMessage);
                 
                 return false;
             }         

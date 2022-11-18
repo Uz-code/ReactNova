@@ -42,12 +42,29 @@ export const useForm = ( initialForm = {} ) => {
     const guardarLocalizacion = ( arr ) => {
         
         if (arr.length > 0) {
-            
+
+            let listId;
+            let listNombre;
+
+            if (arr.length > 1) {
+               const arrlistId = arr.map( (item) => item.id );
+               listId = arrlistId.join(',');
+
+               listNombre = arr.map( (item) => item.name );
+
+            } else {
+                listId = arr[0].id;
+
+                listNombre = arr[0].name;
+
+            }
+
+
             setListLocalizacion(arr);
             
-            SetNombreLocalizacion(arr[0][0]);
+            SetNombreLocalizacion(listNombre);
 
-            setValue("LocalizacionID", arr[0][1]); //  mepa mejor retornar un objeto que un array por ahora safa, todo
+            setValue("LocalizacionID", listId.toString()); //  mepa mejor retornar un objeto que un array por ahora safa, todo
 
         }
 
@@ -163,7 +180,7 @@ export const useForm = ( initialForm = {} ) => {
     useEffect( () => {
         //Metodo con valores por defecto dependiendo del sistema operativo
 
-        var objCadenaConexion = utilCadenaConexion && (objCadenaConexion =  setCadenaConexion());
+        var objCadenaConexion = utilCadenaConexion && (setCadenaConexion());
         var objPeriodoCtrlClaveAuto = setTipoPeriodoCtrlClaveAuto();
         var objPort = setPort();
         var objLocalizacionID = {'LocalizacionID': ''};

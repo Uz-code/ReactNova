@@ -4,13 +4,14 @@ import React, { useState, useEffect , useReducer } from 'react';
 import { Modal } from './components/Modal';
 import { AlertComponent } from './components/AlertComponent';
 import Pagination from './components/Pagination';
+import { useMemo } from 'react';
 
 export const ReporteAuditoria = () => {
 
-    const [ categories, setCategories ] = useState( '' );
+    const [ campoBusqueda, setCampoBusqueda ] = useState( '' );
 
     const onAddCategory = ( newCategory ) => {
-            setCategories( newCategory );
+            setCampoBusqueda( newCategory );
     }
 
     const [limit, setLimit] = useState('5');
@@ -39,7 +40,8 @@ export const ReporteAuditoria = () => {
 
     const [PaginaActual, setPaginaActual ] = useState(1);
 
-    
+    const options = useMemo( () => ({ campoBusqueda , limit , PaginaActual}), [campoBusqueda, limit, PaginaActual] );
+
     const openModal = () => {
         setComponentType(2); 
         setShowModal(prev => !prev);
@@ -133,11 +135,9 @@ export const ReporteAuditoria = () => {
 
                                                 { 
                                                     <DataList2
-                                                        key={ categories } 
-                                                        category={ categories }
-                                                        limit={ limit } 
+                                                        key={ campoBusqueda }
+                                                        options = { options } 
                                                         setMaxResultados={ setMaxResultados } 
-                                                        PaginaActual={ PaginaActual }
                                                         forceUpdate = { update }
                                                         onError={ (value) => openErrorModal(value) }
                                                         cardSize={1}

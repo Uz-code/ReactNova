@@ -14,7 +14,7 @@ export const useFetchData = ( options , setMaxResultados, forceUpdate , onError)
     
     useEffect( () => {
 
-        //console.log("useEffect useFetchData");
+        console.log("useEffect useFetchData");
         setIsLoading(true);
         setContacts([]);
 

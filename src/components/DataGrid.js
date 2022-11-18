@@ -1,7 +1,7 @@
 import { TableItem } from './TableItem';
 import { useFetchData } from '../hooks/useFetchData.js';
 
-export const DataGrid = ({ options, setMaxResultados, forceUpdate, onError , setUser ,onDelete , onSelectUser , listUsers }) => {
+export const DataGrid = ({ options, setMaxResultados, forceUpdate, onError , setUser ,onDelete , onSelectUser , listUsers , hasActions,isSelectable}) => {
 
     //console.log(options);
     const { contacts, isLoading } = useFetchData( options, setMaxResultados , forceUpdate, onError);
@@ -28,8 +28,8 @@ export const DataGrid = ({ options, setMaxResultados, forceUpdate, onError , set
                     onDelete = {onDelete}
                     onSelectUser = {onSelectUser}
                     listUsers = {listUsers}
-                    hasActions = { listUsers ? false : true }
-                    isSelectable = { listUsers ? true : false }
+                    hasActions = {hasActions}
+                    isSelectable = { isSelectable }
                 />
 
                 ))

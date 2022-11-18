@@ -1,14 +1,22 @@
-import { useEffect,useState } from 'react';
+import { React, useEffect,useState } from 'react';
 import { useForm } from './hooks/useForm';
-import React from 'react';
 import { useLocation } from 'react-router'
+
+import  Tabs  from './components/Tabs';
 import { Modal } from './components/Modal';
 import { AlertComponent } from './components/AlertComponent';
-import { useNavigate } from 'react-router-dom';
 import { SearchForUser } from './SearchForUser';
-import  Tabs  from './components/Tabs';
-import { BsAlarm, BsArchive, BsArchiveFill, BsEye, BsEyeSlash, BsKeyFill, BsUpload } from 'react-icons/bs';
-import { SeleccionarUc } from './SeleccionarUC';
+import { SeleccionarItem } from './SeleccionarItem';
+
+import { useNavigate } from 'react-router-dom';
+
+import {  BsArchive, BsArchiveFill, BsEye, BsEyeSlash, BsKeyFill } from 'react-icons/bs';
+
+
+import { CustomTablaUsuariosControlados } from './CustomTablaUsuariosControlados';
+
+/**tablade usuarios */
+
 
 export const EditUser = () => {
        
@@ -16,35 +24,9 @@ export const EditUser = () => {
     
     const [ notificadoresId, setNotificadoresId ] = useState( '' );
 
-    const CancelarLocalizacion = (  ) => {
-        
-        cancelHandler();
-
-    }
-
     useEffect ( () => {
         setValue("notificadores", notificadoresId);
-        //console.log("notificadoresId", notificadoresId);
     }, [notificadoresId] );
-
-
-    /*useEffect ( () => {
-
-        if (listUser.length > 0) {
-            
-            console.log("LocalizacionID", listUser[0][1]);
-
-            console.log("Nombre Seleccionado", listUser[0][0]);
-            SetNombreLocalizacion(listUser[0][0]);
-        }
-        else
-        {
-            SetNombreLocalizacion('');
-
-            console.log("empty");
-        }
-
-    }, [listUser] );*/
 
     var 
     {
@@ -158,12 +140,10 @@ export const EditUser = () => {
     AccessKeyID: '',
     });
     
+    //para el boton de back
     let navigate = useNavigate();
 
-    const openModal = () => {
-        setShowModal(prev => !prev);
-    };
-    
+    //para el boton de visibilidad de password
     const toggleTypePassc = () => {
         if (!toggleGenerarPassc) {
             typePassC == 'password' ? setTypePassC( 'text' ) : setTypePassC( 'password' ) ? setTypePassC( 'text' ) : setTypePassC( 'password' );
@@ -176,6 +156,7 @@ export const EditUser = () => {
         }
     };
 
+    //para el boton de generar por satCS
     const togglePassc = () => {
         setToggleGenerarPassc(!toggleGenerarPassc);
     };
@@ -184,6 +165,7 @@ export const EditUser = () => {
         
     };
 
+    // para los handlers de el modal
     function AcceptHandler() {
         setShowModal(false);
     }
@@ -191,6 +173,7 @@ export const EditUser = () => {
     function cancelHandler() {
         setShowModal(false);
     }
+    
 
     const location = useLocation();
  
@@ -198,13 +181,18 @@ export const EditUser = () => {
     var EditUser = false;
     if( location.state != null )
     {
+        
+        //Si recivo una ID por el objeto loction quiere decir que vino de un redirect del componente tabla de usuarios controlados 
+        //y debo cargar los datos del usuario en el formulario
+    
         id = location?.state.id; 
         EditUser = true;
+        
     }
 
     const [ typeModal, setTypeModal ] = useState( 1 );
     // Tipo 1 = Alerta
-    // Tipo 2 = Formulario, Tabla, etc
+    // Tipo 2 = TablaUC
 
     useEffect ( () => {
        !showModal && setTypeModal(1);
@@ -220,16 +208,23 @@ export const EditUser = () => {
         <>
         <div className="App-header App-body">
             <Modal showModal={showModal} setShowModal={setShowModal} >
-            {typeModal == 1 ? <AlertComponent showModal={showModal} type={1} setShowModal={setShowModal} title={title} message={StateMessageError} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler} />
+            {typeModal == 1 ? 
+                <AlertComponent showModal={showModal} type={1} setShowModal={setShowModal} title={title} message={StateMessageError} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler} />
             : 
             UsrSo == 61 ? // Tabla Azure AD seleccion de Localizacion
-                <SeleccionarUc  setMensajeAlerta={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={cancelHandler}  listaExterna={listLocalizacion}  /> 
+                <SeleccionarItem  setMensajeAlerta={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={cancelHandler}  listaExterna={listLocalizacion} multiSelect={true}>
+                    <CustomTablaUsuariosControlados/>
+                </SeleccionarItem> 
             :
             UsrSo == 62 ? // Tabla Google WS seleccion de Localizacion
-                <SeleccionarUc  setMensajeAlerta={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={cancelHandler}  listaExterna={listLocalizacion}  /> 
+                <SeleccionarItem  setMensajeAlerta={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={cancelHandler}  listaExterna={listLocalizacion} multiSelect={false}>
+                    <CustomTablaUsuariosControlados/>
+                </SeleccionarItem>
             :
             UsrSo == 56 && // Tabla SAP seleccion de Localizacion
-                <SeleccionarUc  setMensajeAlerta={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={cancelHandler}  listaExterna={listLocalizacion}  /> 
+                <SeleccionarItem  setMensajeAlerta={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={cancelHandler}  listaExterna={listLocalizacion} multiSelect={false}>
+                    <CustomTablaUsuariosControlados/>
+                </SeleccionarItem> 
             }
             </Modal> 
 
@@ -847,7 +842,7 @@ export const EditUser = () => {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div label="Informacion">
                                 <div className= "content-main">
                                     <div className= "row g-6" style={{ display: "flex", flexDirection: "row" }}>
@@ -912,7 +907,7 @@ export const EditUser = () => {
                                                         </select>
                                                     </div>   
                                                     { 
-                                                    UsrSo != 63 &&
+                                                    UsrSo != 63  && 
                                                     <div className='input-group-flex  mb-3'>
                                                         <div  className="input-tag">
                                                             Periodo Control Automatico de Clave:
@@ -979,7 +974,7 @@ export const EditUser = () => {
                                                     }
                                                 </div>
 
-                                                <SearchForUser setMensajeAlerta = { setStateMessageError }  setUsersId = {setNotificadoresId} />
+                                                <SearchForUser setMensajeAlerta = { setStateMessageError }  setUsersId = {setNotificadoresId} multiSelect = {true} />
                                             </div>
                                         </div>
                                     </div>

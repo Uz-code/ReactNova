@@ -1,12 +1,12 @@
 import { AddFilter } from './components/AddFilter';
 import { DataList } from './components/DataList';
+import Pagination from './components/Pagination';
 import { useMemo } from 'react';
 
-import Pagination from './components/Pagination';
 
 import React, { useState, useEffect , useReducer } from 'react';
 
-export const SearchForUser = ({ setMensajeAlerta ,  setUsersId }) => {
+export const SearchForUser = ({ setMensajeAlerta ,  setUsersId , multiSelect}) => {
     
     const [listUsers, setListUsers ] = useState( [] );
 
@@ -16,21 +16,22 @@ export const SearchForUser = ({ setMensajeAlerta ,  setUsersId }) => {
 
     const [PaginaActual, setPaginaActual ] = useState(1);
 
-    const onAddUserToList = ( userName, id ) => {
+    const onAddUserToList = ( userName , id ) => {
         
         // validar si el usuario se encuentra en la lista 
-        const userAlreadyInList = listUsers.find( user => user[1] === id );
-        // if the user is already in the list, do nothing
-        if ( userAlreadyInList ) { onRemoveUserToList( id ); return; }
+        const userAlreadyInList = listUsers.find( user => user.id === id ) != null;
 
-        // si el usuario no esta en la lista adherirlo
-        setListUsers( [ ...listUsers, [userName, id] ] );
+        // if the user is already in the list, do nothing
+        if ( userAlreadyInList  ) { onRemoveUserToList( id ); return; }
+
+        // reemplazo el nuevo valor en la lista
+        multiSelect ?  setListUsers( [ ...listUsers, { name : userName , id : id } ] ) : setListUsers( [ { name : userName , id : id } ] );
 
     }
 
     useEffect ( () => {
 
-        var userId = listUsers.map( user =>  user[1] );
+        var userId = listUsers.map( user =>  user.id );
         //array to string 
         var userIdString = userId.join(',');
 
@@ -39,8 +40,8 @@ export const SearchForUser = ({ setMensajeAlerta ,  setUsersId }) => {
     }, [listUsers] );
 
     const onRemoveUserToList = ( id ) => {
-       
-        setListUsers(listUsers.filter( (user) => user[1] !== id ));
+
+        setListUsers(listUsers.filter( (user) => user.id !== id ));
 
     }
 
@@ -90,7 +91,7 @@ export const SearchForUser = ({ setMensajeAlerta ,  setUsersId }) => {
                         listUsers.map( (user,index) => {
                             return (
                                 <div key={index} className="clear-btn search-item no-select">
-                                    <a className="" >{user[0]} </a> <a className="search-item__close" onClick={ () => onRemoveUserToList(user[1]) } >x</a>
+                                    <a className="" >{user.name} </a> <a className="search-item__close" onClick={ () => onRemoveUserToList(user.id) } >x</a>
                                 </div>
                             )
                         }

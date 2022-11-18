@@ -1,5 +1,4 @@
 import { AddFilter } from './components/AddFilter';
-import { DataGrid } from './components/DataGrid';
 import React, { useState, useEffect , useReducer } from 'react';
 import { Modal } from './components/Modal';
 import { AlertComponent } from './components/AlertComponent';
@@ -7,9 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 import Pagination from './components/Pagination';
 
+import { CustomTablaUsuariosControlados } from './CustomTablaUsuariosControlados';
+import { SeleccionarItem } from './SeleccionarItem';
+
 import './Tabla.css';
 
 export const TablaFetchData = () => {
+    const [ listLocalizacion, setListLocalizacion ] = useState( [] );
 
     const [campoBusqueda, setCampoBusqueda ] = useState( '' );
 
@@ -150,40 +153,21 @@ export const TablaFetchData = () => {
                                                 <div className="card-header">
                                                     <h5 className="mb-0">Usuarios</h5>
                                                 </div>
-                                               
-                                                <table className="table ">
-                                               
-                                                    <thead className="thead-light">
-                                                    <colgroup> 
-                                                        <col span="1" style={{width: "16%"}} />
-                                                        <col span="1" style={{width: "0*"}} />
-                                                        <col span="1" style={{width: "0*"}} />
-                                                        <col span="1" style={{width: "20%"}} />  
-                                                        <col span="1" style={{width: "16%"}} />  
-                                                    </colgroup>
-                                                        <tr>
-                                                            <th scope="col">Nombre</th>
-                                                            <th scope="col">Direccion</th>
-                                                            <th scope="col">Genero</th>
-                                                            <th scope="col">E-mail</th>
-                                                            <th scope="col"></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody className='table-body'>
-                                                    { 
-                                                        <DataGrid 
-                                                            options = { options }
-                                                            key={ campoBusqueda } 
-                                                            setMaxResultados={ setMaxResultados } 
-                                                            forceUpdate = { update }
-                                                            onError={ (value) => openErrorModal(value) }
-                                                            setUser = {setUser}
-                                                            onDelete = { (value) => openOptionModal(value) }
-                                                        />
-                                                    }
-                                                    </tbody>
-                                                </table>
 
+                                                <SeleccionarItem  setMensajeAlerta={ (value) => openErrorModal(value)  }  guardarHandler = { (arr) => { setListLocalizacion(arr); } } cancelHandler={cancelHandler}  listaExterna={listLocalizacion} multiSelect={true}>
+                                                <CustomTablaUsuariosControlados
+                                                     options = { options }
+                                                     key={ campoBusqueda } 
+                                                     setMaxResultados={ setMaxResultados } 
+                                                     forceUpdate = { update }
+                                                     onError={ (value) => openErrorModal(value) }
+                                                     setUser = {setUser}
+                                                     onDelete = { (value) => openOptionModal(value) }
+                                                     hasActions = {true}
+                                                     isSelectable = {false}
+                                                />
+                                                </SeleccionarItem>
+                                                
                                                 <div className="card-footer footer-start">
                                                     <span className="text-muted text-sm">Mostrando {limit > maxResultados ? maxResultados : limit } items de {maxResultados} resultados encontrados</span>
                                                 </div>

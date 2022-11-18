@@ -8,71 +8,53 @@ const AuthContext = createContext(null);
     const loggedInUser = localStorage.getItem("user");
 
     const [user, setUser] = useState(JSON.parse(loggedInUser) || null);
+    
     const [message, setMessage] = useState('');
     const [title, setTitle] = useState('');
 
-    /*useEffect(() => {
-        const loggedInUser = localStorage.getItem("user");
-    
-        if (loggedInUser) {
-            const foundUser = JSON.parse(loggedInUser);
-            setUser(foundUser);
-        }
-        
-      }, []);
-*/
-    //const [loading, setLoading] = useState(true);
-
-    /*useEffect(() => {
-        auth.onAuthStateChanged((user) => {
-            setUser(user);
-            setLoading(false);
-        });
-    }, []);
-
-    const value = {
-        user,
-    };
-*/
-   
-
-    const login = ( user ) => {
-        
+    const fetchToken = ( usuario ) => {
         let response = null;
 
-        //TODO VALIDAR LOGIN
-        /* 
-        const user = { username, password };
-        // send the username and password to the server
-        const response = await axios.post(
-            "http://blogservice.herokuapp.com/api/login",
-            user
-        );
-        // set the state of the user
-        setUser(response.data)
-        
-        // store the user in localStorage
-        localStorage.setItem('user', response.data)
-        console.log(response.data)*/
-        
-        //todo return empty array en error
+        //caso hipotetico de algun error obteniendo datos
+        /*if (Error == true) {
+           
+            response = { errorMessage: 'Codigo Error 404', title: 'El error que te da la api', TokenSeguridad: '' }; 
 
-        //setMessage('Usuario o Password incorrecta.');
+            return null;
+        }*/
+
+        //caso correcto retornar algo asi
+
+        response = { errorMessage: '', title: '', TokenSeguridad: '123492' }; 
         
-        //Caso correcto
-        response = { message: '', title: '', user: user }; // user = token, id , username
+        return response;
+    }
+
+    const login = ( form ) => {
+        let response;
+
+        response = fetchToken(form.username);
+        if (response.errorMessage) {
+            return response;
+        }
+
+        let TokenSeguridad = response.TokenSeguridad;
+        //....
+
+        //....
+        let user = null;
+
+        // conseguir los datos necesarios para retornaro un objeto user = { token: '12349', username: 'nova\administrador', id: '1' }
+
+        // al final armar/retornar algo asi
+        user = { token: '...', username: '...', id: '...'};  
+
         setUser(user);
+
         localStorage.setItem('user', JSON.stringify(user));
         
-        //Caso incorrecto
-        //response = { title: 'Error', message: 'Usuario o Password incorrecta.' , user: null };
-        //logout();
-        // 
-
         return response;
 
-        
-        
     };
 
 

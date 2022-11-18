@@ -6,6 +6,10 @@ export const AddFilter = ({ onNewCategory, limit, onNewLimit , forceUpdate  }) =
 
     const [ inputValue, setInputValue ] = useState('');
 
+    const [ placeholder, setPlaceholder ] = useState('Buscar...');
+
+    const [ itemActive , SetItemActive ] = useState('1');
+
     const [ limitValue, setlimitValue ] = useState(limit);
 
     const onInputChange = ({ target }) => {
@@ -43,13 +47,18 @@ export const AddFilter = ({ onNewCategory, limit, onNewLimit , forceUpdate  }) =
         Submitting();
     }, [forceUpdate]);
 
-    const [ itemActive , SetItemActive ] = useState('1');
+    const itemActivo = ( id ) => {
+        const placeholder = id === '1' ? 'Buscar por Nombre' : id === '2' ? 'Buscar por Detalle' : id === '3' ? 'Buscar por Localizacion' : 'Buscar...';
+        setPlaceholder(placeholder);
+        SetItemActive( id );
+    }
+
 
     return (
         <>
         <form onSubmit={ onSubmit }>
 
-            <div className= "container-filter">
+            <div className= "container-filter" {...filter ? {style: {minHeight: '350px'}} : {style: {minHeight: '0'}}} >
 
                 <div className= "row g-6 mb-7" style={{ display: "flex", flexDirection: "row" }}>
                     <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
@@ -57,7 +66,7 @@ export const AddFilter = ({ onNewCategory, limit, onNewLimit , forceUpdate  }) =
                             <input 
                                 className="input-fancy input-large"
                                 type="text"
-                                placeholder="Buscar..."
+                                placeholder=  { placeholder }
                                 value={ inputValue }
                                 onChange={ onInputChange }
                             />
@@ -170,13 +179,13 @@ export const AddFilter = ({ onNewCategory, limit, onNewLimit , forceUpdate  }) =
 
                     <div className="row g-6 mb-7 ">
                         <div className= "col-xl-3 col-sm-6 col-12 flex " style={{  flex:1 }}>
-                            <div  className={`btn btn-sm btn-neutral pd-1  ${ itemActive == '1' ? 'active' : '' }`}  onClick ={ () => SetItemActive('1') }>
+                            <div  className={`btn btn-sm btn-neutral pd-1  ${ itemActive == '1' ? 'active' : '' }`}  onClick ={ () => itemActivo('1') }>
                                 Nombre
                             </div>
-                            <div  className={`btn btn-sm btn-neutral pd-1  ${ itemActive == '2' ? 'active' : '' }`} onClick ={ () => SetItemActive('2') }>
+                            <div  className={`btn btn-sm btn-neutral pd-1  ${ itemActive == '2' ? 'active' : '' }`} onClick ={ () => itemActivo('2') }>
                                 Descripcion
                             </div>
-                            <div  className={`btn btn-sm btn-neutral pd-1  ${ itemActive == '3' ? 'active' : '' }`}  onClick ={ () => SetItemActive('3') }>
+                            <div  className={`btn btn-sm btn-neutral pd-1  ${ itemActive == '3' ? 'active' : '' }`}  onClick ={ () => itemActivo('3') }>
                                 Localizacion
                             </div>
                         </div>

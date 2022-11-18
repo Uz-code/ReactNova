@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const Background = styled.div`
   width: 100%;
   height: 90%;
+  margin-left: -60px !important;
   position: fixed;
   display: flex;
   justify-content: center;
