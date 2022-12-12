@@ -1,21 +1,30 @@
 import { useState } from 'react';
 import { useAuth } from '../components/Auth';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const useFormLogIn = ( initialForm = {} ) => {
-    
+ 
     // Auth
-    const auth = useAuth();
+    const { login , message, title } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const redirectPath = location.state?.from || '/';
-
+    
     // use State
     const [ formState, setFormState ] = useState( initialForm );
     const [ StateMessageError, setStateMessageError] = useState('');
     const [ titulo, setTitulo] = useState('');
-    
+    const [ isLoading, setIsLoading ] = useState( false );
     const [ showModal, setShowModal] = useState(false);
+
+    useEffect ( () => {
+        message && OpenAlert(message, title, true) 
+    }, [message]);
+    
+    const OpenAlert = ( message, title, show ) => {
+        setStateMessageError(message); setTitulo(title); setShowModal(show);
+    }
 
     //Handlers
     const handleChange = ( e ) => {
@@ -36,36 +45,34 @@ export const useFormLogIn = ( initialForm = {} ) => {
         });
     } 
 
-    const handleLogIn = ( e ) => {
+    const handleLogIn = async ( e ) => {
         e.preventDefault();
+        setIsLoading(true);
 
-        // todo hacerla async
        if(VerifDatos()){
 
-            //adentro de auth.login se validara el usuario y se guardara en el localstorage 
-            const logIn = auth.login(formState);
+            const { UserValid } = await login(formState);
 
-            const { errorMessage, title } = logIn;
+            if (!UserValid) {
+                console.log(message);
+                OpenAlert(message, title, true)
+                setIsLoading(false);
 
-            if (errorMessage) {
-                
-                setShowModal(true);
-                setTitulo(title);
-                setStateMessageError(errorMessage);
-                
                 return false;
             }         
             
+            setIsLoading( false );
             navigate(redirectPath, { replace: true }); 
             return true;
        }
 
+       setIsLoading( false );
         return false;
 
     }
 
     const VerifDatos = () => {
-
+        setTitulo("Error");
         const isValid = Object.keys( formState ).every( key => 
             validateInput( formState[ key ] , key )
         );
@@ -78,7 +85,6 @@ export const useFormLogIn = ( initialForm = {} ) => {
     }
 
     const validateInput = ( value , key ) => {
-        setTitulo("Error");
         switch (key) {
             case 'username':
                 if( !ValidarLength( value , "Nombre de Usuario", null, 30 ) ){
@@ -195,6 +201,7 @@ export const useFormLogIn = ( initialForm = {} ) => {
         ...formState,
         formState,
         setShowModal,
+        isLoading,
         showModal,
         handleLogIn,
         handleChange,
