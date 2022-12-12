@@ -4,6 +4,7 @@ import { Modal } from './components/Modal';
 import { AlertComponent } from './components/AlertComponent';
 import { useLocation } from 'react-router'
 import { useEffect } from 'react';
+import img from './img/Object1.png';
 
 export const LogIn = () => {    
     
@@ -11,6 +12,7 @@ export const LogIn = () => {
     {
     formState,
     setShowModal,
+    isLoading,
     showModal,
     handleChange,
     handleLogIn,
@@ -31,9 +33,6 @@ export const LogIn = () => {
         setShowModal(true);
       };
     
-    function AcceptHandler() {
-        setShowModal(false);
-    }
 
     function cancelHandler() {
         setShowModal(false);
@@ -62,62 +61,84 @@ export const LogIn = () => {
     return (
         <>
         <Modal showModal={showModal} setShowModal={setShowModal}>
-            <AlertComponent title={titulo} message={StateMessageError} type={2} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
+            <AlertComponent title={titulo} message={StateMessageError} type={2} cancelHandler={cancelHandler}  />
         </Modal> 
         
         <div className="App-body"> 
-            <div className= "responsive-wrapper FormContainer container-fluid ">
-                <div className= "main-header">
-                    <h1> Log In </h1>
-                </div>
-                
-                <form onSubmit={handleLogIn} className = 'form' >
-                    <div className= "content-main mb-6 ">
-                        <div className= "main-row" >
-                            <div className= "col-xl-3 col-sm-6 col-12 flex" style={{ flex:1 }}>
-                                <div className= "card shadow border-0 flex" >
+            <div className="w3-background-card flex center " style={{minHeight: '90vh'}}>
+                <img className="w3-img" src={img} alt = "Logo" />
+            
+                    <div className= "FormContainer container-fluid ">   
+                        <form onSubmit={handleLogIn} className = 'form' >
+                            <div className= "content-main mb-6 ">
+                                <div className= "main-row" >
+                                    <div className= " col-xl-3 col-sm-6 col-12 flex center" style={{ flex:1 }}>
+                                            <div className= "card w3-card border-0 flex" >
+                                            
+                                                <div className='card-body' >
+                                                    <div className='flex mb-6'>
+                                                        <div  className="input-tag no-select">
+                                                            <label className='LabelForm'>Metodo de Autenticacion: Windows</label>
+                                                        </div>
+                                                    </div>
+                                
+                                                    <div className='mb-7 flex'>
+                                                        <label className='input-group w3-input'>
+                                                            <input type="text"  className="input-fancy" name="username" placeholder=" " value={username} onChange={handleChange} />
+                                                            <p>Usuario</p>
+                                                        </label>
+                                                    </div>
+                                                    <div className='mb-3 flex'>
+                                                        <label className='input-group w3-input'>
+                                                            <input type="password"  className="input-fancy" name="password" placeholder=" " value={password} onChange={handleChange} />
+                                                            <p>Contraseña</p>
+                                                        </label>
+                                                    </div>
 
-                                    <div className='card-body'>
-                                        <div className='input-group mb-3 '>
-                                            <div  className="input-tag no-select">
-                                                <label className='LabelForm'>Metodo de Autenticacion: Windows</label>
-                                            </div>
-                                        </div>
-                                        <div className='input-group-flex mb-3'>
-                                            <div  className="input-tag no-select">
-                                                Usuario
-                                            </div>
-                                            <input type="text" className="form-input" name="username" value={username} onChange={handleChange} />
-                                        </div>
-                                        <div className='input-group-flex mb-3'>
-                                            <div  className="input-tag no-select">
-                                                <label className='LabelForm'>Contraseña</label>
-                                            </div>
-                                            <input type='password' className='form-input' name='password' value={password} onChange={handleChange} />
-                                        </div>
-                                        <div className='flex mb-3'>
-                                            <div  className="input-tag no-select">
-                                                <label className='LabelForm'>Utilizar credenciales actuales: </label>
-                                            </div>
-                                            <input type='checkbox'  name='chk' checked={false} disabled onChange={handleChange} />
-                                        </div>
+                                                    <div className='flex mb-3'>
+                                                        <div  className="input-tag no-select">
+                                                            <label className='LabelForm'>Utilizar credenciales actuales: </label>
+                                                        </div>
+                                                        <input type='checkbox'  name='chk' checked={false} disabled onChange={handleChange} />
+                                                    </div>
+                                                </div>
+
+                                                <div className='card-footer no-border'>
+                                                    <div className= "center flex" >
+                                                        <div className='card-body'>
+                                                            <div className='start-section'>
+
+                                                                    <button type='submit' className="w3-polimorfic3-btn" onClick={handleLogIn} {...(isLoading && { disabled: true })}> {isLoading ? 'Cargando...' : 'Iniciar Sesión'}</button>
+
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                     </div>
                                     
-                                    <div className='card-footer'>
-                                        <div className=' '>
-                                            <div className= "" >
-                                                <div className='input-group-flex mb-3 '>
-                                                <button type='submit' className="btn btn-sm btn-neutral flex" onClick={handleLogIn}>Ingresar</button>
+                                </div>
+                                {/*
+                                <div className= "main-row" >
+                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{ flex:1 }}>
+                                            <div className= "center flex" >
+
+                                                <div className='card-body'>
+                                                        <div className='start-section'>
+
+                                                        <button type='submit' className="w3-polimorfic2-btn" onClick={handleLogIn}>Log In</button>
+
+                                                        <button type='submit' className="w3-polimorfic3-btn" onClick={handleLogIn}>Sing Up</button>
+
+                                                        </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
                                 </div>
-                            </div>
-                        </div>
-                    </div>                        
-                </form>
+                                */}
+                            </div>                        
+                        </form>
+                    </div>  
             </div>
         </div> 
     </>
