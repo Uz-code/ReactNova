@@ -714,12 +714,9 @@ export const EditUser = () => {
                                                     </>
                                                     }
 
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Prompt de Usuario:
-                                                        </div>
-                                                        <input type="text" className="form-input"  name="UserPrompt" value={UserPrompt} onChange={handleChange} />
-                                                    </div>
+                                                    <InputGroup marginTop="3" flex={true}>     
+                                                        <InputFancy fancy={false} placeholder="Prompt de Usuario" name="UserPrompt" value={UserPrompt} onChange = {handleChange} />
+                                                    </InputGroup>
 
                                                 </>
                                                 }
@@ -727,32 +724,25 @@ export const EditUser = () => {
                                                 { 
                                                     (UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17) && 
                                                         <>
-                                                        <div className='input-group-flex  mb-3'>
-                                                            <div  className="input-tag no-select">
-                                                                Shell Por Defecto:
-                                                            </div>
-                                                            <input type="text" className="form-input"  name="DefaultShell" value={DefaultShell} onChange={handleChange} />
-                                                        </div>
+                                                        <InputGroup marginTop="3" flex={true}>
+                                                            <InputFancy fancy={false} placeholder="Shlell por Defecto" name="DefaultShell" value={DefaultShell} onChange = {handleChange} />
+                                                        </InputGroup>
 
-                                                        <div className='input-group-flex  mb-3'>
-                                                            <div  className="input-tag no-select">
-                                                                X11:
-                                                            </div>
-                                                            <select className="form-select form-select-lg " aria-label="" value={x11Opt} name="x11Opt" onChange={handleChange}>
-                                                                <option value="0">Desactivado</option>
-                                                                <option value="1">Activado</option>
-                                                            </select>                                                   
-                                                        </div>
+                                                        <InputGroup marginTop="3" flex={true}>
+                                                            <SelectComponent fancy={false} placeholder="Puerto X11" name="x11Opt" value={x11Opt} onChange = {handleChange} 
+                                                            options = { [
+                                                                { value: '0', label: 'Desactivado' },
+                                                                { value: '1', label: 'Activado' },
+                                                            ] } />
+                                                        </InputGroup>
+
                                                         
                                                         { 
                                                             x11Opt == 1 && 
                                                             <>
-                                                                <div className='input-group-flex  mb-3'>
-                                                                    <div  className="input-tag no-select">
-                                                                        ServidorX11:
-                                                                    </div>
-                                                                    <input type="text" className="form-input"  name="ServidorX11" value={ServidorX11} onChange={handleChange} />
-                                                                </div>
+                                                                <InputGroup marginTop="3" flex={true}>
+                                                                    <InputFancy fancy={false} placeholder="servidor X11" name="ServidorX11" value={ServidorX11} onChange = {handleChange} />
+                                                                </InputGroup>
 
                                                                 <div className='input-group-flex  mb-3'>
                                                                     <div  className="input-tag no-select">
