@@ -59,13 +59,12 @@ thead, tbody tr {
 .table td {
   font-size: .8125rem;
   word-break: break-word;
-
 }
 
 @media
    (min-width: 1320px) {
     .table td {
-      white-space: nowrap;
+      /*white-space: nowrap;*/
     }
   
   }
@@ -129,9 +128,13 @@ thead, tbody, tfoot, tr, td, th {
   text-align: left;
 }
 
+.white
+{
+  background-color: #fff !important;
+}
+
 .btn {
   display: inline-block;
-  margin-left: 5px;
   font-weight: 500;
   line-height: 1.3;
   color: #525f7f;
@@ -166,7 +169,6 @@ a {
 
 .btn-neutral {
   color: #16192c;
-  background-color: #fff;
   border-color: #e7eaf0;
   margin: 3px !important;
 }
@@ -214,7 +216,8 @@ a {
 }
 
 .page-link {
-  padding: 0.6rem .75rem;
+  min-height: 36px;
+  padding: 0.5rem .75rem;
   cursor:pointer;
   position: relative;
   display: block;

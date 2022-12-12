@@ -30,7 +30,7 @@ left: 60px;
 top: 64px;
 height: 100%;
 width: 1px;
-background: white;
+background: var(--secondary-bg);
 border-right: 1px solid transparent;
 z-index: 99;
 transition: all 0.1s ease;
@@ -89,7 +89,7 @@ transition: all 0.1s ease;
     top: 64px;
     height: 100%;
     width: 60px;
-    background:white;
+    background:var(--secondary-bg);
     border-right: 1px solid var(--bd-color);
     z-index: 99;
     transition: all 0.1s ease;
@@ -134,31 +134,16 @@ color: black;
 /*.sidebar li:hover { 
   background-color: #f5f5f5;
 }*/
-.sidebar li .tooltip{
-  color:black;
-  position: absolute;
-  top: -20px;
-  left: calc(100% + 10px);
-  z-index: 3;
-  background: #fff;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 15px;
-  font-weight: 400;
-  opacity: 0;
-  white-space: nowrap;
-  pointer-events: none;
-  transition: 0s;
-}
+
 
 .SideNavBar  li .tooltip{
   position: absolute;
   top: -20px;
   left: calc(100% + 10px);
   z-index: 3;
-  background: #fff;
+  background: var(--secondary-bg);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 1px 0 rgb(0 0 0 / 15%), 0 6px 12px 0 rgb(24 94 224 / 15%);
   padding: 6px 12px;
   border-radius: 4px;
   font-size: 15px;
@@ -406,7 +391,7 @@ color: black;
 
 li a {
     display: inline-block;
-    color: white;
+    color: var(--secondary-bg);
     text-align: center;
     text-decoration: none;
     height: 35px;
