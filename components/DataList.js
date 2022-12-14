@@ -3,7 +3,7 @@ import { useFetchData } from '../hooks/useFetchData.js';
 
 export const DataList = ({ options , setMaxResultados, forceUpdate, onError, cardSize , onAddUserToList,listUsers  }) => {
 
-    const { contacts, isLoading } = useFetchData( options, setMaxResultados , forceUpdate, onError );
+    const { users, isLoading } = useFetchData( options, setMaxResultados , forceUpdate, onError );
     
 
     return (
@@ -16,10 +16,9 @@ export const DataList = ({ options , setMaxResultados, forceUpdate, onError, car
             {  
 
             <div className="card-body start-section" style={{  flex:1 , minHeight: '400px' }}>
-                    {contacts.map( (contact) => (
+                    {users.map( (user) => (
                         <DataListContent 
-                            key={ contact.id } 
-                            { ...contact }
+                            { ...user }
                             size={cardSize}
                             onAddUserToList = { onAddUserToList }
                             listUsers = { listUsers }

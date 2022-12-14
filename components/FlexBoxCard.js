@@ -10,6 +10,7 @@ export const FlexBoxCard = ({ title, index, subtitle, img , checkboxState }) => 
 	}
     return (
         <>
+        <div className='card-width'>
             <div className= "card mh-2 shadow border-0 " >
                 <div className="card-header">
                     <div>
@@ -30,6 +31,7 @@ export const FlexBoxCard = ({ title, index, subtitle, img , checkboxState }) => 
                     <a href="#">Ver más</a>
                 </div>
             </div>
+        </div>
         </>
     )
 }
