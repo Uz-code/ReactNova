@@ -3,6 +3,7 @@ import Tab from './components/Tab';
 
 import { useState} from 'react';
 
+import { ListContent } from './components/ListContent';
 import { ContainerFlex } from './components/ContainerFlex';
 import { Card } from './components/Card';
 import { Wrapper } from './components/Wrapper';
@@ -22,7 +23,7 @@ import { DialogComponent } from './components/DialogComponent';
 
 export const AddUF = ( {AcceptHandler} ) => {
 
-	const EditUser = false;
+	const EditUser = true;
 	const id = 0;
 
     const [ currentTab, setCurrentTab ] = useState( "" );
@@ -263,13 +264,14 @@ export const AddUF = ( {AcceptHandler} ) => {
 											{ value: '1', label: 'Desactivado' }
 										] } />
 									</InputGroup>		
-								}		
+								}	
+								<br/>	
 							</Card>
 						</ContainerFlex>
 
-						<ContainerFlex half={false} justifyContent = {"space-between"}>
+						<ContainerFlex half={true} justifyContent = {"space-between"}>
 							<Card flex={1}>
-								<InputGroup marginTop="5" flex={true}>
+								<InputGroup marginTop="1" flex={true}>
 									<SelectComponent label="Metodo Autenticacion" name="selTipoMetodoAutenticacion" value={selTipoMetodoAutenticacion} onChange = {handleChange} options = { dictionary } />
 								</InputGroup>
 								
@@ -284,7 +286,8 @@ export const AddUF = ( {AcceptHandler} ) => {
 								}
 
 							</Card>
-							<Card>
+							
+							<Card minHeight={true} flex={1} cardSmall={true}>
 								<div className='input-tag no-select'>
 									<small className='subtitulo'>Acceso:</small>
 								</div>
@@ -292,27 +295,72 @@ export const AddUF = ( {AcceptHandler} ) => {
 								<FormCheckbox label="Sat Mobile" name={"chkDispositivoHabilitado_SATMobile"}   width="20%" flex={true} value={chkDispositivoHabilitado_SATMobile} onChange = {handleChange} />
 								<FormCheckbox label="Applicacion Externa" name={"chkDispositivoHabilitado_AppExt"}  width="20%" flex={true} value={chkDispositivoHabilitado_AppExt} onChange = {handleChange} />
 								<FormCheckbox label="Sat Extension API" name={"chkDispositivoHabilitado_SATApi"}  width="20%" flex={true} value={chkDispositivoHabilitado_SATApi} onChange = {handleChange} />
-							
 							</Card>
-						
+
 						</ContainerFlex>
 					</Tab>
-
-					<Tab label = "Elementos relacionados" >
+					
+					<Tab { ...EditUser ? { label:"Elementos relacionados" } : { label:"" } } >
 						<ContainerFlex>
 							<Card flex={1}>
+							<div className='drop__container'>
+								<div className='card-body'>
+									<h1>Grupos Asignados</h1>
+								</div>
+									<div className='drop__list'>
+										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
+											<ListContent content1="Grupo 1" content3={ 'grupo administradores'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
+										</div>
+										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
+											<ListContent content1="Grupo 2" content3={ 'grupo notificadores'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
+										</div>
+										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
+											<ListContent content1="Grupo 3" content3={ 'grupo personas'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
+										</div>
+									</div>
+								</div>
+								<br/>
+							</Card>
+							<Card flex={1}>
+								<div className='drop__container'>
+									<div className='card-body'>
+										<h1>Sobres Asignados</h1>
+									</div>	
 
+									<div className='drop__list'>	
+										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
+											<ListContent content1="Sobre 1" content3={ 'Sobre administradores'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
+										</div>
+										
+										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
+											<ListContent content1="Sobre 2" content3={ 'sobres numero 2'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
+										</div>
+
+										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
+											<ListContent content1="Sobre 3" content3={ 'sobre 1430'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
+										</div>
+									</div>
+								</div>
+							</Card>
+							<Card flex={1}>
+								<div className='drop__container'>
+									<div className='card-body'>
+										<h1>Sobres de Grupos</h1>
+									</div>	
+
+									<div className='drop__list'>	
+										<div  className= { `card  border-0 flex` } style= {{ flexDirection: 'row' , justifyContent: 'space-between' , boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
+											<ListContent content1="Sobre 3" content3={ 'grupo administrador'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
+										</div>
+									</div>
+								</div>
 							</Card>
 						</ContainerFlex>
 					</Tab>
 				</Tabs>
-				<ContainerFlex>
-					<div>
-						<InputGroup marginTop="0" marginBottom="7">
-							<Button label="Cancelar" onClick={handleCancel} type="button" />
-							<Button label="Guardar" onClick={handleSubmit} type="submit" />
-						</InputGroup>
-					</div>
+				<ContainerFlex center={true} >
+					<Button label="Cancelar" onClick={handleCancel} type="button" />
+					<Button label="Guardar" onClick={handleSubmit} type="submit" />   
 				</ContainerFlex>
 			</form>
 		</Wrapper>

@@ -13,7 +13,7 @@ export const HomePage = () => {
 				<div className= "main-header">
 					<h1>Dashboard</h1>
 				</div>
-	
+
 				<ContainerFlex half={false} >
 						{SettingsData.map((item, index) => {
 							return (
@@ -31,7 +31,8 @@ export const HomePage = () => {
 				<div className= "content-main">
 					<div className= "row g-6 mb-6" style={{ display: "flex", flexDirection: "row" }}>
 						<div className= "col-xl-3 col-sm-6 col-12 main-section " style={{  flex:1 }}>
-							<div className= "card card-center shadow border-0" >
+							<div className='card-width'>
+							<div className= "card  card-center shadow border-0" >
 
 								<table className="table ">
 									<thead>
@@ -112,7 +113,7 @@ export const HomePage = () => {
 									<a href="#">Ver más</a>
 								</div>
 							</div>
-
+							</div>
 						</div>
 					</div>
 

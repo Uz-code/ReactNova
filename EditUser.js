@@ -672,7 +672,7 @@ export const EditUser = () => {
                                             
                                                 { (UsrSo == 1 || UsrSo == 3 || UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17 || UsrSo == 20 || UsrSo == 50 || UsrSo == 51 || UsrSo == 40 ||
                                                    UsrSo == 41 || UsrSo == 55 || UsrSo == 23 || UsrSo == 30 || UsrSo == 99 || UsrSo == 20 || UsrSo == 58 || UsrSo == 64 || UsrSo == 65) &&
-                                                    <InputGroup marginTop="3" flex={true}>
+                                                    <InputGroup marginTop="" flex={true}>
                                                         <InputFancy fancy={false} placeholder="Puerto SSH" name="SatPssh" value={SatPssh} onChange = {handleChange} />
                                                     </InputGroup>
                                                 }
@@ -741,18 +741,17 @@ export const EditUser = () => {
                                                             x11Opt == 1 && 
                                                             <>
                                                                 <InputGroup marginTop="3" flex={true}>
-                                                                    <InputFancy fancy={false} placeholder="servidor X11" name="ServidorX11" value={ServidorX11} onChange = {handleChange} />
+                                                                    <InputFancy fancy={false} placeholder="Servidor X11" name="ServidorX11" value={ServidorX11} onChange = {handleChange} />
                                                                 </InputGroup>
 
-                                                                <div className='input-group-flex  mb-3'>
-                                                                    <div  className="input-tag no-select">
-                                                                        UsrSo Autorizacion:
-                                                                    </div>
-                                                                    <select className="form-select form-select-lg " aria-label="" value={UsrSoAutorizacion} name="UsrSoAutorizacion" onChange={handleChange}>
-                                                                        <option value="0">MIT</option>
-                                                                        <option value="1">XDMP</option>
-                                                                    </select>
-                                                                </div>
+                                                                <InputGroup marginTop="3" flex={true}>
+                                                                    <SelectComponent fancy={false} placeholder="UsrSoAutorizacion" name="UsrSoAutorizacion" value={UsrSoAutorizacion} onChange = {handleChange}
+                                                                    options = { [
+                                                                        { value: '0', label: 'MIT' },
+                                                                        { value: '1', label: 'XDMP' },
+                                                                    ]} />
+                                                                </InputGroup>
+
                                                             </>
                                                         }
                                                     </>
@@ -1049,17 +1048,11 @@ export const EditUser = () => {
                             </Tab>
                         </Tabs>
                             
-                    <div className= "row g-6 mb-3 mt-2" style={{ display: "flex", flexDirection: "row" }}>
-                        <div className= "col-sm-6 flex" style={{  flex:1 , flexDirection: "column", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                            <div>
-                                <div className='input-group-flex mb-3 mt-2'>
-                                    <div type='input' className="btn btn-sm btn-neutral white" onClick={() => navigate('/TablaFetchData')/*navigate(-1)*/}>Cancelar </div>
-                                    <button type='submit' className="btn btn-sm btn-neutral white" onClick={handleSubmit}> Aceptar</button>
-                                    <button type='input' className="btn btn-sm btn-neutral white" onClick={handleClear}> Reset</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <ContainerFlex center={true} >
+                            <Button label="Cancelar" onClick={() => navigate('/TablaFetchData')} type="button" />
+                            <Button label="Aceptar" onClick={handleSubmit} type="submit" />
+                            <Button label="Reset" onClick={handleClear} type="input" />
+                        </ContainerFlex>
             </Wrapper>
             </>
         }
