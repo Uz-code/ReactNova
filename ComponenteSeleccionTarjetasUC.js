@@ -29,25 +29,23 @@ export const ComponenteSeleccionTarjetasUC = ({  OnError , guardarHandler, guard
    
     return (
         <>
-            <div className="card-body">
-                <div className='recent-search mb-1'>
-                    <div className="card-filter" style={{width: '100%', paddingTop : '.5rem' }}>
-                        <div className="content-header-actions">
-                            <AddFilter  onNewCategory={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } />  	
-                        </div>
+            <div className='recent-search mb-1'>
+                <div className="card-filter" style={{width: '100%', paddingTop : '.5rem' }}>
+                    <div className="content-header-actions">
+                        <AddFilter  onNewCampoBusqueda={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } />  	
                     </div>
                 </div>
-                <SeleccionarItem AgregarNuevo ={AgregarNuevo} openModalListado = {openModalListado}  hasListaUsuarios= {true} guardarOnClick = {guardarOnClick}  hasButtons = {false} limit={limit}  guardarHandler = { (arr) => { guardarHandler(arr); } } cancelHandler={cancelHandler}  listaExterna={listaExterna} multiSelect={multiSelect} isDoubleTable={true}>
-                    <DataList 
-                    key={ campoBusqueda } 
-                    setMaxResultados={ setMaxResultados } 
-                    options={ options }
-                    forceUpdate = { update }
-                    onError = { (value) => { OnError(value); }}
-                    cardSize={2} 
-                    />
-                </SeleccionarItem> 
             </div>
+            <SeleccionarItem AgregarNuevo ={AgregarNuevo} openModalListado = {openModalListado}  hasListaUsuarios= {true} guardarOnClick = {guardarOnClick}  hasButtons = {false} limit={limit}  guardarHandler = { (arr) => { guardarHandler(arr); } } cancelHandler={cancelHandler}  listaExterna={listaExterna} multiSelect={multiSelect} isDoubleTable={true}>
+                <DataList 
+                key={ campoBusqueda } 
+                setMaxResultados={ setMaxResultados } 
+                options={ options }
+                forceUpdate = { update }
+                onError = { (value) => { OnError(value); }}
+                cardSize={2} 
+                />
+            </SeleccionarItem> 
         </>
     )
 }

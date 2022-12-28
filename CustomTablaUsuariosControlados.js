@@ -22,8 +22,8 @@ export const CustomTablaUsuariosControlados = ( { options, setMaxResultados, for
                     <th scope="col">Genero</th>
                     <th scope="col">E-mail</th>
                     { hasActions &&  
-                    <th scope="col"></th>
-                     } 
+                        <th scope="col"></th>
+                    } 
                 </tr>
             </thead>
             <tbody className='table-body' style={{ overflowX : 'hidden' }}>

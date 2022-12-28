@@ -3,6 +3,7 @@ import Tab from './components/Tab';
 
 import { useState} from 'react';
 
+import { ListadoTarjetas } from './components/ListadoTarjetas';
 import { ListContent } from './components/ListContent';
 import { ContainerFlex } from './components/ContainerFlex';
 import { Card } from './components/Card';
@@ -286,7 +287,7 @@ export const AddUF = ( {AcceptHandler} ) => {
 								}
 
 							</Card>
-							
+
 							<Card minHeight={true} flex={1} cardSmall={true}>
 								<div className='input-tag no-select'>
 									<small className='subtitulo'>Acceso:</small>
@@ -302,63 +303,34 @@ export const AddUF = ( {AcceptHandler} ) => {
 					
 					<Tab { ...EditUser ? { label:"Elementos relacionados" } : { label:"" } } >
 						<ContainerFlex>
-							<Card flex={1}>
-							<div className='drop__container'>
-								<div className='card-body'>
-									<h1>Grupos Asignados</h1>
-								</div>
-									<div className='drop__list'>
-										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
-											<ListContent content1="Grupo 1" content3={ 'grupo administradores'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
-										</div>
-										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
-											<ListContent content1="Grupo 2" content3={ 'grupo notificadores'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
-										</div>
-										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
-											<ListContent content1="Grupo 3" content3={ 'grupo personas'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
-										</div>
-									</div>
-								</div>
-								<br/>
-							</Card>
-							<Card flex={1}>
-								<div className='drop__container'>
-									<div className='card-body'>
-										<h1>Sobres Asignados</h1>
-									</div>	
+							<ListadoTarjetas title={"Grupos Asignados"} 
+								contentArray =
+								{ [
+									{ content1 : 'Grupo 1', content2 : '', content3 : 'Grupo Administradores', content4 : 'Localizacion' , content5 : '128.128.10.65' },
+									{ content1 : 'Grupo 2', content2 : '', content3 : 'Grupo Auditoria', content4 : 'Localizacion', content5 : '128.128.10.218' }
+								]} 
+							/>
+							
+							<ListadoTarjetas title={"Sobres Asignados"} 
+								contentArray =
+								{ [
+									{ content1 : 'Sobre 1', content2 : '', content3 : 'Sobre Administradores', content4 : 'Localizacion' , content5 : 'nova (128.128.10.65)' },
+									{ content1 : 'Sobre 2', content2 : '', content3 : 'Sobre numero 2', content4 : 'Localizacion', content5 : 'nova (128.128.10.65)' },
+									{ content1 : 'Sobre 2', content2 : '', content3 : 'Sobre numero 2', content4 : 'Localizacion', content5 : 'nova (128.128.10.65)' },
+									{ content1 : 'Sobre 2', content2 : '', content3 : 'Sobre numero 2', content4 : 'Localizacion', content5 : 'nova (128.128.10.65)' },
+								]} 
+							/>
+							<ListadoTarjetas title={"Sobres de Grupos"} 
+								contentArray =
+								{ [
+									{ content1 : 'Sobre Grupo 3', content2 : '', content3 : 'Grupo Administradores', content4 : 'Localizacion' , content5 : 'nova (128.128.10.80)'}
+								]}
+							/>
 
-									<div className='drop__list'>	
-										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
-											<ListContent content1="Sobre 1" content3={ 'Sobre administradores'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
-										</div>
-										
-										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
-											<ListContent content1="Sobre 2" content3={ 'sobres numero 2'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
-										</div>
-
-										<div  className= { `card  border-0 flex` } style= {{ boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
-											<ListContent content1="Sobre 3" content3={ 'sobre 1430'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
-										</div>
-									</div>
-								</div>
-							</Card>
-							<Card flex={1}>
-								<div className='drop__container'>
-									<div className='card-body'>
-										<h1>Sobres de Grupos</h1>
-									</div>	
-
-									<div className='drop__list'>	
-										<div  className= { `card  border-0 flex` } style= {{ flexDirection: 'row' , justifyContent: 'space-between' , boxShadow: '4px 4px 16px rgb(10 22 70 / 6%), -2px -2px 16px #fff '}}>
-											<ListContent content1="Sobre 3" content3={ 'grupo administrador'} content4= { 'Localizacion'} content5= { 'nova (128.128.10.65)'} />
-										</div>
-									</div>
-								</div>
-							</Card>
 						</ContainerFlex>
 					</Tab>
 				</Tabs>
-				<ContainerFlex center={true} >
+				<ContainerFlex center={true} gap={false}>
 					<Button label="Cancelar" onClick={handleCancel} type="button" />
 					<Button label="Guardar" onClick={handleSubmit} type="submit" />   
 				</ContainerFlex>

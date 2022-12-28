@@ -103,7 +103,7 @@ export const LogIn = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className='card-body '>
+                                                <div className='card-body'>
                                                     <div className= "center flex" >
                                                             <div className='start-section center'>
                                                                 <button type='submit' className="w3-polimorfic3-btn" onClick={handleLogIn} {...(isLoading && { disabled: true })}> {isLoading ? 'Cargando...' : 'Iniciar Sesión'}</button>

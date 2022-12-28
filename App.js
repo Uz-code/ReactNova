@@ -14,6 +14,7 @@ import { EditUser } from './EditUser';
 import { LogIn } from './LogIn';
 import { useAuth } from './components/Auth';
 import { RequiredAuth } from './components/RequiredAuth';
+import { Template } from './Template';
 
 import { BrowserRouter as Router,
 		Routes,
@@ -51,6 +52,7 @@ return (
 				auth.user && <Navbar sidebar={sidebar} setSidebar={setSidebar} />	
 			}
 			<Routes>
+				<Route exact path= "/Template" element={<RequiredAuth><Template/></RequiredAuth>} />
 				<Route exact path= "/" element={<RequiredAuth><HomePage/></RequiredAuth>} />
 				<Route exact path= "/RecursosAsignados" element={<RequiredAuth><RecursosAsignados/></RequiredAuth>} />
 				<Route exact path= "/Verificaciones" element={<RequiredAuth><Verificaciones/></RequiredAuth>} />

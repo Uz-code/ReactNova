@@ -3,13 +3,15 @@ import { useForm } from './hooks/useForm';
 import { useLocation } from 'react-router'
 import { AddUF } from './AddUF';
 
-import  Tabs  from './components/Tabs';
-import  Tab  from './components/Tab';
+import miniatura from './img/miniatura.png';
+import Tabs from './components/Tabs';
+import Tab from './components/Tab';
+
 import { Modal } from './components/Modal';
 import { DialogHook } from './hooks/DialogHook';
 import { useNavigate } from 'react-router-dom';
 
-import {  BsArchive, BsArchiveFill, BsEye, BsEyeSlash, BsKeyFill } from 'react-icons/bs';
+import { BsKeyFill } from 'react-icons/bs';
 
 import { ComponenteSeleccionUsuarioControlado } from './ComponenteSeleccionUsuarioControlado';
 import { ComponenteSeleccionTarjetasUC } from './ComponenteSeleccionTarjetasUC';
@@ -24,51 +26,56 @@ import { SelectComponent } from './components/SelectComponent';
 import { TextareaComponent } from './components/TextareaComponent';
 import { Button } from './components/Button';
 
-import miniatura from './img/miniatura.png';
 import { DialogComponent } from './components/DialogComponent';
 import { Wrapper } from './components/Wrapper';
 import { MainHeader } from './components/MainHeader';
 import { SeleccionarArchivo } from './components/SeleccionarArchivo';
 import { SeleccionarItem } from './SeleccionarItem';
+import { FormSubtituleComponent } from './components/FormSubtituleComponent';
+import { PasswordComponent } from './components/PasswordComponent';
 /**tablade usuarios */
 
+import {UserDefaultData} from './helpers/UserDefaultData';
+
 export const EditUser = () => {
-       
-    const [ toggleCambiarComponente, setToggleCambiarComponente ] = useState(false);
-    const [ UsrADDescripcion, setUsrADDescripcion ] = useState( 'Administrador de dominio' );
+
+    const [EditUser , setEditUser] = useState(false);
+
+    const location = useLocation();
     
-   
-    const guardarHandler = ( arr ) => {
-        
-        let notificadores = '';
-        
-        arr.forEach( (item) => {
-            if(notificadores != ''){
-                notificadores += ',';
-            }
-
-            notificadores += item.id;
-        });
-
-        setValue( 'SatUsrsSel', notificadores);
-
-        setShowModal(false);
-
-        setListaNotificadores( arr );
-
+    const FetchData = async (Username, Localizacion, Sistema) => {
+        let response = await UserDefaultData(Username,Localizacion,Sistema);
+        return await response;
     }
 
-    /* TODO cargar objeto para el listado de notificadores
-    const [ listaNotificadores, setListaNotificadores ] = useState( [{ name : "Terry Medust" , id : 1 }] );*/
-    const [ listaNotificadores, setListaNotificadores ] = useState( [] );
+    useEffect (() => {
+        
+        if( location.state != null )
+        {
 
-    const [ currentTab, setCurrentTab ] = useState( "" );
+            let id = location?.state.id; 
+           
+            setEditUser(true);
 
-    const [ typeModal, setTypeModal ] = useState( 1 );
-
+            if (id != null)
+            {
+                FetchData('Nombre','Localizacion','Sistema').then(data => {
+                setFormState(data);
+                // console.log(data.notificadores);
+                //TODO conseguir los nombres de los notificadores actuales en formato [{ name : "Terry Medust" , id : 1 }]
+                //getListaNotificadores(data.notificadores);
+                setListaNotificadores([{ name : "Sheldon Quigley" , id : 2 }]) ;
+                });  
+            }
+    
+        }
+    
+    }, []);
+     
     var 
     {
     formState,
+    setFormState,
     setShowModal,
     showModal,
     handleChange,
@@ -118,7 +125,6 @@ export const EditUser = () => {
     UsrAdmin,
     Sistema,
     selUsrSoAutenticacionUsr,
-    UserPrompt,
     DefaultShell,
     ServidorX11,
     selRegistrarLog,
@@ -136,53 +142,82 @@ export const EditUser = () => {
     AcountID,
     SecretAccessKey,
     AccessKeyID,
-    } = useForm({
-    //Datos por defecto del formulario mas adelante ver como cargarlos desde la base de datos
-    username: '',
-    Password: '',
-    passchk: '',
-    Passwordc: '',
-    passcchk: '',
-    cambiarPassword : false,
-    SatPssh: '3840',
-    SatPromptUC : '0',
-    localizacion: '',
-    LocalizacionID : '',
-    Nservice : '',
-    descripcion: '',
-    notificadores : '',
-    UsrSo: '99',
-    Protocol: '4',
-    UsrScript: '0',
-    UsrScriptControlClave : '0',
-    txtPassphrase_pk : '',
-    x11Opt: '0',
-    UsrSoAutorizacion: '0',
-    IdModelos : '1',
-    PoliticaConfiguracion : '0',
-    UsrAdmin : '0',
-    Sistema : '2',
-    selUsrSoAutenticacionUsr : '0',
-    UserPrompt : 'regex:[\\.\\$\\]%#>~@]( )?$',
-    DefaultShell : '/bin/bash',
-    ServidorX11: 'localhost',
-    selRegistrarLog: 1,
-    SegundosScreenshot: '0',
-    selConexionSinLog:1,
-    ControlUsr: '1',
-    CambioAct: '1',
-    UsrSoPeriodoCtrlClaveAuto: "0",
-    Responsable: '1',
-    GrupoResp: '1',
-    ArchivoAdjunto_pk : '',
-    hdArchivoAdjuntoAttachId_adj1: '',
-    NombreBD:'',
-    CadenaConexionUsuario: '',
-    AcountID: '',
-    SecretAccessKey: '',
-    AccessKeyID: '',
-    });
-    
+    } = useForm( {
+        //Datos por defecto del formulario mas adelante ver como cargarlos desde la base de datos
+        username: '',
+        Password: '',
+        passchk: '',
+        Passwordc: '',
+        passcchk: '',
+        cambiarPassword : false,
+        SatPssh: '3840',
+        SatPromptUC : 'regex:[\\.\\$\\]%#>~@]( )?$',
+        localizacion: '',
+        LocalizacionID : '',
+        Nservice : '',
+        descripcion: '',
+        notificadores : '',
+        UsrSo: '99',
+        Protocol: '4',
+        UsrScript: '0',
+        UsrScriptControlClave : '0',
+        txtPassphrase_pk : '',
+        x11Opt: '0',
+        UsrSoAutorizacion: '0',
+        IdModelos : '1',
+        PoliticaConfiguracion : '0',
+        UsrAdmin : '0',
+        Sistema : '2',
+        selUsrSoAutenticacionUsr : '0',
+        DefaultShell : '/bin/bash',
+        ServidorX11: 'localhost',
+        selRegistrarLog: 1,
+        SegundosScreenshot: '0',
+        selConexionSinLog:'1',
+        ControlUsr: '1',
+        CambioAct: '1',
+        UsrSoPeriodoCtrlClaveAuto: "0",
+        Responsable: '1',
+        GrupoResp: '1',
+        ArchivoAdjunto_pk : '',
+        hdArchivoAdjuntoAttachId_adj1: '',
+        NombreBD:'',
+        CadenaConexionUsuario: '',
+        AcountID: '',
+        SecretAccessKey: '',
+        AccessKeyID: '',
+    } );
+
+    const [ toggleCambiarComponente, setToggleCambiarComponente ] = useState(false);
+
+    const UsrADDescripcion = 'Administrador de dominio';
+   
+    const guardarHandler = ( arr ) => {
+        
+        let notificadores = '';
+        
+        arr.forEach( (item) => {
+            if(notificadores != ''){
+                notificadores += ',';
+            }
+
+            notificadores += item.id;
+        });
+
+        setValue( 'SatUsrsSel', notificadores);
+
+        setShowModal(false);
+
+        setListaNotificadores( arr );
+
+    }
+
+    const [ listaNotificadores, setListaNotificadores ] = useState( [] );
+
+    const [ currentTab, setCurrentTab ] = useState( "" );
+
+    const [ typeModal, setTypeModal ] = useState( 1 );
+
     /**ver listado */
 
     const openModalListado = ( ) => {
@@ -225,25 +260,6 @@ export const EditUser = () => {
     function CancelHandler() {
         setShowModal(false);
     }
-    
-
-    const location = useLocation();
- 
-    var id = 0;
-    var EditUser = false;
-    if( location.state != null )
-    {
-        
-        //Si recivo una ID por el objeto loction quiere decir que vino de un redirect del componente tabla de usuarios controlados 
-        //y debo cargar los datos del usuario en el formulario
-    
-        id = location?.state.id; 
-        EditUser = true;
-        
-    }
-
-    // UsrSo 1 = Alerta
-    // UsrSo 2 = TablaUC
 
     useEffect ( () => {
        !showModal && setTypeModal(1);
@@ -269,7 +285,6 @@ export const EditUser = () => {
 
             const userAlreadyInList = listaNotificadores.find( user => user.id === obj.id ) != null;
 
-
             if ( userAlreadyInList  ) { return; }
 
             guardarHandler( [  obj,...listaNotificadores] );
@@ -293,16 +308,6 @@ export const EditUser = () => {
     
     const { dialog, setDialog } = DialogHook ( { title: '', message: '' } );
 
-    const CambiarComponente = () => {
-
-       /* setToggleCambiarComponente(!toggleCambiarComponente);
-    
-       /* setShowModal(true);
-        setTypeModal(1);
-        setDialog( { title: "¿Desea continuar?", message: "Se perderan los cambios realizados", AcceptHandler: AcceptHandler, CancelHandler: CancelHandler } );
-    */
-    };
-
     useEffect( () => {
     
         if (StateMessageError != null && StateMessageError != '')
@@ -314,10 +319,7 @@ export const EditUser = () => {
 
     }, [StateMessageError] );
 
-
-
     return (
-        /*a component to add users to agregarUsuario */
             <>
             {toggleMiniatura &&
                 <div className="card shadow miniatura" style={{ width: '195px', height:'120px', cursor: 'pointer', position: 'absolute', top: '92%', left: '91%', transform: 'translate(-50%, -50%)', zIndex: '1000' }} onClick={() => setToggleCambiarComponente(true)}>
@@ -388,7 +390,7 @@ export const EditUser = () => {
                 }
             <Wrapper>
 			    <MainHeader>
-                    <h1> Usuarios Controlados / { EditUser ? `Editar Usuario ${id}`: 'Crear Usuario' } </h1>
+                    <h1> Usuarios Controlados / { EditUser ? `Editar Usuario `: 'Crear Usuario' } </h1>
                 </MainHeader>
                         <Tabs Tab={currentTab} setTab={setCurrentTab} >
                             <Tab label = "Datos del Usuario">
@@ -400,10 +402,9 @@ export const EditUser = () => {
                                         //<label className='LabelForm'>Datos Basicos </label>
                                             //<p className='subtitulo'>Datos Basicos</p>
                                         //</div>
+                                        /*    <form onSubmit={handleSubmit}>
+                                        </form>*/
                                         }
-                                        <form onSubmit={handleSubmit}>
-                                        </form>
-                                        
                                         <InputGroup marginTop="5" >
                                             <InputFancy type={"text"} placeholder={"Nombre"} value={username} required={true} name="username" onChange = {handleChange} />
                                         </InputGroup>
@@ -415,7 +416,7 @@ export const EditUser = () => {
                                         <div className='mt-5 flex'>
                                             <label className='input-group'>
                                                 <input type="text"className="input-fancy" name="localizacion" placeholder="  " required={true} value={(UsrSo == 61  || UsrSo == 62 || UsrSo == 56) ?  nombreLocalizacion : localizacion } disabled = {(UsrSo == 61  || UsrSo == 62 || UsrSo == 56) && {disabled: true}} onChange={handleChange} />
-                                                <p class="required">Localizacion </p>
+                                                <p className="required">Localizacion </p>
                                             </label>
                                             { 
                                             (UsrSo == 61  || UsrSo == 62 || UsrSo == 56) && 
@@ -435,55 +436,40 @@ export const EditUser = () => {
 
                                         <div className='mt-5 flex'>
                                             <label className='input-group'>
-                                                <input type={typePass} id='password'  className="input-fancy" name="Password" placeholder=" " value={Password}  {...toggleGenerarPass && {readOnly: true}} onChange={handleChange} />
-                                                <p>Password</p>
-                                                <div className="password-icon" {...toggleGenerarPass && {style: {display: 'none'}}} onClick={toggleTypePass}>
-                                                    <i data-feather="eye">{typePass == 'password' ? <BsEye></BsEye> : <BsEyeSlash></BsEyeSlash>}</i>
-                                                </div>
+                                                <PasswordComponent   title = {'Password'} value = {Password} name="Password" required={true} onChange = {handleChange} toggleTypePass = {toggleTypePass} typePass = {typePass}  toggleGenerarPass = {toggleGenerarPass} />
                                             </label>
 
                                             <label className='input-group'>
-                                                <input type={typePass}  className="input-fancy" name="passchk" placeholder=" " value={passchk} {...toggleGenerarPass && {readOnly: true}} onChange={handleChange} />
-                                                <p>Verificacion</p>
-                                                <div className="password-icon" {...toggleGenerarPass && {style: {display: 'none'}}} onClick={toggleTypePass}>
-                                                    <i data-feather="eye">{typePass == 'password' ? <BsEye></BsEye> : <BsEyeSlash></BsEyeSlash>} </i>
-                                                </div>
+                                                <PasswordComponent  title = {'Verificacion'} value = {passchk} name="passchk" required={true} onChange = {handleChange} toggleTypePass = {toggleTypePass} typePass = {typePass}  toggleGenerarPass = {toggleGenerarPass} />
                                             </label>
                                             <div className="button-fancy" onClick={togglePass} title="Generar Password" > <BsKeyFill style={toggleGenerarPass && { color: "#434ce8" }} /> </div>
                                         </div>
 
                                         <div className='mt-5 flex'>
                                             <label className='input-group'>
-                                            <input type={typePassC}  className="input-fancy" name="Passwordc" placeholder="  " value={Passwordc} {...toggleGenerarPassc && {readOnly: true}}  onChange={handleChange} />
-                                                <p>Password Combinada</p>
-                                                <div className="password-icon" {...toggleGenerarPassc && {style: {display: 'none'}}} onClick={toggleTypePassc}>
-                                                    <i data-feather="eye"> {typePassC == 'password' ? <BsEye></BsEye> : <BsEyeSlash></BsEyeSlash>} </i>
-                                                </div>
+                                                <PasswordComponent  title = {'Password Combinada'} value = {Passwordc} name="Passwordc" onChange = {handleChange} toggleTypePass = {toggleTypePassc} typePass = {typePassC}  toggleGenerarPass = {toggleGenerarPassc} />
                                             </label>
-                                        
+
                                             <label className='input-group'>
-                                            <input type={typePassC}  className="input-fancy" name="passcchk" placeholder="  " value={passcchk} {...toggleGenerarPassc && {readOnly: true}}  onChange={handleChange} />
-                                                <p>Verificacion</p>
-                                                <div className="password-icon" {...toggleGenerarPassc && {style: {display: 'none'}}} onClick={toggleTypePassc}>
-                                                    <i data-feather="eye"> {typePassC == 'password' ? <BsEye></BsEye> : <BsEyeSlash></BsEyeSlash>} </i>
-                                                </div>
+                                            <PasswordComponent  title = {'Verificacion'} value = {passcchk} name="passcchk" onChange = {handleChange} toggleTypePass = {toggleTypePassc} typePass = {typePassC}  toggleGenerarPass = {toggleGenerarPassc} />
                                             </label>
                                             <div className="button-fancy" onClick={togglePassc} title="Generar Password" > <BsKeyFill style={toggleGenerarPassc && { color: "#434ce8" }} /> </div>
                                         </div>
 
                                         { EditUser && 
                                             <InputGroup marginTop="5" flex={true}>
-                                            <FormCheckbox flex= {true} width="50%"label="Cambiar Clave en Plataforma al Aceptar" name="cambiarPassword" value={cambiarPassword} onChange = {handleChange} />
+                                                <FormCheckbox flex= {true} width="50%"label="Cambiar Clave en Plataforma al Aceptar" name="cambiarPassword" value={cambiarPassword} onChange = {handleChange} />
                                             </InputGroup>
                                         }
                                     </Card>
 
                                     <Card flex={1}>
-                                        <div className='input-group mt-1'>
+                                        {/*
+                                        <div className='input-group mt-0'>
                                             <p className='subtitulo'  style= {{ paddingLeft : "1rem" }}>Datos Adicionales</p>
-                                        </div>
+                                        </div>*/}
 
-                                        <InputGroup marginTop="1" flex={true}>
+                                        <InputGroup marginTop="5" flex={true}>
                                             <SelectComponent label="Plataforma" name="UsrSo" value={UsrSo} onChange = {handleChange}
                                             options = { [
                                                 { value: '99', label: 'ADM Dominio not trusted' },
@@ -587,22 +573,22 @@ export const EditUser = () => {
                                 || UsrSo == 41 || UsrSo == 50 || UsrSo == 51 || UsrSo == 20 || UsrSo == 55 || UsrSo == 59
                                 || UsrSo == 1 || UsrSo == 3 || UsrSo == 9 
                                 || UsrSo == 23 || UsrSo == 30 || UsrSo == 99 || UsrSo == 58 || UsrSo == 64 || UsrSo == 65 
-                                || UsrSo == 7  ||UsrSo == 13 ) &&    
+                                || UsrSo == 7  || UsrSo == 13 ||  UsrSo == 40 ) &&    
                                 <>
                                     <ContainerFlex>
                                         <Card flex={1}>
                                                 { 
                                                 UsrSo == 63  && 
                                                 <>
-                                                    <InputGroup marginTop="3" flex={true}>
+                                                    <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                         <InputFancy fancy={false} placeholder="ID Clave de Acceso (aws)" name="AccessKeyID" value={AccessKeyID} onChange = {handleChange} />
                                                     </InputGroup>
                                                    
-                                                    <InputGroup marginTop="3" flex={true}>
+                                                    <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                         <InputFancy fancy={false} placeholder="Clave de Acceso Secreta (aws)" name="SecretAccessKey" value={SecretAccessKey} onChange = {handleChange} />
                                                     </InputGroup>
 
-                                                    <InputGroup marginTop="3" flex={true}>
+                                                    <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                         <InputFancy fancy={false} placeholder="ID o Alias (aws)" name="AcountID" value={AcountID} onChange = {handleChange} />
                                                     </InputGroup>
                                                 </>
@@ -613,18 +599,18 @@ export const EditUser = () => {
                                                     <>
                                                         { 
                                                         UsrSo == 65 && 
-                                                            <InputGroup marginTop="3" flex={true}>
+                                                            <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                                 <InputFancy fancy={false} placeholder="Nombre Base de Datos" name="NombreBD" value={NombreBD} onChange = {handleChange} />
                                                             </InputGroup>
                                                         }
 
-                                                        <InputGroup marginTop="3" flex={true}>
+                                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                             <FormCheckbox flex= {true} width="50%" label="Utilizar Cadena de Conexion" name="utilCadenaConexion" value={utilCadenaConexion} onChange = {() => setUtilCadenaConexion(!utilCadenaConexion) } />
                                                         </InputGroup>
 
                                                         { 
                                                         utilCadenaConexion && 
-                                                        <InputGroup marginTop="3" flex={true}>
+                                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                             <TextareaComponent label="Cadena Conexion" rows={4} name="CadenaConexionUsuario" value={CadenaConexionUsuario || ''} onChange = {handleChange} />
                                                         </InputGroup>
                                                         }
@@ -635,7 +621,7 @@ export const EditUser = () => {
                                                 { 
                                                     (UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17 || UsrSo == 40 || UsrSo == 41 || UsrSo == 50 || UsrSo == 51 || UsrSo == 20 || UsrSo == 55 || UsrSo == 59) && 
                                                     <>
-                                                        <InputGroup marginTop="3" flex={true}>
+                                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                             <SelectComponent fancy={false} label="Script para Cambio Clave" name="UsrScript" value={UsrScript} onChange = {handleChange} 
                                                             options = { [
                                                                 { value: '0', label: 'Sin Script' },
@@ -645,7 +631,7 @@ export const EditUser = () => {
                                                        
                                                         {
                                                         UsrSo == 59 &&
-                                                            <InputGroup marginTop="3" flex={true}>
+                                                            <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                                 <SelectComponent fancy={false} label="Script para Control Clave" name="UsrScriptControlClave" value={UsrScriptControlClave} onChange = {handleChange}
                                                                 options = { [
                                                                     { value: '0', label: 'Sin Script' },
@@ -656,7 +642,7 @@ export const EditUser = () => {
 
                                                         {
                                                         UsrSo != 40 &&
-                                                            <InputGroup marginTop="3" flex={true}>
+                                                            <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                                 <SelectComponent label="Protocolo de Conexion" name="Protocol" value={Protocol} onChange={handleChange} 
                                                                 options = { [
                                                                     { value: '4', label: 'SSH Automatico' },
@@ -668,18 +654,16 @@ export const EditUser = () => {
                                                     </>
                                                 }
 
-                                            
-                                            
                                                 { (UsrSo == 1 || UsrSo == 3 || UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17 || UsrSo == 20 || UsrSo == 50 || UsrSo == 51 || UsrSo == 40 ||
                                                    UsrSo == 41 || UsrSo == 55 || UsrSo == 23 || UsrSo == 30 || UsrSo == 99 || UsrSo == 20 || UsrSo == 58 || UsrSo == 64 || UsrSo == 65) &&
-                                                    <InputGroup marginTop="" flex={true}>
+                                                    <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                         <InputFancy fancy={false} placeholder="Puerto SSH" name="SatPssh" value={SatPssh} onChange = {handleChange} />
                                                     </InputGroup>
                                                 }
 
                                                 { 
                                                 (UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17 || UsrSo == 40 || UsrSo == 41 || UsrSo == 50 || UsrSo == 51) &&
-                                                    <InputGroup marginTop="3" flex={true}>
+                                                    <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                         <InputFancy fancy={false} placeholder="Prompt de Usuario" name="SatPromptUC" value={SatPromptUC} onChange = {handleChange} />
                                                     </InputGroup>
                                                 }
@@ -687,7 +671,7 @@ export const EditUser = () => {
                                                 { 
                                                 UsrSo == 11 && 
                                                     <>
-                                                    <InputGroup marginTop="3" flex={true}>
+                                                    <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                         <FormCheckbox label="Autenticacion por Clave Publica" name="chkArchivoAdjunto_pk" checked={chkArchivoAdjunto_pk} onChange={ () => setChkArchivoAdjunto_pk(!chkArchivoAdjunto_pk) } />
                                                     </InputGroup>
                                                     
@@ -695,15 +679,15 @@ export const EditUser = () => {
                                                     chkArchivoAdjunto_pk && 
                                                     <>
                                                         
-                                                        <InputGroup marginTop={3} flex={true} >
+                                                        <InputGroup marginTop="2" marginBottom="2" flex={true} >
                                                             <SeleccionarArchivo label="Archivo PK" name="ArchivoAdjunto_pk" value={ArchivoAdjunto_pk} onChange={handleChange} />
                                                         </InputGroup>
 
-                                                        <InputGroup marginTop={3} flex={true} >
+                                                        <InputGroup marginTop="2" marginBottom="2" flex={true} >
                                                             <InputFancy fancy={false} label="Phassphrase" value={txtPassphrase_pk} onChange = {handleChange} />
                                                         </InputGroup>
 
-                                                        <InputGroup marginTop={3} flex={true} >
+                                                        <InputGroup marginTop="2" marginBottom="2" flex={true} >
                                                             <SeleccionarItem label="Autenticacion a Utilizar"  name="selUsrSoAutenticacionUsr" value={selUsrSoAutenticacionUsr} onChange={handleChange}
                                                             options = { [
                                                                 { value: '0', label: 'Autenticacion por Password' },
@@ -714,8 +698,8 @@ export const EditUser = () => {
                                                     </>
                                                     }
 
-                                                    <InputGroup marginTop="3" flex={true}>     
-                                                        <InputFancy fancy={false} placeholder="Prompt de Usuario" name="UserPrompt" value={UserPrompt} onChange = {handleChange} />
+                                                    <InputGroup marginTop="2" marginBottom="2"  flex={true}>     
+                                                    prompt de usuario?
                                                     </InputGroup>
 
                                                 </>
@@ -724,12 +708,12 @@ export const EditUser = () => {
                                                 { 
                                                     (UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17) && 
                                                         <>
-                                                        <InputGroup marginTop="3" flex={true}>
+                                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                             <InputFancy fancy={false} placeholder="Shlell por Defecto" name="DefaultShell" value={DefaultShell} onChange = {handleChange} />
                                                         </InputGroup>
 
-                                                        <InputGroup marginTop="3" flex={true}>
-                                                            <SelectComponent fancy={false} placeholder="Puerto X11" name="x11Opt" value={x11Opt} onChange = {handleChange} 
+                                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                                            <SelectComponent fancy={false} label="Puerto X11" name="x11Opt" value={x11Opt} onChange = {handleChange} 
                                                             options = { [
                                                                 { value: '0', label: 'Desactivado' },
                                                                 { value: '1', label: 'Activado' },
@@ -740,11 +724,11 @@ export const EditUser = () => {
                                                         { 
                                                             x11Opt == 1 && 
                                                             <>
-                                                                <InputGroup marginTop="3" flex={true}>
+                                                                <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                                     <InputFancy fancy={false} placeholder="Servidor X11" name="ServidorX11" value={ServidorX11} onChange = {handleChange} />
                                                                 </InputGroup>
 
-                                                                <InputGroup marginTop="3" flex={true}>
+                                                                <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                                     <SelectComponent fancy={false} placeholder="UsrSoAutorizacion" name="UsrSoAutorizacion" value={UsrSoAutorizacion} onChange = {handleChange}
                                                                     options = { [
                                                                         { value: '0', label: 'MIT' },
@@ -765,293 +749,192 @@ export const EditUser = () => {
                                 { 
                                 (UsrSo == 40 || UsrSo == 50) && 
                                 <>
-                                <div className="content-main">
-                                    <div className= "row g-6" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                          
-                                            <div className= "card  shadow border-0 flex" >
-                                                <div className='card-body'>
-                                                    
-                                                    <div className='input-group mb-1' style= {{ paddingLeft : "8.5px" }}>
-                                                        <p className='subtitulo'>Datos Telnet</p>
-                                                    </div>
-
-                                                    <div className='input-group-flex mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Envia Enter:
-                                                        </div>
-                                                        <select className="form-select form-select-lg " aria-label="" value={EnviaEnter} name="EnviaEnter" onChange={handleChange}>
-                                                            <option value="0">No</option>
-                                                            <option value="1">Si</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Envia Password:
-                                                        </div>
-                                                        <select className="form-select form-select-lg " aria-label="" value={EnviaPassword} name="EnviaPassword" onChange={handleChange}>
-                                                            <option value="0">No</option>
-                                                            <option value="1">Si</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Envia Usuario:
-                                                        </div>
-                                                        <select className="form-select form-select-lg " aria-label="" value={EnviaUsuario} name="EnviaUsuario" onChange={handleChange}>
-                                                            <option value="0">No</option>
-                                                            <option value="1">Si</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div className='input-group-flex mb-3 '>
-                                                        <div  className="input-tag no-select">
-                                                            Prompt de Password:
-                                                        </div>
-                                                        <input type="text" className="form-input"  name="PwdPrompt" value={PwdPrompt} onChange={handleChange} />
-                                                    </div>
-                                                    <div className='input-group-flex mb-3 '>
-                                                        <div  className="input-tag no-select">
-                                                            Prompt de Usuario:
-                                                        </div>
-                                                        <input type="text" className="form-input"  name="UsrPrompt" value={UsrPrompt} onChange={handleChange} />
-                                                    </div>
-
-                                                </div>
+                                    <ContainerFlex>
+                                        <Card>
+                                            <div className='input-group mt-1'>
+                                                <p className='subtitulo'  style= {{ paddingLeft : "1rem" }}>Datos Telnet</p>
                                             </div>
                                            
-                                        </div>
-                                    </div>
-                                </div>
+                                            <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                                <SelectComponent fancy={false} label="Envia Enter" name="EnviaEnter" value={EnviaEnter} onChange = {handleChange}
+                                                options = { [
+                                                    { value: '0', label: 'No' },
+                                                    { value: '1', label: 'Si' },
+                                                ]} />
+                                            </InputGroup>
+
+                                            <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                                <SelectComponent fancy={false} label="Envia Password" name="EnviaPassword" value={EnviaPassword} onChange = {handleChange}
+                                                options = { [
+                                                    { value: '0', label: 'No' },
+                                                    { value: '1', label: 'Si' },
+                                                ]} />
+                                            </InputGroup>
+
+                                            <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                                <SelectComponent fancy={false} label="Envia Usuario" name="EnviaUsuario" value={EnviaUsuario} onChange = {handleChange}
+                                                options = { [
+                                                    { value: '0', label: 'No' },
+                                                    { value: '1', label: 'Si' },
+                                                ]} />
+                                            </InputGroup>
+
+                                            <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                                <InputFancy fancy={false} placeholder="User Prompt" name="UsrPrompt" value={UsrPrompt} onChange = {handleChange} />
+                                            </InputGroup>
+                                            
+                                            <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                                <InputFancy fancy={false} placeholder="PasswordPrompt" name="PwdPrompt" value={PwdPrompt} onChange = {handleChange} />
+                                            </InputGroup>
+
+                                        </Card>
+                                    </ContainerFlex>
                                 </>
                                 }
 
                             </Tab>
 
                             <Tab label="Informacion">
-                                <div className= "content-main">
-                                    <div className= "row g-6" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            <div className= "card  shadow border-0 flex" >
-
-                                                <div className='card-body'>
-                                                    <div className='input-group mb-1' style= {{ paddingLeft : "8.5px" }}>
-                                                        <p className='subtitulo'>Informacion</p>
-                                                    </div>
-
-                                                    <div className='input-group-flex mb-3'>
-                                                        
-                                                    <div  className="input-tag no-select">
-                                                        Log de Conexion:
-                                                    </div>
-                                                    <select className="form-select form-select-lg "  value={selRegistrarLog} onChange={handleChange} name="selRegistrarLog">
-                                                        <option value="1">Registrar Log</option>
-                                                        <option value="2">Ascendiente</option>
-                                                    </select>
-
-                                                    </div> 
-
-                                                    <div className='input-group-flex mb-3'>
-
-                                                    <div  className="input-tag no-select">
-                                                        Segundos Log:
-                                                    </div>
-                                                        <input type="text" className="form-input"  placeholder="SegundosScreenshot" value={SegundosScreenshot} onChange={handleChange} />
-                                                    </div> 
-                                                
-                                                    { LoggingSesionHabilitado &&
-                                                    <>
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Conexion sin Registro de Log:
-                                                        </div>
-                                                        
-                                                        <select className="form-select form-select-lg " name="selConexionSinLog" value={selConexionSinLog} onChange={handleChange} >
-                                                            <option value="1">Pemritir</option>
-                                                            <option value="2">Cancelar</option>
-                                                        </select>
-                                                    </div> 
-                                                    </>
-                                                    }
-
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Control de la Clave del Usuario	:
-                                                        </div>
-                                                        
-                                                        <select className="form-select form-select-lg " name="ControlUsr" value={ControlUsr} onChange={handleChange} >
-                                                            <option value="1">Manual</option>
-                                                            <option value="2">Automatico</option>
-                                                        </select>
-                                                    </div>  
-                                                    
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Cambio de Clave por Tiempo de No Uso:
-                                                        </div>
-                                                        
-                                                        <select className="form-select form-select-lg " name="CambioAct" value={CambioAct} onChange={handleChange} >
-                                                            <option value="1">Utilizar Por Defecto</option>
-                                                            <option value="2">Ascendiente</option>
-                                                        </select>
-                                                    </div>   
-                                                    { 
-                                                    UsrSo != 63  && 
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag">
-                                                            Periodo Control Automatico de Clave:
-                                                        </div>
-                                                        
-                                                        <select className="form-select form-select-lg " name="UsrSoPeriodoCtrlClaveAuto" value={UsrSoPeriodoCtrlClaveAuto} onChange={handleChange} >
-                                                            <option value="0">Utilizar Por Defecto</option>
-                                                            <option value="1">Utilizar el Especificado</option>
-                                                            <option value="2">No realizar Control Automatico de Clave</option>
-                                                        </select>
-                                                    </div> 
-                                                    }
-
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Usuario Responsable	:
-                                                        </div>
-                                                        
-                                                        <select className="form-select form-select-lg " name="Responsable" value={Responsable} onChange={handleChange} >
-                                                            <option value="1">No responsable</option>
-                                                            <option value="2">Ascendiente</option>
-                                                        </select>
-                                                    </div> 
-
-                                                    <div className='input-group-flex  mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            Grupo Responsable:
-                                                        </div>
-                                                        
-                                                        <select className="form-select form-select-lg " name="GrupoResp" value={GrupoResp} onChange={handleChange} >
-                                                            <option value="1">No responsable</option>
-                                                            <option value="2">Ascendiente</option>
-                                                        </select>
-                                                    </div> 
-
-                                                    <InputGroup marginTop={3} flex={true} >
-                                                        <SeleccionarArchivo label="Archivo Relacionado" name="hdArchivoAdjuntoAttachId_adj1" value={hdArchivoAdjuntoAttachId_adj1} onChange={handleChange} />
-                                                    </InputGroup>
-
-                                                </div>
-                                            </div>
+                                <ContainerFlex>
+                                    <Card flex={1}>
+                                        <div className='input-group mt-1'>
+                                            <p className='subtitulo'  style= {{ paddingLeft : "1rem" }}>Informacion</p>
                                         </div>
-                                    </div>
-                                </div>                        
+
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                           <SelectComponent label="Log de Conexion" name="selRegistrarLog" value={selRegistrarLog} onChange = {handleChange}
+                                            options = { [
+                                                { value: '0', label: 'No' },
+                                                { value: '1', label: 'Si' },
+                                            ]} />
+                                        </InputGroup>
+
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <InputFancy fancy={false} placeholder="Segundos Log" name="SegundosScreenshot" value={SegundosScreenshot} onChange = {handleChange} />
+                                        </InputGroup>
+                                    
+                                        { LoggingSesionHabilitado &&
+                                            <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                                <SelectComponent label="Conexion sin Registro Log" name="selConexionSinLog" value={selConexionSinLog} onChange = {handleChange}
+                                                options = { [
+                                                    { value: '1', label: 'Permitir' },
+                                                    { value: '2', label: 'Cancelar' },
+                                                ]} />
+                                            </InputGroup>
+                                        }
+
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <SelectComponent label="Control de la Clave del Usuario" name="ControlUsr" value={ControlUsr} onChange = {handleChange} 
+                                            options = { [
+                                                { value: '1', label: 'Manual' },
+                                                { value: '2', label: 'Automatico' },
+                                            ]} />
+                                        </InputGroup>
+                                        
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <SelectComponent label="Cambio de Clave por Tiempo No Uso" name="CambioAct" value={CambioAct} onChange = {handleChange}
+                                            options = { [
+                                                { value: '0', label: 'No' },
+                                                { value: '1', label: 'Si' },
+                                            ]} />
+                                        </InputGroup>
+
+                                        { 
+                                        UsrSo != 63  && 
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <SelectComponent label="Periodo Control Automatico de Clave" name="UsrSoPeriodoCtrlClaveAuto" value={UsrSoPeriodoCtrlClaveAuto} onChange = {handleChange}
+                                            options = { [
+                                                { value: '0', label: 'Utilizar Por Defecto' },
+                                                { value: '1', label: 'Utilizar el Especificado' },
+                                                { value: '2', label: 'No realizar Control Automatico de Clave' },
+                                            ]} />
+                                        </InputGroup>
+                                        }
+
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <SelectComponent label="Usuario Responsable" name="Responsable" value={Responsable} onChange = {handleChange}
+                                            options = { [
+                                                { value: '0', label: 'No' },
+                                                { value: '1', label: 'Si' },
+                                            ]} />
+                                        </InputGroup>
+
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <SelectComponent label="Grupo Responsable" name="GrupoResp" value={GrupoResp} onChange = {handleChange}
+                                            options = { [
+                                                { value: '1', label: 'No responsable' },
+                                                { value: '2', label: 'Ascendiente' },
+                                            ]} />
+                                        </InputGroup>
+
+                                        <InputGroup marginTop={3} flex={true} >
+                                            <SeleccionarArchivo label="Archivo Relacionado" name="hdArchivoAdjuntoAttachId_adj1" value={hdArchivoAdjuntoAttachId_adj1} onChange={handleChange} />
+                                        </InputGroup>
+                                    </Card>
+                                </ContainerFlex>
                             </Tab>
 
 
                             <Tab label="Notificadores" >
-                                <div className= "content-main">
-                                    <div className= "row g-6" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            <div className= "card  shadow border-0 flex" >
-                                                  <div className='mb-2'>
-                                                  {/*
-                                                    <div className='input-group' style= {{ paddingLeft : "8.5px" }}>
-                                                        <p className='subtitulo'>Notificadores</p>
-                                                    </div>*/
-                                                     }
-                                                    </div>
-                                                <ComponenteSeleccionTarjetasUC 
-                                                    listaExterna={listaNotificadores}
-                                                    OnError = { (value) => { OnError(value); }} 
-                                                    guardarOnClick = {true}
-                                                    guardarHandler = {guardarHandler}
-                                                    multiSelect = {true}
-                                                    openModalListado = { openModalListado }
-                                                    isDoubleTable = {true}
-                                                    AgregarNuevo = {handleAddNotificador}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                               <ContainerFlex >
+                                    <Card flex={1}>
+                                        <ComponenteSeleccionTarjetasUC 
+                                            listaExterna={listaNotificadores}
+                                            OnError = { (value) => { OnError(value); }} 
+                                            guardarOnClick = {true}
+                                            guardarHandler = {guardarHandler}
+                                            multiSelect = {true}
+                                            openModalListado = { openModalListado }
+                                            isDoubleTable = {true}
+                                            AgregarNuevo = {handleAddNotificador}
+                                        />
+                                    </Card>
+                                </ContainerFlex>
                             </Tab>
                             
-                            <Tab label= { EditUser && 'Datos Estadisticos' } >
-                                { EditUser &&
-                                <>  
-                                <div label="Informacion">
-                                    <div className= "content-main">
-                                        <div className= "row g-6" style={{ display: "flex", flexDirection: "row" }}>
-                                            <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                                <div className= "card  shadow border-0 flex" >
+                            <Tab { ...EditUser && {label : "Datos Estadisticos"} } > { EditUser &&
+                                <ContainerFlex >
+                                    <Card flex={1}>
+                                        
+                                        <FormSubtituleComponent name="Datos Estadisticos" />
+                                       
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <InputFancy fancy={false}  placeholder="Fecha Ultima Modificacion" name="FechaUltimaModificacion" value={"13/11/2022  22:39:36"} disabled = {true} />
+                                        </InputGroup>
 
-                                                    <div className='card-body'>
-                                                        
-                                                        <div className='input-group mb-1' style= {{ paddingLeft : "8.5px" }}>
-                                                            <p className='subtitulo'>Datos Estadisticos</p>
-                                                        </div>
-                                                        
-                                                        <div className='input-group-flex  mb-3'>
-                                                            <div  className="input-tag no-select">
-                                                                Fecha Ultima Modificacion	
-                                                            </div>
-                                                            <input type="text" className="form-input" readOnly  name="xxx" value={"13/11/2022  22:39:36" || ''}  />
-                                                        </div>
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <InputFancy fancy={false}  placeholder="Usuario Ultima Modificacion" name="UsuarioUltimaModificacion" value={"nova\\administrador"} disabled = {true} />
+                                        </InputGroup>
+                               
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <InputFancy fancy={false}  placeholder="Fecha Ultimo Cambio de Clave Exitoso" name="FechaCC" value={"06/10/2022  16:13:38"} disabled = {true} />
+                                        </InputGroup>
 
-                                                        <div className='input-group-flex  mb-3'>
-                                                            <div  className="input-tag no-select">
-                                                                Usuario Ultima Modificacion
-                                                            </div>
-                                                            <input type="text" className="form-input" readOnly  name="xx1" value={"nova\\administrador" || ''}  />
-                                                        </div>
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <InputFancy fancy={false}  placeholder="Fecha Proximo Cambio Clave Automatico" name="Fechca" value={"06/10/2022  16:13:38"} disabled = {true} />
+                                        </InputGroup>
 
-                                                        <div className='input-group-flex  mb-3'>
-                                                            <div  className="input-tag no-select">
-                                                                Fecha Ultimo Cambio de Clave Exitoso	                                                        
-                                                            </div>
-                                                            <input type="text" className="form-input" readOnly  name="xx3" value={"06/10/2022  16:13:38" || ''}  />
-                                                        </div>
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <InputFancy fancy={false}  placeholder="Estado Ultimo Cambio Clave" name="Fechca" value={"No se Efectuo el Cambio"} disabled = {true} />
+                                        </InputGroup>
 
-                                                        <div className='input-group-flex  mb-3'>
-                                                            <div  className="input-tag no-select">
-                                                                Fecha Proximo Cambio Clave Automatico		                                                        
-                                                            </div>
-                                                            <input type="text" className="form-input" readOnly  name="xx4" value={"06/10/2022  16:13:38" || ''}  />
-                                                        </div>
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <InputFancy fancy={false}  placeholder="Fecha Proximo Control Clave Automatico" name="Fechca1" value={"25/10/2022  15:02:34"} disabled = {true} />
+                                        </InputGroup>
 
-                                                        <div className='input-group-flex  mb-3'>
-                                                            <div  className="input-tag no-select">
-                                                                Estado Ultimo Cambio Clave	                                                        
-                                                            </div>
-                                                            <input type="text" className="form-input" readOnly  name="xx6" value={"No se Efectuo el Cambio" || ''}  />
-                                                        </div>
+                                        <InputGroup marginTop="2" marginBottom="2" flex={true}>
+                                            <InputFancy fancy={false}  placeholder="Estado Ultimo Control Clave Automatico" name="xx8" value={"25/10/2022  15:02:34"} disabled = {true} />
+                                        </InputGroup>
 
-                                                        <div className='input-group-flex  mb-3'>
-                                                            <div  className="input-tag no-select">
-                                                                Fecha Proximo Control Clave Automatico	                                                       
-                                                            </div>
-                                                            <input type="text" className="form-input" readOnly  name="xx7" value={"25/10/2022  15:02:34" || ''}  />
-                                                        </div>  
-                                                        
-                                                        <div className='input-group-flex  mb-3'>
-                                                            <div  className="input-tag no-select">
-                                                                Estado Ultimo Control Clave Automatico	                                                
-                                                            </div>
-                                                            <input type="text" className="form-input" readOnly  name="xx8" value={"25/10/2022  15:02:34" || ''}  />
-                                                        </div>
-                                                    
-                                                    
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>                        
-                                </div>
-                                </>
-                                }
-                            </Tab>
+                                    </Card>
+                                </ContainerFlex>
+                            }</Tab>
                         </Tabs>
                             
-                        <ContainerFlex center={true} >
+                        <ContainerFlex center={true} gap={false} >
                             <Button label="Cancelar" onClick={() => navigate('/TablaFetchData')} type="button" />
                             <Button label="Aceptar" onClick={handleSubmit} type="submit" />
-                            <Button label="Reset" onClick={handleClear} type="input" />
+                            <Button label="Reset" onClick={handleClear} type="button" />
                         </ContainerFlex>
             </Wrapper>
             </>

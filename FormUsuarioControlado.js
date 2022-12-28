@@ -835,7 +835,7 @@ export const FormUsuarioControlado = () => {
                                                             <div  className="input-tag no-select">
                                                                 Archivo Pk:
                                                             </div>
-                                                            <label for="ArchivoAdjunto_pk" className="btn btn-neutral flex" {...ArchivoAdjunto_pk != '' && { style : { backgroundColor: "#f5f9fc" , fontWeight : "100", fontSize:"12px" } }}>
+                                                            <label htmlFor="ArchivoAdjunto_pk" className="btn btn-neutral flex" {...ArchivoAdjunto_pk != '' && { style : { backgroundColor: "#f5f9fc" , fontWeight : "100", fontSize:"12px" } }}>
                                                                 {ArchivoAdjunto_pk != '' ?  ArchivoAdjunto_pk = ArchivoAdjunto_pk.replace(/C:\\fakepath\\/i, '')  : 'Seleccionar Archivo'}{ArchivoAdjunto_pk != '' ?  <BsArchiveFill style={{ marginLeft: "10px"}} /> : <BsArchive style={{ marginLeft: "10px"}} />}
                                                             </label>
                                                             <input id="ArchivoAdjunto_pk"  filename={ArchivoAdjunto_pk} name="ArchivoAdjunto_pk" type="file" onChange={handleChange} />

@@ -5,12 +5,16 @@ import { Modal } from './components/Modal';
 import { AlertComponent } from './components/AlertComponent';
 import Pagination from './components/Pagination';
 import { useMemo } from 'react';
+import { Wrapper } from './components/Wrapper';
+import { MainHeader } from './components/MainHeader';
+import { ContainerFlex } from './components/ContainerFlex';
+import { Card } from './components/Card';
 
 export const ReporteAuditoria = () => {
 
     const [ campoBusqueda, setCampoBusqueda ] = useState( '' );
 
-    const onAddCategory = ( newCategory ) => {
+    const onAddCampoBusqueda = ( newCategory ) => {
             setCampoBusqueda( newCategory );
     }
 
@@ -70,124 +74,76 @@ export const ReporteAuditoria = () => {
     return (
         <>
        
-            <Modal showModal={showModal} setShowModal={setShowModal} Page={AlertComponent}  />
-
-            <div className= "App-header">
-                <div className= "App-body">
-                    <div className= "responsive-wrapper  container-fluid ">
-                        <div className= "main-header">
-                      
-                            <h1>Reporte de Auditoria</h1>
-
-                        </div>
-                        
-                        <div className="content VietnamPro-Font">
-                            <div className="content-main">
-
-                                <div className= "container-fluid">
-                                    <div className= "row mb-6" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            <div className= "card shadow border-0 flex card-noheigth" >
-
-                                                <div className="card-header">
-                                                    <div>
-                                                        <h3>Filtro</h3>
-                                                    </div>
-                                                </div>
-                                                <div className="card-body">
-                                                    <div className="content-header-actions">
-                                                        <AddFilter  onNewCategory={ (value) => onAddCategory(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } />  	
-                                                    </div>
-                                                </div>
-                                            
-                                            </div>
-                                        </div>
+             <Modal showModal={showModal} setShowModal={setShowModal} >
+                <AlertComponent title={tituloAlerta} message={MensajeAlerta} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
+            </Modal>
+            
+            <Wrapper>
+                <MainHeader>
+                        <h1>Reporte de Auditoria</h1>
+                </MainHeader>
+                <div className="content VietnamPro-Font">
+                    <div className="content-main">
+                        <ContainerFlex>
+                                <Card flex={1}>
+                                    <div className="content-header-actions">
+                                        <AddFilter onNewCampoBusqueda={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } titulo={"Filtro"} />
                                     </div>
+                                </Card>
+                        </ContainerFlex>
 
-                                    <div className= "row g-6 mb-6 mh-1" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            
-                                            <div className= "card shadow border-0 flex card-noheigth" >
-                                                <div className="card-header">
-                                                    <nav aria-label="">
+                        <ContainerFlex>
+                            <Card flex={1}>
+                                    <nav>
+                                    <Pagination
+                                    className="pagination-bar"
+                                    currentPage={PaginaActual}
+                                    totalCount={maxResultados}
+                                    pageSize={limit}
+                                    onPageChange={page => setPaginaActual(page)}
+                                    siblingCount={1}
+                                    />
+                                    </nav>
+                            </Card>
+                        </ContainerFlex>
 
-                                                    <Pagination
-                                                    className="pagination-bar"
-                                                    currentPage={PaginaActual}
-                                                    totalCount={maxResultados}
-                                                    pageSize={limit}
-                                                    onPageChange={page => setPaginaActual(page)}
-                                                    siblingCount={1}
-                                                    />
-
-                                                    </nav>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div className= "row mb-6 mh-5" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            
-                                            <div className= "card shadow border-0 flex" >
-                                                <div className="card-body" >
-
-                                                { 
-                                                    <DataList2
-                                                        key={ campoBusqueda }
-                                                        options = { options } 
-                                                        setMaxResultados={ setMaxResultados } 
-                                                        forceUpdate = { update }
-                                                        onError={ (value) => openErrorModal(value) }
-                                                        cardSize={1}
-                                                    />
-                                                }
-                                                </div>
-
-                                                <div className="card-footer footer-start">
-                                                    <span className="text-muted text-sm">Mostrando {limit > maxResultados ? maxResultados : limit } items de {maxResultados} resultados encontrados</span>
-                                                </div>
-
-                                            </div>
-
-                                            
-
-                                        </div>
-                                    </div>
-
-                                    <div className= "row g-6 mb-6 mh-1" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            
-                                            <div className= "card shadow border-0 flex card-noheigth" >
-                                                <div className="card-header">
-                                                    <nav aria-label="">
-
-                                                    <Pagination
-                                                    className="pagination-bar"
-                                                    currentPage={PaginaActual}
-                                                    totalCount={maxResultados}
-                                                    pageSize={limit}
-                                                    onPageChange={page => setPaginaActual(page)}
-                                                    siblingCount={1}
-                                                    />
-
-                                                    </nav>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
+                        <ContainerFlex>
+                            <div className= "card shadow border-0 flex" >
+                                <div className="card-body" style={{minHeight: '800px' , padding: '1.24rem'}}>
+                                    <DataList2
+                                        key={ campoBusqueda }
+                                        options = { options } 
+                                        setMaxResultados={ setMaxResultados } 
+                                        forceUpdate = { update }
+                                        onError={ (value) => openErrorModal(value) }
+                                        cardSize={1}
+                                    />
                                 </div>
-
+                                
+                                <div className="card-footer footer-start">
+                                    <span className="text-muted text-sm">Mostrando {limit > maxResultados ? maxResultados : limit } items de {maxResultados} resultados encontrados</span>
+                                </div>
                             </div>
-                        </div>
+                        </ContainerFlex>
 
+                        <ContainerFlex>
+                            <Card flex={1}>
+                                    <nav>
+                                    <Pagination
+                                    className="pagination-bar"
+                                    currentPage={PaginaActual}
+                                    totalCount={maxResultados}
+                                    pageSize={limit}
+                                    onPageChange={page => setPaginaActual(page)}
+                                    siblingCount={1}
+                                    />
+                                    </nav>
+                            </Card>
+                        </ContainerFlex>
                     </div>
                 </div>
-            </div>
+            </Wrapper>
         </>
     )
-
 }
+

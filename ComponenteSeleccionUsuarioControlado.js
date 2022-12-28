@@ -33,7 +33,7 @@ export const ComponenteSeleccionUsuarioControlado = ({ setStateMessageError , On
             <div className='recent-search'>
                 <div className="card-filter" style={{width: '100%', paddingTop : '.5rem' }}>
                     <div className="content-header-actions">
-                        <AddFilter  onNewCategory={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } />  	
+                        <AddFilter  onNewCampoBusqueda={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } />  	
                     </div>
                 </div>
             </div>

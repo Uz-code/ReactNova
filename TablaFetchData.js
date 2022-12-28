@@ -1,13 +1,16 @@
 import { AddFilter } from './components/AddFilter';
-import React, { useState, useEffect , useReducer } from 'react';
+import { useState, useEffect , useReducer } from 'react';
 import { Modal } from './components/Modal';
 import { AlertComponent } from './components/AlertComponent';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
-import Pagination from './components/Pagination';
-
 import { CustomTablaUsuariosControlados } from './CustomTablaUsuariosControlados';
 import { SeleccionarItem } from './SeleccionarItem';
+import Pagination from './components/Pagination';
+import { Wrapper } from './components/Wrapper';
+import { MainHeader } from './components/MainHeader';
+import { ContainerFlex } from './components/ContainerFlex';
+import { Card } from './components/Card';
 
 import './Tabla.css';
 
@@ -120,128 +123,86 @@ export const TablaFetchData = () => {
 
     }
 
-    const [userID, setUser] = useState(null);
-
-    useEffect ( () => {
-        if (userID != null) {
-            navigateTo();
-        }
-    }, [userID]) 
-
     let navigate = useNavigate();
 
-    function navigateTo() {
+    function navigateTo(userID) {
         navigate('/EditUser',{state:{id:userID}});
     }
     
-   
-
     const options = useMemo( () => ({ campoBusqueda , limit , PaginaActual}), [campoBusqueda, limit, PaginaActual] );
 
-    //console.log("App reendering");
     return (
         <>
-            
             <Modal showModal={showModal} setShowModal={setShowModal} >
                 <AlertComponent title={tituloAlerta} message={MensajeAlerta} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
             </Modal>
-                
-            <div className= "App-header">
-                <div className= "App-body">
-                    <div className= "responsive-wrapper  container-fluid ">
-                        <div className= "main-header">
-                            <h1>Usuarios Controlados</h1>
-                            <div className="button btn-submit" onClick={() => { navigate('/EditUser'); }}> 
-                                <i className="ph-faders-bold"></i>
-                                <span>Crear Nuevo</span>
-                            </div>
-                        </div>
-                        
-                        <div className="content VietnamPro-Font">
-                            <div className="content-main">
 
-                                <div className= "container-fluid">
-                                    <div className= "row mb-6" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            <div className= "card shadow border-0 flex card-noheigth" >
-
-                                                {/*<button type='' className="BtnPrincipal" onClick={openModal}> Alet modal</button>*/}
-
-                                                {/*<button type='' className="BtnPrincipal" onClick={openErrorModal}> Error modal</button>*/}
-                                                
-                                                <div className="card-body">
-                                                 
-                                                    <div className="content-header-actions">
-                                                        <AddFilter onNewCategory={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } 
-                                                        titulo={"Filtro"} />
-                                                    </div>
-                                                </div>
-                                            
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className= "row mb-6" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            
-                                            <div className= "card shadow border-0 flex" >
-                                            
-                                                <div className="card-header">
-                                                     <div class="" style={ { paddingLeft: "6px" } }>
-                                                        <p class="subtitulo">Usuarios</p>
-                                                    </div>  
-                                                    <button className="btn btn-primary" onClick={() => { openModalListado(); }} >Simulacion de accion masiva</button>
-
-                                                </div>
-
-                                                <SeleccionarItem minimoSeleccion = {0} hasListaUsuarios={false}  openModalListado={openModalListado} guardarOnClick={true} listaExterna={listaUsuarios} guardarHandler = { (arr) => { guardarHandler(arr); } } cancelHandler={cancelHandler} multiSelect={true} limpiarLista={update} >
-                                                    <CustomTablaUsuariosControlados
-                                                        options = { options }
-                                                        key={ campoBusqueda } 
-                                                        setMaxResultados={ setMaxResultados } 
-                                                        forceUpdate = { update }
-                                                        onError={ (value) => openErrorModal(value) }
-                                                        setUser = {setUser}
-                                                        onDelete = { (value) => openOptionModal(value) }
-                                                        hasActions = {true}
-                                                    />
-                                                </SeleccionarItem>
-                                                
-                                                <div className="card-footer footer-start">
-                                                    <span className="text-muted text-sm">Mostrando {limit > maxResultados ? maxResultados : limit } items de {maxResultados} resultados encontrados</span>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className= "row g-6 mb-6" style={{ display: "flex", flexDirection: "row" }}>
-                                        <div className= "col-xl-3 col-sm-6 col-12 flex" style={{  flex:1 }}>
-                                            <div className= "card shadow border-0 flex card-noheigth" >
-                                                <div className="card-header">
-                                                    <nav aria-label="">
-
-                                                        <Pagination
-                                                        className="pagination-bar"
-                                                        currentPage={PaginaActual}
-                                                        totalCount={maxResultados}
-                                                        pageSize={limit}
-                                                        onPageChange={page => setPaginaActual(page)}
-                                                        siblingCount={1}
-                                                        />
-
-                                                    </nav>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <Wrapper>
+            
+                <MainHeader>
+                    <h1>Usuarios Controlados</h1>
+                    <div className="button btn-submit" onClick={() => { navigate('/EditUser'); }}> 
+                        <i className="ph-faders-bold"></i>
+                        <span>Crear Nuevo</span>
                     </div>
-                </div>
-            </div>
-        </>
-    )
+                </MainHeader>
+                        
+                <div className="VietnamPro-Font">
+                    <ContainerFlex>
+                            <Card flex={1}>
+                                <div className="content-header-actions">
+                                    <AddFilter onNewCampoBusqueda={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } titulo={"Filtro"} />
+                                </div>
+                            </Card>
+                    </ContainerFlex>
 
+                    <ContainerFlex>
+                        <div className= "card shadow border-0 flex" >
+                            <div className="card-header">
+                                <div style={ { paddingLeft: "6px" } }>
+                                    <p className="subtitulo">Usuarios</p>
+                                </div>  
+                                <button className="btn btn-primary" onClick={() => { openModalListado(); }} >Simulacion de accion masiva</button>
+
+                            </div>
+
+                            <SeleccionarItem minimoSeleccion = {0} hasListaUsuarios={false}  openModalListado={openModalListado} guardarOnClick={true} listaExterna={listaUsuarios} guardarHandler = { (arr) => { guardarHandler(arr); } } cancelHandler={cancelHandler} multiSelect={true} limpiarLista={update} >
+                                <CustomTablaUsuariosControlados
+                                    options = { options }
+                                    key={ campoBusqueda } 
+                                    setMaxResultados={ setMaxResultados } 
+                                    forceUpdate = { update }
+                                    onError={ (value) => openErrorModal(value) }
+                                    setUser = { (value) => navigateTo(value) }
+                                    onDelete = { (value) => openOptionModal(value) }
+                                    hasActions = {true}
+                                />
+                            </SeleccionarItem>
+                            
+                            <div className="card-footer footer-start">
+                                <span className="text-muted text-sm">Mostrando {limit > maxResultados ? maxResultados : limit } items de {maxResultados} resultados encontrados</span>
+                            </div>
+                        </div>
+                    </ContainerFlex>
+                    
+                    <ContainerFlex>
+                            <Card>
+                                <nav aria-label="">
+
+                                    <Pagination
+                                    className="pagination-bar"
+                                    currentPage={PaginaActual}
+                                    totalCount={maxResultados}
+                                    pageSize={limit}
+                                    onPageChange={page => setPaginaActual(page)}
+                                    siblingCount={1}
+                                    />
+
+                                </nav>
+                            </Card>
+                    </ContainerFlex>
+                </div>
+            </Wrapper>
+        </>
+    );
 }
