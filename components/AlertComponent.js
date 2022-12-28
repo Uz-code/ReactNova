@@ -1,9 +1,8 @@
 import { useEffect, useCallback ,useState} from 'react';
 import styled from 'styled-components';
-
+import { ClampMessage } from '../utils/ClampMessage';
 
 export const AlertComponent = ({  title, message, cancelHandler, AcceptHandler}) => {
-    const [toggleClamp , setToggleClamp] = useState(true);
     /* enter listener on keypress */
 
     const keyPress = useCallback(
@@ -26,10 +25,8 @@ export const AlertComponent = ({  title, message, cancelHandler, AcceptHandler})
         
         <h1>{title}</h1> 
         
-        <p className= {toggleClamp ? 'texto-alerta line-clamp' : 'texto-alerta '}>{message}</p>
-        {(toggleClamp && message.length > 200) &&
-         <a className="pointer" style={{paddingBottom: '.5rem'}} onClick={() => setToggleClamp(false)}>Ver más</a>}
-
+        <ClampMessage message={message} />
+        
         <div className="buttons">
 
             { cancelHandler ? (

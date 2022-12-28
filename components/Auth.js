@@ -65,7 +65,7 @@ const AuthContext = createContext(null);
         let response = await postData( url, body, header);
 
         if(response.SATXWS_EjecutarAutenticacionUsuarioResult.CodigoRespuesta !== 0){
-            setTitle(`Codigo Error ${response.SATXWS_InicioAutenticacionUsuarioResult?.CodigoRespuesta}`);
+            setTitle(`Codigo Error ${response.SATXWS_EjecutarAutenticacionUsuarioResult?.CodigoRespuesta}`);
             throw new Error(response.SATXWS_EjecutarAutenticacionUsuarioResult.DescripcionRespuesta);
         }
         

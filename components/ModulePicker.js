@@ -18,11 +18,11 @@ return(
    
 <div className="container-module">
 	<div className="tabs">
-		<input type="radio" id="radio-1" name="tabs" onClick={ ()=>{seleccionado("SATCS")}} disabled={disable} checked={moduloActual === "SATCS"}/>
+		<input type="radio" id="radio-1" name="tabs" onChange={ ()=>{seleccionado("SATCS")}} disabled={disable} checked={moduloActual === "SATCS"}/>
 		<label className="tab" htmlFor="radio-1">SATCS</label>
-		<input type="radio" id="radio-2" name="tabs" onClick={()=>{seleccionado("SATAG")}} disabled={disable} checked={moduloActual === "SATAG"}/>
+		<input type="radio" id="radio-2" name="tabs" onChange={()=>{seleccionado("SATAG")}} disabled={disable} checked={moduloActual === "SATAG"}/>
 		<label className="tab" htmlFor="radio-2" >SATAG</label>
-		<input type="radio" id="radio-3" name="tabs" onClick={()=>{seleccionado("SATND")}} disabled={disable} checked={moduloActual === "SATND"} />
+		<input type="radio" id="radio-3" name="tabs" onChange={()=>{seleccionado("SATND")}} disabled={disable} checked={moduloActual === "SATND"} />
 		<label className="tab" htmlFor="radio-3">SATND<span className="notification">2</span></label>
 
 		<span className="glider"></span>

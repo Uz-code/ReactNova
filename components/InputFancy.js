@@ -12,7 +12,7 @@ export const InputFancy = ({ value , placeholder, required, type = "text", name,
         :
         <>
             <input type={type} className="input-fancy" name= { name } placeholder=" " ref={reference} disabled={ disabled }  value={ value } onChange = { onChange } required={required} />
-            <p className= { required && "required" } >{placeholder}</p>
+            <p className= { required ? "required" : ''} >{placeholder}</p>
         </>
     )
 }

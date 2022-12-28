@@ -24,7 +24,7 @@ return(
     </div>
     <div className="content-header">
         {children.map ((child) => {
-            if(child.props.label != '')
+            if(child.props.label)
             {
             return (
                 <div className={activeTab === child.props.label ? "content-tab  active-content" : "content-tab"} key={child.props.label} >

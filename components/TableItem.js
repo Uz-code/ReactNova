@@ -1,9 +1,8 @@
 import { BsArchive, BsTrash } from 'react-icons/bs';
-import { useState } from 'react';
 
 export const TableItem = ({ address, fullName, email, id , university, setUser, onDelete ,listUsers, hasActions, isSelectable, onSelectUser}) => {
 
-    const isSelected = listUsers.some( (user) => user.id === id );
+  const isSelected = listUsers && listUsers.some( (user) => user.id === id );
 
     return (
       <tr key={id}  className={` ${listUsers != null && (isSelected ? 'user-selected': 'selectable')}` } >

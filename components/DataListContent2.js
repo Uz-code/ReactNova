@@ -1,5 +1,5 @@
 
-export const DataListContent2 = ({ address, fullName, email, id , university, company, size }) => {
+export const DataListContent2 = ({ address, fullName,company, size }) => {
 
     return (
     
@@ -20,7 +20,9 @@ export const DataListContent2 = ({ address, fullName, email, id , university, co
                 
                 <div className="col-md-8 ">
                   <div className="card-header">
-                      <div className="card-text"><small className="text-muted"> the audit report is not an analysis of the company's earnings performance for the period. Instead, the report is merely a measure of the reliability of the financial statements. </small></div>
+                      <div className="card-text"><small className="text-muted"> the audit report is not an analysis of the company's earnings performance for the period. Instead, the report is merely a measure of the reliability of the financial statements. 
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies tincidunt, nunc nisl aliquet nisl, eget aliquet nunc nisl eget nisl.
+                      </small></div>
                   </div>
                 </div>
             </div>

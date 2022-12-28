@@ -1,6 +1,6 @@
 import { ListContent } from './ListContent';
 
-export const DataListContent = ({ address, fullName, email, id , university, company, size, onAddUserToList, listUsers }) => {
+export const DataListContent = ({ address, fullName, id , size, onAddUserToList, listUsers }) => {
 
     return (
     
@@ -14,7 +14,6 @@ export const DataListContent = ({ address, fullName, email, id , university, com
 
                 <ListContent content1={fullName} content2={address} content3={'Last updated 3 mins ago'} />
                 
-                    
             </div>
         </div>
     )

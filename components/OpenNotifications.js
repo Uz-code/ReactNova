@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { DropDownComponent } from './DropDownComponent';
-import { DropDownItems} from './DropDownItems';
+import { Notifications} from './Notifications';
 
-export const OpenUserProfileComponent = ( { forceClose, close } ) => {
+export const OpenNotifications = ( { forceClose, close } ) => {
 
 	const [open, setOpen] = useState(false);
 	
@@ -19,10 +19,10 @@ return(
  <> 
 <div className="container-module">
 	<div className="drawer tabs">
-		<label className="tab" onClick={()=>{openComponent()}}>Perfil</label>
+		<label className="tab" onClick={()=>{openComponent()}}>Notificaciones</label>
 	</div>
-	<DropDownComponent open={open} setOpen={setOpen} profile={true}>
-		<DropDownItems/>
+	<DropDownComponent open={open} setOpen={setOpen} notifications={true}>
+		<Notifications/>
 	</DropDownComponent>
 </div>
 </> 

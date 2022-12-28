@@ -6,7 +6,7 @@ export const ContainerFlex = ({ children , half, justifyContent, paddingTop = tr
            
             {  
                 <div className={ `row g-6 flex ${paddingTop ? 'content-main': ''}`} style={{ flexDirection: "row" }}>
-                    <div className= {`col-xl-3 col-sm-6 col-12 main-section ${half ? 'form-user': ''} ${center ? 'center': ''}` }  style={{ flex:1 , justifyContent: justifyContent, gap : gap }}>
+                    <div className= {`col-xl-3 col-sm-6 ${gap ? 'col-12 ': ''}main-section ${half ? 'form-user': ''} ${center ? 'center': ''}` }  style={{ flex:1 , justifyContent: justifyContent}}>
                         {children}
                     </div>
                 </div>
