@@ -47,9 +47,8 @@ export const getData = async( options , setMaxResultados ,  onError ) => {
 
         }
         catch (ex) {
-            console.log(ex);
-            onError("Error Obteniendo los datos de los usuarios controlados: " + ex.message);
-            return [];
+            onError("Error obteniendo los usuarios controlados, Descripcion: " + ex.message);
+            return null;
         }
     }
 

@@ -7,14 +7,15 @@ export const useFetchData = ( options , setMaxResultados, forceUpdate , onError)
     const [isLoading, setIsLoading] = useState( true );
 
     const getUsers = async() => {
+        
         let users = null;
 
         try 
         {
 
             users = await getData( options , setMaxResultados, onError );
-           
-            users && setUsers(users); setIsLoading( false );
+            
+            if(users){setUsers(users); setIsLoading( false );}
             
         }
         catch(ex)

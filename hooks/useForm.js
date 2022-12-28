@@ -1,9 +1,9 @@
 import { useState,useEffect } from 'react';
 import { useAuth } from '../components/Auth';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { DialogHook } from '../hooks/DialogHook';
 
 export const useForm = ( initialForm = {} ) => {
+    
     // tipo de modal 1 alerta 
     const [ typeModal, setTypeModal ] = useState( 1 );
 
@@ -429,14 +429,14 @@ export const useForm = ( initialForm = {} ) => {
                 break;
             case 'Passwordc':
                 if(!toggleGenerarPassc) {
-                    if( !ValidarLength( value , "Contraseña Combinada", null, 128 ) ){
+                    if( !ValidarLength( value , "Contraseña Combinada", null, 128 , false) ){
                         return false;
                     }
                 }
                 break;
             case 'passcchk':
                 if(!toggleGenerarPassc) {
-                    if(!ValidarLength( value , "Verificacion Contraseña Combinada", null, 128 ) ){
+                    if(!ValidarLength( value , "Verificacion Contraseña Combinada", null, 128, false ) ){
                         return false;
                     }
                     if(!ValidarEquidad(formState.Passwordc ,formState.passcchk)){
@@ -535,12 +535,15 @@ export const useForm = ( initialForm = {} ) => {
         return true;
     }
 
-    const ValidarLength = ( value , name, min, max) => {
+    const ValidarLength = ( value , name, min, max, required = true) => {
 
         try {
-            if (!ChkNotNull( value )) {
-                setStateMessageError(`El campo ${ name } no puede estar vacío`);
-                return false;
+            
+            if (required){
+                if (!ChkNotNull( value )) {
+                    setStateMessageError(`El campo ${ name } no puede estar vacío`);
+                    return false;
+                }
             }
     
             if( min == null || max == null ){
@@ -573,6 +576,7 @@ export const useForm = ( initialForm = {} ) => {
     return {
         ...formState,
         formState,
+        setFormState,
         LoggingSesionHabilitado,
         nombreLocalizacion, SetNombreLocalizacion,
         setShowModal,
