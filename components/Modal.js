@@ -62,7 +62,7 @@ const CloseModalButton = styled.div`
   z-index: 10;
 `;
 
-export const Modal = ({ showModal, setShowModal, children}) => {
+export const Modal = ({ showModal, setShowModal, children, CancelHandler}) => {
   const modalRef = useRef();
 
   const animation = useSpring({
@@ -75,14 +75,14 @@ export const Modal = ({ showModal, setShowModal, children}) => {
 
   const closeModal = e => {
     if (modalRef.current === e.target) {
-      setShowModal(false);
+      CancelHandler ? CancelHandler() : setShowModal(false);
     }
   };
 
   const keyPress = useCallback(
     e => {
       if (e.key === 'Escape' && showModal) {
-        setShowModal(false);
+        CancelHandler ? CancelHandler() : setShowModal(false);
         //console.log('I pressed');
       }
     },

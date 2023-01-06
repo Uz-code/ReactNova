@@ -37,7 +37,7 @@ export const Loader = ( { isLoading, duration , type, centerTable }  ) => {
             {
                 type == 'spinner' &&
                 <div className="center flex" {...centerTable && {style: {minHeight: '30vh'}}}>
-                    <div class="spinner"></div>
+                    <div className="spinner"></div>
                 </div>
             }
              
@@ -52,7 +52,7 @@ export const Loader = ( { isLoading, duration , type, centerTable }  ) => {
                 type == 'loader-1' &&
                 <div className="center flex" {...centerTable && {style: {minHeight: '30vh'}}}>
                     <div className="content-loader">
-                        <div class="loader-1"><span></span></div>
+                        <div className="loader-1"><span></span></div>
                     </div>
                 </div>
             } 

@@ -1,10 +1,8 @@
-import { useEffect, useCallback ,useState} from 'react';
-import styled from 'styled-components';
+import { useEffect, useCallback } from 'react';
 import { ClampMessage } from '../utils/ClampMessage';
 
-export const AlertComponent = ({  title, message, cancelHandler, AcceptHandler}) => {
+export const AlertComponent = ({  title, message, children, cancelHandler, AcceptHandler , customButtonText = "Aceptar"}) => {
     /* enter listener on keypress */
-
     const keyPress = useCallback(
         (e) => {
             if (e.key === 'Enter') {
@@ -24,9 +22,16 @@ export const AlertComponent = ({  title, message, cancelHandler, AcceptHandler})
     <>
         
         <h1>{title}</h1> 
-        
+       
+        {children &&
+        <>
+            <br/>
+            {children}
+        </>
+        }
+
         <ClampMessage message={message} />
-        
+
         <div className="buttons">
 
             { cancelHandler ? (
@@ -37,7 +42,7 @@ export const AlertComponent = ({  title, message, cancelHandler, AcceptHandler})
 
             { AcceptHandler ? (
 
-                <button className="BtnPrincipal" onClick={() => AcceptHandler()} >Aceptar</button>
+                <button className="BtnPrincipal" onClick={() => AcceptHandler()} >{customButtonText}</button>
             ) : null }
 
         </div>

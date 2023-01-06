@@ -1,10 +1,9 @@
 import { ListContent } from './ListContent';
-import { Card } from './Card';
 
 export const ListadoTarjetas = ( { title , contentArray} ) => {
 
     return (
-        <Card flex={1}>
+        <>
             <div className='drop__container'>
                 { title  && <div className='card-body'>
                         <h1>{ title }</h1>
@@ -24,6 +23,6 @@ export const ListadoTarjetas = ( { title , contentArray} ) => {
                 </div>
                 </div>
             <br/>
-        </Card>
+            </>
     )
 }

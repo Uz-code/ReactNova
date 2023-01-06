@@ -8,7 +8,7 @@ export const DataList2 = ({ options, setMaxResultados, forceUpdate, onError, car
     
     return (
         <>
-            <LoadingComponent loading={isLoading} type="loader-1" >
+            <LoadingComponent loading={isLoading} type="loader-1" centerTable={true}>
                 {
                 users.map( (user) => (
                     <DataListContent2

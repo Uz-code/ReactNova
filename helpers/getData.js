@@ -47,7 +47,7 @@ export const getData = async( options , setMaxResultados ,  onError ) => {
 
         }
         catch (ex) {
-            onError("Error obteniendo los usuarios controlados, Descripcion: " + ex.message);
+            onError("Se produjo un error obteniendo los datos de los usuarios funcionales.  Descripcion: " + ex.message);
             return null;
         }
     }

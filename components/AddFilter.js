@@ -14,6 +14,8 @@ export const AddFilter = ({ onNewCampoBusqueda, limit, onNewLimit , forceUpdate 
     const [ itemActive , SetItemActive ] = useState('1');
 
     const [ limitValue, setlimitValue ] = useState(limit);
+    
+    const [ sistema, setSistema ]= useState('');
 
     const onInputChange = ({ target }) => {
         setInputValue( target.value );
@@ -40,6 +42,7 @@ export const AddFilter = ({ onNewCampoBusqueda, limit, onNewLimit , forceUpdate 
         if (isNaN(limitValue)){  return; }
  
         onNewLimit( limitValue.trim() );
+        
     }
 
     useEffect( () => {
@@ -60,8 +63,8 @@ export const AddFilter = ({ onNewCampoBusqueda, limit, onNewLimit , forceUpdate 
             <div className={`container-filter ${filter ? 'container-filter-active' : ''}`}>
             
             { titulo &&
-            <div class="input-group mb-2" style={ { paddingLeft: "0.25rem" } }>
-                <p class="subtitulo"> { titulo } </p>
+            <div className="input-group mb-2" style={ { paddingLeft: "0.25rem" } }>
+                <p className="subtitulo"> { titulo } </p>
             </div> }
             
             <Row gap='3px'>
@@ -98,7 +101,7 @@ export const AddFilter = ({ onNewCampoBusqueda, limit, onNewLimit , forceUpdate 
         
                         <Row>
                         
-                            <div class="flex-wrap" >
+                            <div className="flex-wrap" >
                             
                                 <div className=" input-group2" >
                                     <div  className="input-tag ">
@@ -116,9 +119,9 @@ export const AddFilter = ({ onNewCampoBusqueda, limit, onNewLimit , forceUpdate 
                                         Sistema:
                                     </div>
                                     
-                                    <select className="form-select form-select-lg " aria-label="" defaultValue={'1'}>
-                                        <option value="1">Todos</option>
-                                        <option value="2">Ascendiente</option>
+                                    <select className="form-select form-select-lg " aria-label="" value={sistema} onChange={ (e) => setSistema(e.target.value) }>
+                                        <option value="">Todos</option>
+                                        <option value="Aplicacion">Aplicacion</option>
                                     </select>
                                 </div>
 

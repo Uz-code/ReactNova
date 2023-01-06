@@ -8,6 +8,7 @@ export const DialogHook = ( {title, message } ) => {
 		message: message,
 		AcceptHandler : null,
 		CancelHandler : null,
+		customButtonText : 'Aceptar',
 	});
 
     return {

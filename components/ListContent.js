@@ -6,7 +6,7 @@ export const ListContent = ({ content1,content2,content3,content4,content5 }) =>
            
             {  
             <div className="flex">
-                <div className="card-body mx-w-185">
+                <div className="card-body">
                     <h5 className="card-title">{ content1 }</h5>
                     { content2 && <div className="card-text">{ content2 }</div>  }
                     <div className="card-text"><small className="text-muted">{ content3 }</small></div>

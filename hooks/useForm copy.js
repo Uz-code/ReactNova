@@ -19,24 +19,24 @@ export const useForm = ( initialForm = {} ) => {
 
     // use State
     const [ chkArchivoAdjunto_pk, setChkArchivoAdjunto_pk ] = useState( false );
+    const LoggingSesionHabilitado = true;
 
-
-    /* XD Strings booleanos TODO ver que hacer con esto, cosas de SAT*/
-    const LogOpenHabilitadaStr = "true";
-    const LogWinHabilitadaStr = "true";
-    const LogISeriesHabilitadaStr = "true";
-    const LogCommHabilitadaStr = "true";
-    const LogBDHabilitadaStr = "true";
-    const LogZSeriesHabilitadaStr = "true";
-    const LogAppWinHabilitadaStr = "true";
-    const LogAppWebHabilitadaStr = "true";
-    /*  */
+    const [toggleGenerarPass, setToggleGenerarPass] = useState(false);
+    const [toggleGenerarPassc, setToggleGenerarPassc] = useState(false);
     
-    const [ LoggingSesionHabilitado, setLoggingSesionHabilitado ] = useState( true );
+    const [prevPasswordc,setPrevPasswordc ] = useState('');
+    const [prevPasscchk,setPrevPasscchk ] = useState('');
+
+    const [prevPassword,setPrevPassword ] = useState('');
+    const [prevPasschk,setPrevPasschk ] = useState('');
+
+    const [ typePassC, setTypePassC ] = useState( 'password' );
+    const [ typePass, setTypePass ] = useState( 'password' );
 
     const [ formState, setFormState ] = useState( initialForm );
 
     const [ StateMessageError,setStateMessageError ] = useState('');
+    
     const [ title, setTitle] = useState('Error');
 
     const [ utilCadenaConexion,setUtilCadenaConexion ] = useState(false);
@@ -110,6 +110,25 @@ export const useForm = ( initialForm = {} ) => {
         });
     } 
 
+    const setPasswordPorSatCS = (password,verificacion,valorPorDefecto,prevPassValue,prevVerifValue,toggle) => {
+
+        if (toggle) {
+            setFormState({
+                ...formState,
+                [password]: valorPorDefecto,
+                [verificacion]: valorPorDefecto
+            });
+        } else {
+            setFormState({
+                ...formState,
+                [password]: prevPassValue,
+                [verificacion]: prevVerifValue
+            });
+        }
+
+            
+    } 
+
     useEffect (() => {
 
         setearCadenaDeConexionPorDefecto();
@@ -136,6 +155,38 @@ export const useForm = ( initialForm = {} ) => {
         !chkArchivoAdjunto_pk && setValues({ ArchivoAdjunto_pk: '' });
     },[chkArchivoAdjunto_pk]);
 
+    useEffect (() => {
+        if(formState.Passwordc != 'Generada por SATCS')
+        {
+            setPrevPasswordc(formState.Passwordc);
+        }
+        if(formState.Passchk != 'Generada por SATCS')
+        {
+            setPrevPasscchk(formState.passcchk);
+        }
+
+        setPasswordPorSatCS('Passwordc','passcchk','Generada por SATCS', prevPasswordc , prevPasscchk, toggleGenerarPassc);
+       
+        toggleGenerarPassc && typePassC === 'text' && setTypePassC('password');
+
+    },[toggleGenerarPassc]);
+
+    useEffect (() => {
+        if(formState.Password != 'Generada por SATCS')
+        {
+            setPrevPassword(formState.Password);
+        }
+        if(formState.passchk != 'Generada por SATCS')
+        {
+            setPrevPasschk(formState.passchk);
+        }
+        
+        setPasswordPorSatCS('Password','passchk','Generada por SATCS', prevPassword, prevPasschk, toggleGenerarPass);
+        toggleGenerarPass && typePass === 'text' && setTypePass('password');
+
+        //toggleGenerarPass && setValues({ Passwordc: 'Generada por SATCS', passcchk: 'Generada por SATCS' });
+    },[toggleGenerarPass]);
+    
     useEffect( () => {
 
         var port = setPort();
@@ -144,38 +195,17 @@ export const useForm = ( initialForm = {} ) => {
             ...port
         });
 
-    },[formState.ProtocoloConexion] );
+    },[formState.Protocol] );
 
 
     useEffect( () => {
-
-    setLoggingSesionHabilitado(false); 
-
-    if (LogAppWinHabilitadaStr == "true" || LogAppWebHabilitadaStr || "true") {
-        setLoggingSesionHabilitado(true); 
-    }else if((formState.Plataforma == "7" || formState.Plataforma == "9" || formState.Plataforma == "11" || formState.Plataforma == "13" || formState.Plataforma == "15" || formState.Plataforma == "17") &&
-    (LogOpenHabilitadaStr == "true") || 
-    (formState.Plataforma == "1" || formState.Plataforma == "3" || formState.Plataforma == "30" || formState.Plataforma == "99") &&
-    (LogWinHabilitadaStr == "true") || 
-    (formState.Plataforma == "20") &&
-    (LogISeriesHabilitadaStr == "true") || 
-    (formState.Plataforma == "50" || formState.Plataforma == "51" || formState.Plataforma == "40" || formState.Plataforma == "41") &&
-    (LogCommHabilitadaStr == "true") || 
-    (formState.Plataforma == "2" || formState.Plataforma == "60" || formState.Plataforma == "57" || formState.Plataforma == "58") &&
-    (LogBDHabilitadaStr == "true") || 
-    (formState.Plataforma == "19" || formState.Plataforma == "21" || formState.Plataforma == "191") &&
-    (LogZSeriesHabilitadaStr == "true"))
-    {
-        setLoggingSesionHabilitado(true); 
-    }
-
         //Metodo con valores por defecto dependiendo del sistema operativo
 
         var objCadenaConexion = utilCadenaConexion && (setCadenaConexion());
         var objPeriodoCtrlClaveAuto = setTipoPeriodoCtrlClaveAuto();
         var objPort = setPort();
         var objLocalizacionID = {'LocalizacionID': ''};
-        SetNombreLocalizacion(''); //Se limpia el nombre de la Localizacion
+        SetNombreLocalizacion(''); //Se limpia el nombre de la localizacion
         setListLocalizacion([]); //Se limpia el arreglo de localizaciones
 
         //Objeto que se agrega al FormState 
@@ -186,15 +216,15 @@ export const useForm = ( initialForm = {} ) => {
             ...objLocalizacionID
         });
 
-        //setHdnSOAnterior(formState.Plataforma);
+        //setHdnSOAnterior(formState.UsrSo);
 
-    },[formState.Plataforma] );
+    },[formState.UsrSo] );
     
     const setTipoPeriodoCtrlClaveAuto = () => {
         var objPeriodoCtrlClaveAuto = {};
 
-        if( formState.Plataforma != undefined){
-            if (formState.Plataforma == 63)
+        if( formState.UsrSo != undefined){
+            if (formState.UsrSo == 63)
             {
                 objPeriodoCtrlClaveAuto = { TipoPeriodoCtrlClaveAuto: '0' };
             }
@@ -206,58 +236,58 @@ export const useForm = ( initialForm = {} ) => {
     const setPort = () => {
 
         var port = {};
-        if(formState.Plataforma != undefined){
+        if(formState.UsrSo != undefined){
             
-            if (formState.Plataforma == 7 || formState.Plataforma == 9 || formState.Plataforma == 11 || formState.Plataforma == 13 || formState.Plataforma == 15 || formState.Plataforma == 17  || formState.Plataforma == 41 || formState.Plataforma == 50 || formState.Plataforma == 51 || formState.Plataforma == 20 || formState.Plataforma == 55 || formState.Plataforma == 59)
+            if (formState.UsrSo == 7 || formState.UsrSo == 9 || formState.UsrSo == 11 || formState.UsrSo == 13 || formState.UsrSo == 15 || formState.UsrSo == 17  || formState.UsrSo == 41 || formState.UsrSo == 50 || formState.UsrSo == 51 || formState.UsrSo == 20 || formState.UsrSo == 55 || formState.UsrSo == 59)
             {
-                if( formState.ProtocoloConexion === '4' ){
+                if( formState.Protocol === '4' ){
                     port = {
-                        'PuertoConexion': '22'
+                        'SatPssh': '22'
                     };
                 }
-                else if( formState.ProtocoloConexion === '1' ){
+                else if( formState.Protocol === '1' ){
                     port = {
-                        'PuertoConexion': '23'
+                        'SatPssh': '23'
                     };
                 }
             }
             else
             {
-                if (formState.Plataforma == 1 || formState.Plataforma == 3 || formState.Plataforma == 30 || formState.Plataforma == 99)
+                if (formState.UsrSo == 1 || formState.UsrSo == 3 || formState.UsrSo == 30 || formState.UsrSo == 99)
 				{
                     port = {
-                        'PuertoConexion': '3389'
+                        'SatPssh': '3389'
                     };
 				}
-				else if (formState.Plataforma == 40 || formState.Plataforma == 50 || formState.Plataforma == 20)
+				else if (formState.UsrSo == 40 || formState.UsrSo == 50 || formState.UsrSo == 20)
 				{
                     port = {
-                        'PuertoConexion': '23'
+                        'SatPssh': '23'
                     };
 				}
-				else if (formState.Plataforma == 58)
+				else if (formState.UsrSo == 58)
 				{
                     port = {
-                        'PuertoConexion': '3306'
+                        'SatPssh': '3306'
                     };
 				}
-				else if (formState.Plataforma == 2)
+				else if (formState.UsrSo == 2)
 				{
                     port = {
-                        'PuertoConexion': '1433'
+                        'SatPssh': '1433'
                     };
 				}
-				else if (formState.Plataforma == 64)
+				else if (formState.UsrSo == 64)
 				{
-                    port = {'PuertoConexion': '5432'};
+                    port = {'SatPssh': '5432'};
 				}
-				else if (formState.Plataforma == 65)
+				else if (formState.UsrSo == 65)
 				{
-                    port = {'PuertoConexion': '27001'};
+                    port = {'SatPssh': '27001'};
 				}
 				else
 				{
-                    port = {'PuertoConexion': '22'};
+                    port = {'SatPssh': '22'};
 				} 
             }
         }
@@ -267,29 +297,29 @@ export const useForm = ( initialForm = {} ) => {
     
     const setCadenaConexion = () => {
         var objCadenaConexion = {};
-        if( formState.Plataforma != undefined){
+        if( formState.UsrSo != undefined){
            
-            if (formState.Plataforma == '2')//SQL Server
+            if (formState.UsrSo == '2')//SQL Server
             {
                 objCadenaConexion = { CadenaConexionUsuario: 'Server={SatUsrLocalizacion}; User ID={SatUsr}; Password="{OldPass}' };
             }
-            else if(formState.Plataforma == '60')//Oracle
+            else if(formState.UsrSo == '60')//Oracle
             {
                 objCadenaConexion = { CadenaConexionUsuario: 'Data Source={SatUsrLocalizacion}; User ID={SatUsr}; Password="{OldPass}"; Pooling=False;' };
             }
-            else if(formState.Plataforma == '58')//MySQL Server 
+            else if(formState.UsrSo == '58')//MySQL Server 
             {
                 objCadenaConexion = { CadenaConexionUsuario: 'Data Source={SatUsrLocalizacion}; Port={SatPortUC}; User ID={SatUsr}; Password="{OldPass}"; Pooling=False;' };
             }
-            else if(formState.Plataforma == '57')//SAP Ase
+            else if(formState.UsrSo == '57')//SAP Ase
             {
                 objCadenaConexion = { CadenaConexionUsuario: 'Data Source={SatUsrLocalizacion}; User ID={SatUsr}; Password="{OldPass}"; Pooling=False; Charset=iso_1;' };
             }
-            else if(formState.Plataforma == '64')//PosgreSQL
+            else if(formState.UsrSo == '64')//PosgreSQL
             {
                 objCadenaConexion = { CadenaConexionUsuario: 'Server={SatUsrLocalizacion}; Port={SatPortUC}; UID={SatUsr}; PWD="{OldPass}"; DB=postgres; Pooling=False;' };
             }
-            else if(formState.Plataforma == '65')//MongoDB
+            else if(formState.UsrSo == '65')//MongoDB
             {   
                 objCadenaConexion = { CadenaConexionUsuario: 'mongodb://{SatUsr}:{OldPass}@{SatUsrLocalizacion}:{SatPortUC}/{SatUsrDB}?maxPoolSize=1&maxIdleTime=20s&connectTimeout=10s&waitQueueTimeout=10s&serverSelectionTimeout=10s' };
             }
@@ -310,18 +340,17 @@ export const useForm = ( initialForm = {} ) => {
 
     const handleSubmit = ( e ) => {
         e.preventDefault();
+        
        if(VerifDatos()){ 
             SubmitForm(formState);
        }
     
     }
+
+
     const SubmitForm = (formState) => {
+        alert('submit ok'); 
         console.log("Formulario: ",formState);
-
-        /* TODO: Que haga el submit a la api xD */
-
-        setShowModal(true);
-        setDialog( { title: "(DEVELOPER OPTION)", message: 'Submit exitoso, desea navegar a la pantalla anterior? (el resultado esta en consola)', AcceptHandler: () => navigate('/TablaFetchData') , CancelHandler: () => setShowModal(false) } );
     }
     
     const VerifDatos = () => {
@@ -343,123 +372,109 @@ export const useForm = ( initialForm = {} ) => {
 
 
     const validateInput = ( value , key ) => {
-        /* Todo despues de las vacaciones cambiar el switch por un if , era mas rapido pero despues hay que hacerlo bien y ordenado */
+        
         switch (key) {
-            case 'Nombre':
+            case 'Protocol':
+                if ( value === '' ) {
+                    setStateMessageError('Protocolo no puede estar vacio');
+                    return false;
+                }
+                break;
+            case 'UsrSo':
+                if ( value === '' ) {
+                    setStateMessageError('Sistema Operativo no puede estar vacio');
+                    return false;
+                }
+                break;
+            case 'SatPssh':
+                if(!ChkNotNull(value)){
+                    setStateMessageError('Puerto de Conexion no puede estar vacio');
+                    return false;
+                }
+                if (!ValidarNumeroLimites( value , "Puerto de Conexion", 0, 65535 )){
+                    return false;
+                }
+                break;
+            case 'ip':
+                if ( value === '' ) {
+                    setStateMessageError('IP no puede estar vacio');
+                    return false;
+                }
+                break;
+            case 'NombreBD':
+                if ( formState.UsrSo == 65 ) {
+                return ValidarLength( value , "NombreBD", null, 200 );
+                }
+                break;
+            case 'CadenaConexionUsuario':
+                if(utilCadenaConexion && (formState.UsrSo == 2 || formState.UsrSo == 60 || formState.UsrSo == 58 || formState.UsrSo == 57 || formState.UsrSo == 64 || formState.UsrSo == 65)){
+
+                    if (!ChkNotNull( value )) {
+                        let AcceptHandler = ( ) => {
+                            setearCadenaDeConexionPorDefecto();
+                            setShowModal(false);
+                        }
+                        
+                        setDialog( { title: "Error", message: 'El campo Cadena de Conexion se encuentra vacío, Desea dejar la cadena de conexión por defecto?', AcceptHandler: () => AcceptHandler() , CancelHandler: () => setShowModal(false) } );
+                        
+                        return false;
+                    }
+                        
+                    return ValidarLength( value , "Cadena de Conexion", null, 4000 )
+                }
+                break;
+            case 'username':
                 if( !ValidarLength( value , "Nombre de Usuario", null, 30 ) ){
                     return false;
                }
                 break;
+            case 'password':
+                if( !ValidarLength( value , "Contraseña", null, 128 ) ){
+                    return false;
+                }
+                break;
             case 'Password':
+                if(!toggleGenerarPass) {
                     if( !ValidarLength( value , "Contraseña", null, 128 ) ){
                         return false;
                     }
+                }
                 break;
-            case 'VerifPassword':
+            case 'passchk':
+                if(!toggleGenerarPass) {
                     if(!ValidarLength( value , "Verificacion Contraseña", null, 128 ) ){
                         return false;
                     }
-                    if(!ValidarEquidad(formState.Password ,formState.VerifPassword,'')){
+                    if(!ValidarEquidad(formState.Password ,formState.passchk,'')){
                         setStateMessageError('La contraseña no coincide con su verificacion');
                         return false;
                     }
+                }
                 break;
-            case 'PasswordAdicional':
-                    return ValidarLength( value , "Contraseña Combinada", null, 128 , false);
-            case 'VerifPasswordAdicional':
+            case 'Passwordc':
+                if(!toggleGenerarPassc) {
+                    if( !ValidarLength( value , "Contraseña Combinada", null, 128 , false) ){
+                        return false;
+                    }
+                }
+                break;
+            case 'passcchk':
+                if(!toggleGenerarPassc) {
                     if(!ValidarLength( value , "Verificacion Contraseña Combinada", null, 128, false ) ){
                         return false;
                     }
-                    if(!ValidarEquidad(formState.PasswordAdicional ,formState.VerifPasswordAdicional )){
+                    if(!ValidarEquidad(formState.Passwordc ,formState.passcchk)){
                         setStateMessageError('La contraseña combinada no coincide con su verificacion');
                         return false;
                     }
-                break;
-                case 'ProtocoloConexion':
-                    if ( value === '' ) {
-                        setStateMessageError('Protocolo no puede estar vacio');
-                        return false;
-                    }
-                    break;
-                case 'DefaultShell':
-                    return ValidarLength( value , "Shell por Defecto", null, 30, false );
-                case 'ServidorX11':
-                    return ValidarLength( value , "Servidor X11", null, 30 , false);
-                case 'SatPromptUC':
-                        return ValidarLength( value , "Prompt de Usuario" , null, 30, false );
-                case 'PuertoConexion':
-                    if(!ChkNotNull(value)){
-                        setStateMessageError('Puerto de Conexion no puede estar vacio');
-                        return false;
-                    }
-                    if (!ValidarNumeroLimites( value , "Puerto de Conexion", 0, 65535 )){
-                        return false;
-                    }
-                    break;
-                case 'ip':
-                    if ( value === '' ) {
-                        setStateMessageError('IP no puede estar vacio');
-                        return false;
-                    }
-                    break;
-                case 'NombreBD':
-                    if ( formState.Plataforma == 65 ) {
-                        return ValidarLength( value , "NombreBD", null, 200 );
-                    }
-                    break;
-                case 'CadenaConexionUsuario':
-                    if(utilCadenaConexion && (formState.Plataforma == 2 || formState.Plataforma == 60 || formState.Plataforma == 58 || formState.Plataforma == 57 || formState.Plataforma == 64 || formState.Plataforma == 65)){
-    
-                        if (!ChkNotNull( value )) {
-                            
-                            let AcceptHandler = ( ) => {
-                                setearCadenaDeConexionPorDefecto();
-                                setShowModal(false);
-                            }
-                            
-                            setDialog( { title: "Error! ☠️", message: 'El campo Cadena de Conexion se encuentra vacío, Desea dejar la cadena de conexión por defecto?', AcceptHandler: () => AcceptHandler() , CancelHandler: () => setShowModal(false) } );
-                            
-                            return false;
-                        }
-                            
-                        return ValidarLength( value , "Cadena de Conexion", null, 4000 );
-                    }
-                    break;
-       
-            case 'AWS_AccessKeyID':
-                if ( formState.Plataforma == 63 ) {
-                    if (!ValidarLength( value, "ID Clave de Acceso", null, 30, true )) {
-                        return false;
-                    }                }
-                break;
-            case 'AWS_SecretAccessKey':
-                if ( formState.Plataforma == 63 ) {
-                    if (!ValidarLength( value, "Clave de Acceso Secreta", null, 30, true )) {
-                        return false;
-                    }
                 }
                 break;
-            case 'AWS_AcountID':
-                if ( formState.Plataforma == 63 ) {
-                    if (!ValidarLength( value, "ID o Alias", null, 30, true )) {
-                        return false;
-                    }
-                }
-                break;
-            case 'SegundosScreenshot':
-                if (!ValidarLength( value , "Segundos Screenshot", null, 128, true )){
-                    return false;
-                }
-                if (!ValidarNumeroLimites( value , "Segundos Screenshot", 0, 65535 )){
-                    return false;
-                }
-                break;
-            case 'Localizacion':
+            case 'localizacion':
                 
-                if(formState.Plataforma == 61 || formState.Plataforma == 62 || formState.Plataforma == 56){
+                if(formState.UsrSo == 61 || formState.UsrSo == 62 || formState.UsrSo == 56){
                     if(formState.LocalizacionID == undefined || formState.LocalizacionID == null || formState.LocalizacionID == '')
                     {
-                        setStateMessageError('Debe seleccionar una Localizacion Valida');
+                        setStateMessageError('Debe seleccionar una Localizacion');
                         return false;
                     }
                 }
@@ -469,18 +484,26 @@ export const useForm = ( initialForm = {} ) => {
                         return false;
                     }
                 }
+                
                 break;
-            case 'Descripcion':
-                return ValidarLength( value , "Descripcion", null, 128, true );
+            case 'description':
+                if ( value === '' ) {
+                    setStateMessageError('Descripcion no puede estar vacio');
+                    return false;
+                }
+                break;
             default:
                 return true;
+                break;
         }
 
         return true;
     }
 
     const ValidarEquidad = ( password,verificacion ) => {
-        return (password === verificacion);;
+        const isValid = (password === verificacion);
+     
+        return isValid;
     }
 
     const validateEmail = ( value ) => {
@@ -536,11 +559,10 @@ export const useForm = ( initialForm = {} ) => {
         return true;
     }
 
-    const ValidarLength = ( value, name, min, max, required = true) => {
-      
-        if(value == null) {value = ''};
+    const ValidarLength = ( value , name, min, max, required = true) => {
 
         try {
+            
             if (required){
                 if (!ChkNotNull( value )) {
                     setStateMessageError(`El campo ${ name } no puede estar vacío`);
@@ -568,7 +590,7 @@ export const useForm = ( initialForm = {} ) => {
                 }
             }
         } catch (error) {
-            setStateMessageError(`Error desconocido validando el Largo del elemento ${ name }`);
+            setStateMessageError(`Error desconocido validando el Largo del elemento.`);
             return false;   
         }
         
@@ -592,6 +614,10 @@ export const useForm = ( initialForm = {} ) => {
         StateMessageError,
         setStateMessageError,
         title,setTitle ,
+        toggleGenerarPass, setToggleGenerarPass,
+        toggleGenerarPassc, setToggleGenerarPassc,
+        typePassC, setTypePassC,
+        typePass, setTypePass,
         chkArchivoAdjunto_pk, setChkArchivoAdjunto_pk,
         utilCadenaConexion, setUtilCadenaConexion,
         listLocalizacion, setListLocalizacion,
