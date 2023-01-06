@@ -303,14 +303,17 @@ export const AddUF = ( {AcceptHandler} ) => {
 					
 					<Tab { ...EditUser ? { label:"Elementos relacionados" } : { label:"" } } >
 						<ContainerFlex>
-							<ListadoTarjetas title={"Grupos Asignados"} 
-								contentArray =
-								{ [
-									{ content1 : 'Grupo 1', content2 : '', content3 : 'Grupo Administradores', content4 : 'Localizacion' , content5 : '128.128.10.65' },
-									{ content1 : 'Grupo 2', content2 : '', content3 : 'Grupo Auditoria', content4 : 'Localizacion', content5 : '128.128.10.218' }
-								]} 
-							/>
-							
+							<Card flex={1}>
+								<ListadoTarjetas title={"Grupos Asignados"} 
+									contentArray =
+									{ [
+										{ content1 : 'Grupo 1', content2 : '', content3 : 'Grupo Administradores', content4 : 'Localizacion' , content5 : '128.128.10.65' },
+										{ content1 : 'Grupo 2', content2 : '', content3 : 'Grupo Auditoria', content4 : 'Localizacion', content5 : '128.128.10.218' }
+									]} 
+								/>
+							</Card>
+							<Card flex={1}>
+
 							<ListadoTarjetas title={"Sobres Asignados"} 
 								contentArray =
 								{ [
@@ -320,13 +323,16 @@ export const AddUF = ( {AcceptHandler} ) => {
 									{ content1 : 'Sobre 2', content2 : '', content3 : 'Sobre numero 2', content4 : 'Localizacion', content5 : 'nova (128.128.10.65)' },
 								]} 
 							/>
+							</Card>
+							<Card flex={1}>
+
 							<ListadoTarjetas title={"Sobres de Grupos"} 
 								contentArray =
 								{ [
 									{ content1 : 'Sobre Grupo 3', content2 : '', content3 : 'Grupo Administradores', content4 : 'Localizacion' , content5 : 'nova (128.128.10.80)'}
 								]}
 							/>
-
+							</Card>
 						</ContainerFlex>
 					</Tab>
 				</Tabs>

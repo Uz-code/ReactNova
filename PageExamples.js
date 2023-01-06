@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Modal } from './components/Modal';
+import { DialogComponent } from './components/DialogComponent';
+import { DialogHook } from './hooks/DialogHook';
 
 const Container = styled.div`
   display: flex;
@@ -15,41 +16,34 @@ export function PageExamples() {
 
   const [showModal, setShowModal] = useState(false);
 
-  const [typeModal, setTypeModal] = useState(1);
-
-  const [tituloModal, settituloModal] = useState('');
-  
-  const [subtituloModal, setSubTituloModal] = useState('');
+  const { dialog, setDialog } = DialogHook ( { title: '', message: '' } );
 
   const openAlertModal = () => {
-    setTypeModal(1);
-    setSubTituloModal('Podemos Cancelar, o podemos Aceptar 👇');
-    settituloModal('Alert! 👋');
+    setDialog({ title: "Alert! 👋", message:'Podemos Cancelar, o podemos Aceptar 👇' , AcceptHandler: CancelHandler  , CancelHandler: CancelHandler })
     setShowModal(prev => !prev);
   };
 
   const openErrorModal = () => {
-    setTypeModal(2);
-    setSubTituloModal('Ocurrio un error');
-    settituloModal('Error! ☠️');
+    setDialog({ title: "Error! ☠️" , AcceptHandler: () => console.log(document.getElementById('👋')) , CancelHandler: CancelHandler })
     setShowModal(prev => !prev);
-
   };
-  function clickHandler() {
+
+  function CancelHandler() {
     setShowModal(prev => !prev);
-    console.log('click');
   }
 
   return (
     <>
+      <DialogComponent dialog={dialog} showModal={showModal} setShowModal={setShowModal}>
+          <div id="👋" onClick={() => CancelHandler()}>👀👌✔</div>
+      </DialogComponent>
+
       <Container>
 
       <button className="BtnPrincipal" onClick={openAlertModal}>👋 I'm Alet modal</button>
 
       <button className="BtnPrincipal" onClick={openErrorModal}>👋 I'm Error modal</button>
       
-      <Modal showModal={showModal} setShowModal={setShowModal} type={typeModal} titulo={tituloModal} subtitulo={subtituloModal} clickHandler={clickHandler}/>
-
       </Container>
     </>
   );

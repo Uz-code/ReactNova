@@ -10,6 +10,8 @@ import Tab from './components/Tab';
 import { Modal } from './components/Modal';
 import { useNavigate } from 'react-router-dom';
 
+import { BsKeyFill } from 'react-icons/bs';
+
 import { ComponenteSeleccionUsuarioControlado } from './ComponenteSeleccionUsuarioControlado';
 import { ComponenteSeleccionTarjetasUC } from './ComponenteSeleccionTarjetasUC';
 
@@ -30,35 +32,42 @@ import { MainHeader } from './components/MainHeader';
 import { SeleccionarArchivo } from './components/SeleccionarArchivo';
 import { SeleccionarItem } from './SeleccionarItem';
 import { FormSubtituleComponent } from './components/FormSubtituleComponent';
+import { PasswordComponent } from './components/PasswordComponent';
 import { LoadingComponent } from './components/LoadingComponent';
 import { useMemo } from 'react';
 import {useFetchUser} from './hooks/useFetchUser';
-import {PasswordVerif} from './components/PasswordVerif';
 
-/* TODO: una vez aprobada la pantalla, modularizar cada 'tarjeta' en componentes serparados, mucho texto en un archivo. */
+/**tablade usuarios */
 
 export const EditUser = () => {
 
     const location = useLocation();
     
+    /* TODO  */
     let id = 0;
-    let f_Nombre = '';
-    let f_Localizacion = '';
-    let f_NombreSistema = '';
+    let Nombre = '';
+    let Localizacion = '';
+    let Activo = 1;
+    let f_Sistema = '';
     let EditUser = false;
 
-    //Si tiene location state quiere decir que vino de la pantalla anerior entonces es un usuario a editar
     if(location.state){
 
         id = location?.state?.id; 
-        f_Nombre = location?.state?.Nombre;
-        f_Localizacion = location?.state?.Localizacion;
-        f_NombreSistema = location?.state?.Sistema;
+        Nombre = location?.state?.campoBusqueda;
+        Localizacion = location?.state?.Localizacion;
+        f_Sistema = location?.state?.Sistem;
+
+        Nombre = 'e';
+        Localizacion = 'e';
+        f_Sistema = 'Aplicacion';
 
         EditUser = true;
     }
 
-    const options = useMemo( () => ({Nombre:f_Nombre,Localizacion:f_Localizacion,NombreSistema:f_NombreSistema}), [] );
+    const options = useMemo( () => ({Nombre:Nombre,Localizacion:Localizacion,NombreSistema:f_Sistema}), [] );
+
+    const [ maxResultados , setMaxResultados] = useState(false);
 
     const [update, forceUpdate] = useReducer((x) => x + 1, 0);
 
@@ -68,8 +77,14 @@ export const EditUser = () => {
         setShowModal(true);
     };
 
+    const OnErrorReset = ( value ) => {
+        setTypeModal(1);
+        setDialog( { title: "Usuario no encontrado ☠️", message: value, AcceptHandler: AcceptHandlerReset, CancelHandler: handleBack , customButtonText : 'Reintentar'} );
+        setShowModal(true);
+    };
+
     function handleBack() {
-        navigate('/TablaFetchData');
+        navigate('/TablaFetchData')
     }
 
     function AcceptHandlerReset() {
@@ -77,17 +92,10 @@ export const EditUser = () => {
         forceUpdate(1);
     }
 
-    const OnErrorReset = ( value ) => {
-        setTypeModal(1);
-        setDialog( { title: "Usuario no encontrado ☠️", message: value, AcceptHandler: AcceptHandlerReset, CancelHandler: handleBack , customButtonText : 'Reintentar'} );
-        setShowModal(true);
-    };
-
-    let { user, isLoading } = useFetchUser( options , update, OnErrorReset, EditUser);
+    let { user, isLoading } = useFetchUser( options, setMaxResultados , update, OnErrorReset, true, EditUser);
 
     useEffect (() => {
-        //console.log(user);
-        (EditUser && user) && setFormState(user);
+        (EditUser && user != undefined) && console.log(user);
     }, [user]);
 
     var 
@@ -108,10 +116,10 @@ export const EditUser = () => {
     utilCadenaConexion,
     setUtilCadenaConexion,
     LoggingSesionHabilitado,
-    Plataforma,
+    UsrSo,
     UsrScript,
     UsrScriptControlClave,
-    ProtocoloConexion,
+    Protocol,
     x11Opt,
     UsrSoAutorizacion,
     EnviaEnter,
@@ -119,18 +127,23 @@ export const EditUser = () => {
     EnviaUsuario,
     PwdPrompt,
     UsrPrompt,
-    Nombre,
-    PuertoConexion,
+    username,
+    SatPssh,
     SatPromptUC,
-    Localizacion,
+    localizacion,
+    LocalizacionID,
     Nservice,
-    Descripcion,
+    descripcion,
     Password,
-    VerifPassword,
-    PasswordAdicional,
-    VerifPasswordAdicional,
+    passchk,
+    Passwordc,
+    passcchk,
     cambiarPassword,
     txtPassphrase_pk,
+    toggleGenerarPass, setToggleGenerarPass,
+    toggleGenerarPassc, setToggleGenerarPassc,
+    typePass, setTypePass,
+    typePassC, setTypePassC,
     chkArchivoAdjunto_pk,setChkArchivoAdjunto_pk,
     nombreLocalizacion,
     listLocalizacion,
@@ -138,42 +151,42 @@ export const EditUser = () => {
     PoliticaConfiguracion,
     selTipoUsrConexionCtrlClave,
     UsrAdmin,
-    NombreSistema,
+    Sistema,
     selUsrSoAutenticacionUsr,
     DefaultShell,
     ServidorX11,
     selRegistrarLog,
     SegundosScreenshot,
     selConexionSinLog,
-    TipoControlClave,
-    TipoCambioClaveTiempoNoUso,
-    TipoPeriodoCtrlClaveAuto,
+    ControlUsr,
+    CambioAct,
+    UsrSoPeriodoCtrlClaveAuto,
     Responsable,
     GrupoResp,
     hdArchivoAdjuntoAttachId_adj1,
     ArchivoAdjunto_pk,
     NombreBD,
     CadenaConexionUsuario,
-    AWS_AcountID,
-    AWS_SecretAccessKey,
-    AWS_AccessKeyID,
+    AcountID,
+    SecretAccessKey,
+    AccessKeyID,
     } = useForm({
         //Datos por defecto del formulario mas adelante ver como cargarlos desde la base de datos
-        Nombre: '',
+        username: '',
         Password: '',
-        VerifPassword: '',
-        PasswordAdicional: '',
-        VerifPasswordAdicional: '',
+        passchk: '',
+        Passwordc: '',
+        passcchk: '',
         cambiarPassword : false,
-        PuertoConexion: '3840',
+        SatPssh: '3840',
         SatPromptUC : 'regex:[\\.\\$\\]%#>~@]( )?$',
-        Localizacion: '',
+        localizacion: '',
         LocalizacionID : '',
         Nservice : '',
-        Descripcion: '',
-        Notificadores : '',
-        Plataforma: '99',
-        ProtocoloConexion: '4',
+        descripcion: '',
+        notificadores : '',
+        UsrSo: '99',
+        Protocol: '4',
         UsrScript: '0',
         UsrScriptControlClave : '0',
         txtPassphrase_pk : '',
@@ -182,25 +195,25 @@ export const EditUser = () => {
         IdModelos : '1',
         PoliticaConfiguracion : '0',
         UsrAdmin : '0',
-        NombreSistema : '2',
+        Sistema : '2',
         selUsrSoAutenticacionUsr : '0',
         DefaultShell : '/bin/bash',
         ServidorX11: 'localhost',
         selRegistrarLog: 1,
         SegundosScreenshot: '5',
         selConexionSinLog:'1',
-        TipoControlClave: '1',
-        TipoCambioClaveTiempoNoUso: '1',
-        TipoPeriodoCtrlClaveAuto: "0",
+        ControlUsr: '1',
+        CambioAct: '1',
+        UsrSoPeriodoCtrlClaveAuto: "0",
         Responsable: '1',
         GrupoResp: '1',
         ArchivoAdjunto_pk : '',
         hdArchivoAdjuntoAttachId_adj1: '',
         NombreBD:'',
         CadenaConexionUsuario: '',
-        AWS_AcountID: '',
-        AWS_SecretAccessKey: '',
-        AWS_AccessKeyID: '',
+        AcountID: '',
+        SecretAccessKey: '',
+        AccessKeyID: '',
     });
 
     const [ toggleCambiarComponente, setToggleCambiarComponente ] = useState(false);
@@ -211,17 +224,17 @@ export const EditUser = () => {
 
     const guardarHandler = ( arr ) => {
         
-        let Notificadores = '';
+        let notificadores = '';
         
         arr.forEach( (item) => {
-            if(Notificadores != ''){
-                Notificadores += ',';
+            if(notificadores != ''){
+                notificadores += ',';
             }
 
-            Notificadores += item.id;
+            notificadores += item.id;
         });
 
-        setValue( 'Notificadores', Notificadores);
+        setValue( 'SatUsrsSel', notificadores);
 
         setShowModal(false);
 
@@ -243,6 +256,28 @@ export const EditUser = () => {
 
     //para el boton de back
     let navigate = useNavigate();
+
+    //para el boton de visibilidad de password
+    const toggleTypePassc = () => {
+        if (!toggleGenerarPassc) {
+            typePassC == 'password' ? setTypePassC( 'text' ) : setTypePassC( 'password' ) ? setTypePassC( 'text' ) : setTypePassC( 'password' );
+        }
+    };
+
+    const toggleTypePass = () => {
+        if (!toggleGenerarPass) {
+            typePass == 'password' ? setTypePass( 'text' ) : setTypePass( 'password' ) ? setTypePass( 'text' ) : setTypePass( 'password' );
+        }
+    };
+
+    //para el boton de generar por satCS
+    const togglePassc = () => {
+        setToggleGenerarPassc(!toggleGenerarPassc);
+    };
+    const togglePass = () => {
+        setToggleGenerarPass(!toggleGenerarPass);
+        
+    };
 
     //para los handlers de el modal
     function AcceptHandler() {
@@ -316,46 +351,48 @@ export const EditUser = () => {
             }
 
             {toggleCambiarComponente ?
-                <AddUF AcceptHandler={agregarUsuario} />
+                <>
+                    <AddUF AcceptHandler={agregarUsuario} />
+                </>
             :
             <>
-            {typeModal == 1 ?
+                {typeModal == 1 ?
                 <DialogComponent dialog={ dialog } showModal={showModal} setShowModal={setShowModal} />
-            :
-            typeModal == 2 ? 
-                ( Plataforma == 61 ? // Tabla Azure AD seleccion de Localizacion
-                <Modal showModal={showModal} setShowModal={setShowModal} >
-                    <div className='Container-Search-Users'>
-                        <ComponenteSeleccionUsuarioControlado setStateMessageError={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } }  cancelHandler={CancelHandler} OnError = { (value) => { OnError(value); }} 
-                        listaExterna = { listLocalizacion } 
-                        multiSelect = { true } 
-                        minimoSeleccion = { 1 }
-                        />
-                    </div>
-                </Modal>
                 :
-                Plataforma == 62 ? // Tabla Google WS seleccion de Localizacion
-                <Modal showModal={showModal} setShowModal={setShowModal} >
-                    <div className='Container-Search-Users'>
-                        <ComponenteSeleccionUsuarioControlado setStateMessageError={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={CancelHandler} OnError = { (value) => { OnError(value); }} 
-                        listaExterna = { listLocalizacion } 
-                        multiSelect = { false }
-                        minimoSeleccion = { 1 }
-                        />
-                    </div>
-                </Modal>
+                typeModal == 2 ? 
+                    ( UsrSo == 61 ? // Tabla Azure AD seleccion de Localizacion
+                    <Modal showModal={showModal} setShowModal={setShowModal} >
+                        <div className='Container-Search-Users'>
+                            <ComponenteSeleccionUsuarioControlado setStateMessageError={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } }  cancelHandler={CancelHandler} OnError = { (value) => { OnError(value); }} 
+                            listaExterna = { listLocalizacion } 
+                            multiSelect = { true } 
+                            minimoSeleccion = { 1 }
+                            />
+                        </div>
+                    </Modal>
+                    :
+                    UsrSo == 62 ? // Tabla Google WS seleccion de Localizacion
+                    <Modal showModal={showModal} setShowModal={setShowModal} >
+                        <div className='Container-Search-Users'>
+                            <ComponenteSeleccionUsuarioControlado setStateMessageError={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={CancelHandler} OnError = { (value) => { OnError(value); }} 
+                            listaExterna = { listLocalizacion } 
+                            multiSelect = { false }
+                            minimoSeleccion = { 1 }
+                            />
+                        </div>
+                    </Modal>
+                    :
+                    UsrSo == 56 && // Tabla SAP seleccion de Localizacion
+                    <Modal showModal={showModal} setShowModal={setShowModal} >
+                        <div className='Container-Search-Users'>
+                            <ComponenteSeleccionUsuarioControlado setStateMessageError={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={CancelHandler} OnError = { (value) => { OnError(value); }} 
+                            listaExterna = { listLocalizacion } 
+                            multiSelect = { false } 
+                            minimoSeleccion = { 1 }/>
+                        </div>
+                    </Modal>)
                 :
-                Plataforma == 56 && // Tabla SAP seleccion de Localizacion
-                <Modal showModal={showModal} setShowModal={setShowModal} >
-                    <div className='Container-Search-Users'>
-                        <ComponenteSeleccionUsuarioControlado setStateMessageError={ setStateMessageError }  guardarHandler = { (arr) => { guardarLocalizacion(arr); } } cancelHandler={CancelHandler} OnError = { (value) => { OnError(value); }} 
-                        listaExterna = { listLocalizacion } 
-                        multiSelect = { false } 
-                        minimoSeleccion = { 1 }/>
-                    </div>
-                </Modal>)
-                :
-            (typeModal == 3 && // Tabla de usuarios controlados
+                (typeModal == 3 && // Tabla de usuarios controlados
                 <Modal showModal={showModal} setShowModal={setShowModal} >
                     <div className='Container-Search-Users'>
                         <ComponenteSeleccionUsuarioControlado setStateMessageError={ setStateMessageError }  guardarHandler = { (arr) => { guardarHandler(arr); } } cancelHandler={CancelHandler} OnError = { (value) => { OnError(value); }}
@@ -367,8 +404,8 @@ export const EditUser = () => {
                         />
                     </div>
                 </Modal>
-            )}
-            
+                )
+                }
             <Wrapper>
 			    <MainHeader>
                     <Title title= { `Usuarios Controlados / ${ EditUser ? 'Editar Usuario' : 'Crear Usuario'}`} />
@@ -389,34 +426,52 @@ export const EditUser = () => {
                                 </form>*/
                                 }
                                 <InputGroup marginTop="5" >
-                                    <InputFancy type={"text"} placeholder={"Nombre"} value={Nombre} required={true} name="Nombre" onChange = {handleChange} />
+                                    <InputFancy type={"text"} placeholder={"Nombre"} value={username} required={true} name="username" onChange = {handleChange} />
                                 </InputGroup>
                                 
                                 <InputGroup marginTop="5" >
-                                    <InputFancy type={"text"} placeholder={"Descripción"} value={Descripcion} required={true} name="Descripcion" onChange = {handleChange} />
+                                    <InputFancy type={"text"} placeholder={"Descripción"} value={descripcion} required={true} name="descripcion" onChange = {handleChange} />
                                 </InputGroup>
 
                                 <div className='mt-5 flex'>
                                     <label className='input-group'>
-                                        <input type="text"className="input-fancy" name="Localizacion" placeholder="  " required={true} value={(Plataforma == 61  || Plataforma == 62 || Plataforma == 56) ?  nombreLocalizacion : Localizacion } disabled = {(Plataforma == 61  || Plataforma == 62 || Plataforma == 56) && {disabled: true}} onChange={handleChange} />
+                                        <input type="text"className="input-fancy" name="localizacion" placeholder="  " required={true} value={(UsrSo == 61  || UsrSo == 62 || UsrSo == 56) ?  nombreLocalizacion : localizacion } disabled = {(UsrSo == 61  || UsrSo == 62 || UsrSo == 56) && {disabled: true}} onChange={handleChange} />
                                         <p className="required">Localizacion </p>
                                     </label>
                                     { 
-                                    (Plataforma == 61  || Plataforma == 62 || Plataforma == 56) && 
+                                    (UsrSo == 61  || UsrSo == 62 || UsrSo == 56) && 
                                         <button className="btn btn-neutral clear-btn" onClick={openModalUc}>Seleccionar</button>
                                     }
                                 </div>
 
                                 { 
-                                (Plataforma == 5 || Plataforma == 60) && 
+                                (UsrSo == 5 || UsrSo == 60) && 
                                 <InputGroup marginTop="5" >
                                     <InputFancy type={"text"} placeholder={"Nservice"} value={Nservice} required={false} name="Nservice" onChange = {handleChange} />
                                 </InputGroup>
                                 }
 
-                                <PasswordVerif Password={Password} VerifPassword={VerifPassword} name={'Password'} namev={'VerifPassword'} title={'Password'} titlev={'Verificacion'} handleChange={handleChange} setFormState={setFormState} formState={formState} />
+                                <div className='mt-5 mb-3 flex'>
+                                    <label className='input-group'>
+                                        <PasswordComponent   title = {'Password'} value = {Password} name="Password" required={true} onChange = {handleChange} toggleTypePass = {toggleTypePass} typePass = {typePass}  toggleGenerarPass = {toggleGenerarPass} />
+                                    </label>
 
-                                <PasswordVerif Password={PasswordAdicional} VerifPassword={VerifPasswordAdicional} name={'PasswordAdicional'} namev={'VerifPasswordAdicional'} title={'Password Combinada'} titlev={'Verificacion'} handleChange={handleChange} setFormState={setFormState} formState={formState} />
+                                    <label className='input-group'>
+                                        <PasswordComponent  title = {'Verificacion'} value = {passchk} name="passchk" required={true} onChange = {handleChange} toggleTypePass = {toggleTypePass} typePass = {typePass}  toggleGenerarPass = {toggleGenerarPass} />
+                                    </label>
+                                    <div className="button-fancy" onClick={togglePass} title="Generar Password" > <BsKeyFill style={toggleGenerarPass && { color: "#434ce8" }} /> </div>
+                                </div>
+
+                                <div className='mt-5 mb-3 flex'>
+                                    <label className='input-group'>
+                                        <PasswordComponent  title = {'Password Combinada'} value = {Passwordc} name="Passwordc" onChange = {handleChange} toggleTypePass = {toggleTypePassc} typePass = {typePassC}  toggleGenerarPass = {toggleGenerarPassc} />
+                                    </label>
+
+                                    <label className='input-group'>
+                                    <PasswordComponent  title = {'Verificacion'} value = {passcchk} name="passcchk" onChange = {handleChange} toggleTypePass = {toggleTypePassc} typePass = {typePassC}  toggleGenerarPass = {toggleGenerarPassc} />
+                                    </label>
+                                    <div className="button-fancy" onClick={togglePassc} title="Generar Password" > <BsKeyFill style={toggleGenerarPassc && { color: "#434ce8" }} /> </div>
+                                </div>
 
                                 { EditUser && 
                                     <InputGroup marginTop="5" flex={true}>
@@ -434,7 +489,7 @@ export const EditUser = () => {
                                 </div>*/}
 
                                 <InputGroup marginTop="5" flex={true}>
-                                    <SelectComponent label="Plataforma" name="Plataforma" value={Plataforma} onChange = {handleChange}
+                                    <SelectComponent label="Plataforma" name="UsrSo" value={UsrSo} onChange = {handleChange}
                                     options = { [
                                         { value: '99', label: 'ADM Dominio not trusted' },
                                         { value: '11', label: 'AIX' },
@@ -489,7 +544,7 @@ export const EditUser = () => {
                                 </InputGroup>
 
                                 { 
-                                (Plataforma == 7 || Plataforma == 9 || Plataforma == 11 || Plataforma == 13 || Plataforma == 15 || Plataforma == 17) && 
+                                (UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17) && 
                                 <>
                                 <InputGroup marginTop="3" flex={true}>
                                     <SelectComponent label="Credenciales para el Control de Claves" name="selTipoUsrConexionCtrlClave" value={selTipoUsrConexionCtrlClave} onChange = {handleChange}
@@ -502,7 +557,7 @@ export const EditUser = () => {
                                 }
 
                                 { 
-                                (Plataforma != 191 && Plataforma != 21 && Plataforma != 3 && Plataforma != 23 && Plataforma != 24) && 
+                                (UsrSo != 191 && UsrSo != 21 && UsrSo != 3 && UsrSo != 23 && UsrSo != 24) && 
                                 <>
                                 <InputGroup marginTop="3" flex={true}>
                                     <SelectComponent label="Usuario Administrador Asignado" name="UsrAdmin" value={UsrAdmin} onChange = {handleChange} 
@@ -515,7 +570,7 @@ export const EditUser = () => {
                                 }
 
                                 { 
-                                UsrAdmin == '1' && 
+                                UsrAdmin != "0" && 
                                     <>
                                     <InputGroup marginTop="3" flex={true}>
                                         <InputFancy fancy={false} disabled={true} placeholder="Descripcion del Usuario Administrador" name="UsrADDescripcion" value={UsrADDescripcion} onChange = {handleChange} type={"text"} />
@@ -535,7 +590,7 @@ export const EditUser = () => {
                                 }
 
                                 <InputGroup marginTop="3" flex={true}>
-                                    <SelectComponent label="NombreSistema" name="NombreSistema" value={NombreSistema} onChange = {handleChange}
+                                    <SelectComponent label="Sistema" name="Sistema" value={Sistema} onChange = {handleChange}
                                     options = { [
                                         { value: '1', label: 'Dominio' },
                                         { value: '2', label: 'Aplicacion' },
@@ -546,37 +601,37 @@ export const EditUser = () => {
                         </ContainerFlex>
 
                         { 
-                        (Plataforma == 63 || Plataforma == 2 || Plataforma == 60 || Plataforma == 57 || Plataforma == 11  || Plataforma == 15 || Plataforma == 17  
-                        || Plataforma == 41 || Plataforma == 50 || Plataforma == 51 || Plataforma == 20 || Plataforma == 55 || Plataforma == 59
-                        || Plataforma == 1 || Plataforma == 3 || Plataforma == 9 
-                        || Plataforma == 23 || Plataforma == 30 || Plataforma == 99 || Plataforma == 58 || Plataforma == 64 || Plataforma == 65 
-                        || Plataforma == 7  || Plataforma == 13 ||  Plataforma == 40 ) &&    
+                        (UsrSo == 63 || UsrSo == 2 || UsrSo == 60 || UsrSo == 57 || UsrSo == 11  || UsrSo == 15 || UsrSo == 17  
+                        || UsrSo == 41 || UsrSo == 50 || UsrSo == 51 || UsrSo == 20 || UsrSo == 55 || UsrSo == 59
+                        || UsrSo == 1 || UsrSo == 3 || UsrSo == 9 
+                        || UsrSo == 23 || UsrSo == 30 || UsrSo == 99 || UsrSo == 58 || UsrSo == 64 || UsrSo == 65 
+                        || UsrSo == 7  || UsrSo == 13 ||  UsrSo == 40 ) &&    
                         <>
                             <ContainerFlex>
                                 <Card flex={1}>
                                     <LoadingComponent loading={isLoading} type="loader-1" centerTable= {true} >
                                         { 
-                                        Plataforma == 63  && 
+                                        UsrSo == 63  && 
                                         <>
                                             <InputGroup marginTop="2" marginBottom="2" flex={true}>
-                                                <InputFancy fancy={false} placeholder="ID Clave de Acceso (aws)" name="AWS_AccessKeyID" value={AWS_AccessKeyID  || ''} onChange = {handleChange} />
+                                                <InputFancy fancy={false} placeholder="ID Clave de Acceso (aws)" name="AccessKeyID" value={AccessKeyID} onChange = {handleChange} />
                                             </InputGroup>
                                             
                                             <InputGroup marginTop="2" marginBottom="2" flex={true}>
-                                                <InputFancy fancy={false} placeholder="Clave de Acceso Secreta (aws)" name="AWS_SecretAccessKey" value={AWS_SecretAccessKey || '' } onChange = {handleChange} />
+                                                <InputFancy fancy={false} placeholder="Clave de Acceso Secreta (aws)" name="SecretAccessKey" value={SecretAccessKey} onChange = {handleChange} />
                                             </InputGroup>
 
                                             <InputGroup marginTop="2" marginBottom="2" flex={true}>
-                                                <InputFancy fancy={false} placeholder="ID o Alias (aws)" name="AWS_AcountID" value={AWS_AcountID || ''} onChange = {handleChange} />
+                                                <InputFancy fancy={false} placeholder="ID o Alias (aws)" name="AcountID" value={AcountID} onChange = {handleChange} />
                                             </InputGroup>
                                         </>
                                         }
 
                                         { 
-                                            (Plataforma == 2 || Plataforma == 60 || Plataforma == 57 || Plataforma == 58 || Plataforma == 64 || Plataforma == 65) && 
+                                            (UsrSo == 2 || UsrSo == 60 || UsrSo == 57 || UsrSo == 58 || UsrSo == 64 || UsrSo == 65) && 
                                             <>
                                                 { 
-                                                Plataforma == 65 && 
+                                                UsrSo == 65 && 
                                                     <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                         <InputFancy fancy={false} placeholder="Nombre Base de Datos" name="NombreBD" value={NombreBD} onChange = {handleChange} />
                                                     </InputGroup>
@@ -597,7 +652,7 @@ export const EditUser = () => {
                                         }
                                         
                                         { 
-                                            (Plataforma == 7 || Plataforma == 9 || Plataforma == 11 || Plataforma == 13 || Plataforma == 15 || Plataforma == 17 || Plataforma == 40 || Plataforma == 41 || Plataforma == 50 || Plataforma == 51 || Plataforma == 20 || Plataforma == 55 || Plataforma == 59) && 
+                                            (UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17 || UsrSo == 40 || UsrSo == 41 || UsrSo == 50 || UsrSo == 51 || UsrSo == 20 || UsrSo == 55 || UsrSo == 59) && 
                                             <>
                                                 <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                     <SelectComponent fancy={false} label="Script para Cambio Clave" name="UsrScript" value={UsrScript} onChange = {handleChange} 
@@ -608,7 +663,7 @@ export const EditUser = () => {
                                                 </InputGroup>
                                                 
                                                 {
-                                                Plataforma == 59 &&
+                                                UsrSo == 59 &&
                                                     <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                         <SelectComponent fancy={false} label="Script para Control Clave" name="UsrScriptControlClave" value={UsrScriptControlClave} onChange = {handleChange}
                                                         options = { [
@@ -619,9 +674,9 @@ export const EditUser = () => {
                                                 }
 
                                                 {
-                                                Plataforma != 40 &&
+                                                UsrSo != 40 &&
                                                     <InputGroup marginTop="2" marginBottom="2" flex={true}>
-                                                        <SelectComponent label="Protocolo de Conexion" name="ProtocoloConexion" value={ProtocoloConexion} onChange={handleChange} 
+                                                        <SelectComponent label="Protocolo de Conexion" name="Protocol" value={Protocol} onChange={handleChange} 
                                                         options = { [
                                                             { value: '4', label: 'SSH Automatico' },
                                                             { value: '1', label: 'Telnet' },
@@ -632,22 +687,22 @@ export const EditUser = () => {
                                             </>
                                         }
 
-                                        { (Plataforma == 1 || Plataforma == 3 || Plataforma == 7 || Plataforma == 9 || Plataforma == 11 || Plataforma == 13 || Plataforma == 15 || Plataforma == 17 || Plataforma == 20 || Plataforma == 50 || Plataforma == 51 || Plataforma == 40 ||
-                                            Plataforma == 41 || Plataforma == 55 || Plataforma == 23 || Plataforma == 30 || Plataforma == 99 || Plataforma == 20 || Plataforma == 58 || Plataforma == 64 || Plataforma == 65) &&
+                                        { (UsrSo == 1 || UsrSo == 3 || UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17 || UsrSo == 20 || UsrSo == 50 || UsrSo == 51 || UsrSo == 40 ||
+                                            UsrSo == 41 || UsrSo == 55 || UsrSo == 23 || UsrSo == 30 || UsrSo == 99 || UsrSo == 20 || UsrSo == 58 || UsrSo == 64 || UsrSo == 65) &&
                                             <InputGroup marginTop="2" marginBottom="2" flex={true}>
-                                                <InputFancy fancy={false} placeholder="Puerto SSH" name="PuertoConexion" value={PuertoConexion} onChange = {handleChange} />
+                                                <InputFancy fancy={false} placeholder="Puerto SSH" name="SatPssh" value={SatPssh} onChange = {handleChange} />
                                             </InputGroup>
                                         }
 
                                         { 
-                                        (Plataforma == 7 || Plataforma == 9 || Plataforma == 11 || Plataforma == 13 || Plataforma == 15 || Plataforma == 17 || Plataforma == 40 || Plataforma == 41 || Plataforma == 50 || Plataforma == 51) &&
+                                        (UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17 || UsrSo == 40 || UsrSo == 41 || UsrSo == 50 || UsrSo == 51) &&
                                             <InputGroup marginTop="2" marginBottom="2" flex={true}>
-                                                <InputFancy fancy={false} placeholder="Prompt de Usuario" name="SatPromptUC" value={SatPromptUC || 'regex:[\\.\\$\\]%#>~@]( )?$'} onChange = {handleChange} />
+                                                <InputFancy fancy={false} placeholder="Prompt de Usuario" name="SatPromptUC" value={SatPromptUC} onChange = {handleChange} />
                                             </InputGroup>
                                         }
 
                                         { 
-                                        Plataforma == 11 && 
+                                        UsrSo == 11 && 
                                             <>
                                             <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                                 <FormCheckbox label="Autenticacion por Clave Publica" name="chkArchivoAdjunto_pk" checked={chkArchivoAdjunto_pk} onChange={ () => setChkArchivoAdjunto_pk(!chkArchivoAdjunto_pk) } />
@@ -658,11 +713,11 @@ export const EditUser = () => {
                                             <>
                                                 
                                                 <InputGroup marginTop="2" marginBottom="2" flex={true} >
-                                                    <SeleccionarArchivo label="Archivo PK" name="ArchivoAdjunto_pk" value={ArchivoAdjunto_pk || ''} onChange = {handleChange} />
+                                                    <SeleccionarArchivo label="Archivo PK" name="ArchivoAdjunto_pk" value={ArchivoAdjunto_pk} onChange={handleChange} />
                                                 </InputGroup>
 
                                                 <InputGroup marginTop="2" marginBottom="2" flex={true} >
-                                                    <InputFancy fancy={false} placeholder="Phassphrase" value={txtPassphrase_pk} onChange = {handleChange} />
+                                                    <InputFancy fancy={false} label="Phassphrase" value={txtPassphrase_pk} onChange = {handleChange} />
                                                 </InputGroup>
 
                                                 <InputGroup marginTop="2" marginBottom="2" flex={true} >
@@ -676,14 +731,18 @@ export const EditUser = () => {
                                             </>
                                             }
 
+                                            <InputGroup marginTop="2" marginBottom="2"  flex={true}>     
+                                            prompt de usuario?
+                                            </InputGroup>
+
                                         </>
                                         }
 
                                         { 
-                                            (Plataforma == 7 || Plataforma == 9 || Plataforma == 11 || Plataforma == 13 || Plataforma == 15 || Plataforma == 17) && 
+                                            (UsrSo == 7 || UsrSo == 9 || UsrSo == 11 || UsrSo == 13 || UsrSo == 15 || UsrSo == 17) && 
                                                 <>
                                                 <InputGroup marginTop="2" marginBottom="2" flex={true}>
-                                                    <InputFancy fancy={false} placeholder="Shlell por Defecto" name="DefaultShell" value={DefaultShell || '/bin/bash'} onChange = {handleChange} />
+                                                    <InputFancy fancy={false} placeholder="Shlell por Defecto" name="DefaultShell" value={DefaultShell} onChange = {handleChange} />
                                                 </InputGroup>
 
                                                 <InputGroup marginTop="2" marginBottom="2" flex={true}>
@@ -721,7 +780,7 @@ export const EditUser = () => {
                         }
 
                         { 
-                        (Plataforma == 40 || Plataforma == 50) && 
+                        (UsrSo == 40 || UsrSo == 50) && 
                         <>
                             <ContainerFlex>
                                 <Card>
@@ -755,7 +814,7 @@ export const EditUser = () => {
                                     </InputGroup>
 
                                     { 
-                                    //(ProtocoloConexion == 1) &&
+                                    //(Protocol == 1) &&
                                     <>
                                         <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                             <InputFancy fancy={false} placeholder="User Prompt" name="UsrPrompt" value={UsrPrompt} onChange = {handleChange} />
@@ -782,7 +841,7 @@ export const EditUser = () => {
                                     <p className='subtitulo'  style= {{ paddingLeft : "1rem" }}>Informacion</p>
                                 </div>
                             
-                                { ( (Plataforma != 24 && Plataforma != 5) && LoggingSesionHabilitado) &&
+                                { ( (UsrSo != 24 && UsrSo != 5) && LoggingSesionHabilitado) &&
                                 <>
                                     <InputGroup marginTop="2" marginBottom="2" flex={true}>
                                         <SelectComponent label="Log de Conexion" name="selRegistrarLog" value={selRegistrarLog} onChange = {handleChange}
@@ -811,9 +870,9 @@ export const EditUser = () => {
                                     
                                 }
 
-                                { (Plataforma != 23 && Plataforma != 24 && Plataforma != 25 )&& 
+                                { (UsrSo != 23 && UsrSo != 24 && UsrSo != 25 )&& 
                                 <InputGroup marginTop="2" marginBottom="2" flex={true}>
-                                    <SelectComponent label="Control de la Clave del Usuario" name="TipoControlClave" value={TipoControlClave} onChange = {handleChange} 
+                                    <SelectComponent label="Control de la Clave del Usuario" name="ControlUsr" value={ControlUsr} onChange = {handleChange} 
                                     options = { [
                                         { value: '1', label: 'Manual' },
                                         { value: '2', label: 'Automatico' },
@@ -822,7 +881,7 @@ export const EditUser = () => {
                                 }
 
                                 <InputGroup marginTop="2" marginBottom="2" flex={true}>
-                                    <SelectComponent label="Cambio de Clave por Tiempo No Uso" name="TipoCambioClaveTiempoNoUso" value={TipoCambioClaveTiempoNoUso} onChange = {handleChange}
+                                    <SelectComponent label="Cambio de Clave por Tiempo No Uso" name="CambioAct" value={CambioAct} onChange = {handleChange}
                                     options = { [
                                         { value: '0', label: 'No' },
                                         { value: '1', label: 'Si' },
@@ -830,9 +889,9 @@ export const EditUser = () => {
                                 </InputGroup>
 
                                 { 
-                                Plataforma != 63  && 
+                                UsrSo != 63  && 
                                 <InputGroup marginTop="2" marginBottom="2" flex={true}>
-                                    <SelectComponent label="Periodo Control Automatico de Clave" name="TipoPeriodoCtrlClaveAuto" value={TipoPeriodoCtrlClaveAuto} onChange = {handleChange}
+                                    <SelectComponent label="Periodo Control Automatico de Clave" name="UsrSoPeriodoCtrlClaveAuto" value={UsrSoPeriodoCtrlClaveAuto} onChange = {handleChange}
                                     options = { [
                                         { value: '0', label: 'Utilizar Por Defecto' },
                                         { value: '1', label: 'Utilizar el Especificado' },
@@ -858,7 +917,7 @@ export const EditUser = () => {
                                 </InputGroup>
 
                                 <InputGroup marginTop={3} flex={true} >
-                                    <SeleccionarArchivo label="Archivo Relacionado" name="hdArchivoAdjuntoAttachId_adj1" value={hdArchivoAdjuntoAttachId_adj1 || ''} onChange = {handleChange} />
+                                    <SeleccionarArchivo label="Archivo Relacionado" name="hdArchivoAdjuntoAttachId_adj1" value={hdArchivoAdjuntoAttachId_adj1} onChange={handleChange} />
                                 </InputGroup>
                                 </LoadingComponent>
                             </Card>
@@ -920,11 +979,11 @@ export const EditUser = () => {
                                 </InputGroup>
                                 </LoadingComponent>
                             </Card>
-                        </ContainerFlex>}
-                    </Tab>
+                        </ContainerFlex>
+                    }</Tab>
                 </Tabs>
                     
-                <ContainerFlex center={true}>
+                <ContainerFlex center={true} gap={false} >
                     <div style={{ marginBottom :'2rem'}} >
                         <Button label="Cancelar" onClick={handleBack} type="button" />
                         <Button label="Aceptar" onClick={handleSubmit} type="submit" />

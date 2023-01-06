@@ -15,6 +15,7 @@ import { LogIn } from './LogIn';
 import { useAuth } from './components/Auth';
 import { RequiredAuth } from './components/RequiredAuth';
 import { Template } from './Template';
+import { Mantenimiento } from './Mantenimiento';
 
 import { BrowserRouter as Router,
 		Routes,
@@ -25,25 +26,25 @@ const App = () => {
 	
 const auth = useAuth();
 
- const [sidebar, setSidebar] = useState(false);
+const [sidebar, setSidebar] = useState(false);
 
-  const keyPress = useCallback(
-    e => {
-      if (e.key === 'Escape' && sidebar) {
-        setSidebar(false);
-      }
-    },
-    [setSidebar, sidebar]
-  );
+const keyPress = useCallback(
+e => {
+	if (e.key === 'Escape' && sidebar) {
+	setSidebar(false);
+	}
+},
+[setSidebar, sidebar]
+);
 
-  useEffect(
-    () => {
-      document.addEventListener('keydown', keyPress);
-      return () => document.removeEventListener('keydown', keyPress);
-    },
-    [keyPress]
-  );
-	
+useEffect(
+() => {
+	document.addEventListener('keydown', keyPress);
+	return () => document.removeEventListener('keydown', keyPress);
+},
+[keyPress]
+);
+
 return (
     <>
 		<Router>
@@ -53,6 +54,7 @@ return (
 			}
 			<Routes>
 				<Route exact path= "/Template" element={<RequiredAuth><Template/></RequiredAuth>} />
+				<Route exact path= "/Mantenimiento" element={<RequiredAuth><Mantenimiento/></RequiredAuth>} />
 				<Route exact path= "/" element={<RequiredAuth><HomePage/></RequiredAuth>} />
 				<Route exact path= "/RecursosAsignados" element={<RequiredAuth><RecursosAsignados/></RequiredAuth>} />
 				<Route exact path= "/Verificaciones" element={<RequiredAuth><Verificaciones/></RequiredAuth>} />

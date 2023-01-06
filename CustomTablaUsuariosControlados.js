@@ -1,8 +1,8 @@
 
 import { DataGrid } from './components/DataGrid';
 
-export const CustomTablaUsuariosControlados = ( { options, setMaxResultados, forceUpdate , onError , onDelete , onAddUserToList , listUsers , setUser, hasActions, isSelectable } ) => {
-   
+export const CustomTablaUsuariosControlados = ( { options, setMaxResultados, forceUpdate , onError , onDelete , onDesactivar, onAddUserToList , listUsers , setUser, hasActions, isSelectable } ) => {
+
     return (
         <>
         <table className="table" >
@@ -34,6 +34,7 @@ export const CustomTablaUsuariosControlados = ( { options, setMaxResultados, for
                     forceUpdate = { forceUpdate }
                     onError={ (value) => onError(value)}
                     onDelete = { (value) => onDelete(value) }
+                    onDesactivar = { (value) => onDesactivar(value) }
                     onSelectUser={ (userName, id) => onAddUserToList(userName, id) }
                     listUsers = { listUsers }
                     setUser = { setUser }

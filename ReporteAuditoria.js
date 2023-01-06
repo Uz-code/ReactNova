@@ -1,6 +1,6 @@
 import { AddFilter } from './components/AddFilter';
 import { DataList2 } from './components/DataList2';
-import React, { useState, useEffect , useReducer } from 'react';
+import React, { useState , useReducer } from 'react';
 import { Modal } from './components/Modal';
 import { AlertComponent } from './components/AlertComponent';
 import Pagination from './components/Pagination';
@@ -9,6 +9,8 @@ import { Wrapper } from './components/Wrapper';
 import { MainHeader } from './components/MainHeader';
 import { ContainerFlex } from './components/ContainerFlex';
 import { Card } from './components/Card';
+import { ContentMain } from './components/ContentMain';
+import { Title } from './components/Title';
 
 export const ReporteAuditoria = () => {
 
@@ -75,73 +77,72 @@ export const ReporteAuditoria = () => {
         <>
        
              <Modal showModal={showModal} setShowModal={setShowModal} >
-                <AlertComponent title={tituloAlerta} message={MensajeAlerta} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
+                <AlertComponent title={tituloAlerta} message={MensajeAlerta} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler} customButtonText={"Reintentar"}/>
             </Modal>
             
             <Wrapper>
                 <MainHeader>
-                        <h1>Reporte de Auditoria</h1>
+                    <Title title='Reporte de Auditoria'/>
                 </MainHeader>
-                <div className="content VietnamPro-Font">
-                    <div className="content-main">
-                        <ContainerFlex>
-                                <Card flex={1}>
-                                    <div className="content-header-actions">
-                                        <AddFilter onNewCampoBusqueda={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } titulo={"Filtro"} />
-                                    </div>
-                                </Card>
-                        </ContainerFlex>
 
-                        <ContainerFlex>
-                            <Card flex={1}>
-                                    <nav>
-                                    <Pagination
-                                    className="pagination-bar"
-                                    currentPage={PaginaActual}
-                                    totalCount={maxResultados}
-                                    pageSize={limit}
-                                    onPageChange={page => setPaginaActual(page)}
-                                    siblingCount={1}
-                                    />
-                                    </nav>
-                            </Card>
-                        </ContainerFlex>
-
-                        <ContainerFlex>
-                            <div className= "card shadow border-0 flex" >
-                                <div className="card-body" style={{minHeight: '800px' , padding: '1.24rem'}}>
-                                    <DataList2
-                                        key={ campoBusqueda }
-                                        options = { options } 
-                                        setMaxResultados={ setMaxResultados } 
-                                        forceUpdate = { update }
-                                        onError={ (value) => openErrorModal(value) }
-                                        cardSize={1}
-                                    />
-                                </div>
-                                
-                                <div className="card-footer footer-start">
-                                    <span className="text-muted text-sm">Mostrando {limit > maxResultados ? maxResultados : limit } items de {maxResultados} resultados encontrados</span>
-                                </div>
+                <ContentMain>
+                    <ContainerFlex>
+                        <Card flex={1}>
+                            <div className="content-header-actions">
+                                <AddFilter onNewCampoBusqueda={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } titulo={"Filtro"} />
                             </div>
-                        </ContainerFlex>
+                        </Card>
+                    </ContainerFlex>
 
-                        <ContainerFlex>
-                            <Card flex={1}>
-                                    <nav>
-                                    <Pagination
-                                    className="pagination-bar"
-                                    currentPage={PaginaActual}
-                                    totalCount={maxResultados}
-                                    pageSize={limit}
-                                    onPageChange={page => setPaginaActual(page)}
-                                    siblingCount={1}
-                                    />
-                                    </nav>
-                            </Card>
-                        </ContainerFlex>
-                    </div>
-                </div>
+                    <ContainerFlex>
+                        <Card flex={1}>
+                                <nav>
+                                <Pagination
+                                className="pagination-bar"
+                                currentPage={PaginaActual}
+                                totalCount={maxResultados}
+                                pageSize={limit}
+                                onPageChange={page => setPaginaActual(page)}
+                                siblingCount={1}
+                                />
+                                </nav>
+                        </Card>
+                    </ContainerFlex>
+
+                    <ContainerFlex>
+                        <div className= "card shadow border-0 flex" >
+                            <div className="card-body" style={{minHeight: '800px' , padding: '1.24rem'}}>
+                                <DataList2
+                                    key={ campoBusqueda }
+                                    options = { options } 
+                                    setMaxResultados={ setMaxResultados } 
+                                    forceUpdate = { update }
+                                    onError={ (value) => openErrorModal(value) }
+                                    cardSize={1}
+                                />
+                            </div>
+                            
+                            <div className="card-footer footer-start">
+                                <span className="text-muted text-sm">Mostrando {limit > maxResultados ? maxResultados : limit } items de {maxResultados} resultados encontrados</span>
+                            </div>
+                        </div>
+                    </ContainerFlex>
+
+                    <ContainerFlex>
+                        <Card flex={1}>
+                                <nav>
+                                <Pagination
+                                className="pagination-bar"
+                                currentPage={PaginaActual}
+                                totalCount={maxResultados}
+                                pageSize={limit}
+                                onPageChange={page => setPaginaActual(page)}
+                                siblingCount={1}
+                                />
+                                </nav>
+                        </Card>
+                    </ContainerFlex>
+                </ContentMain>
             </Wrapper>
         </>
     )

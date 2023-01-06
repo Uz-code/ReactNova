@@ -206,7 +206,8 @@ export const FormUsuarioControlado = () => {
     }
 
     const location = useLocation();
- 
+    id = location?.state.id; 
+
     var id = 0;
     var EditUser = false;
     if( location.state != null )

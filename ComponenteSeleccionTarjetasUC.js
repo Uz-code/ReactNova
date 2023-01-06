@@ -26,7 +26,7 @@ export const ComponenteSeleccionTarjetasUC = ({  OnError , guardarHandler, guard
     const [maxResultados, setMaxResultados] = useState('0');
 
     const options = useMemo( () => ({ campoBusqueda , limit , PaginaActual}), [campoBusqueda, limit, PaginaActual] );
-   
+
     return (
         <>
             <div className='recent-search mb-1'>

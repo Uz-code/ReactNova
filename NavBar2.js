@@ -54,7 +54,6 @@ export  const Navbar2 = ({sidebar,MenuType}) => {
 							</i>	
 						</a>
 					</div>
-					<span className="tooltip">Log out</span>
 				</li>
 			</ul>
 		</div>

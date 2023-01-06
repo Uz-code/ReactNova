@@ -586,7 +586,8 @@ label p {
 .form-select:focus
 { 
     outline: none;
-    border: 1px  0 0 0 0.2rem rgba(0,123,255,.25);
+    /*border: 1px  0 0 0 0.2rem rgba(0,123,255,.25);*/
+    box-shadow: 0 0 0 0.1rem #d5deff;
 }
 
 .BtnPrincipal
@@ -1074,6 +1075,9 @@ opacity: 0.2;
         width: 100%;
     }
 
+    .card-width {
+      width: 100%;
+  }
 }
          
 @media (max-width: 975px) {
@@ -1083,7 +1087,7 @@ opacity: 0.2;
     }
     
     .content-main {
-        padding : 0px !important;
+        padding-top : 5px !important;
     }
 
     .main-section {
@@ -1352,6 +1356,10 @@ img {
 }
 .active {
     border-color: var(--c-accent-primary) !important;
+}
+
+.border-separador {
+  border-top: 1px solid #cbd5e1;
 }
 
 .selected {
@@ -1753,12 +1761,7 @@ border-radius: 18px;
 .button:hover, .button:focus {
     border-color: var(--c-accent-primary);
 }
-.content {
-    border-top: 1px solid #cbd5e1;
-    margin-top: 2rem;
-    display: flex;
-    align-items: flex-start;
-}
+
 
 .main-header h1 {
     font-size: 1.75rem;

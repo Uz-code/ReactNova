@@ -1,20 +1,25 @@
 import { AddFilter } from './components/AddFilter';
-import { useState, useEffect , useReducer } from 'react';
-import { Modal } from './components/Modal';
-import { AlertComponent } from './components/AlertComponent';
+import { useState , useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 import { CustomTablaUsuariosControlados } from './CustomTablaUsuariosControlados';
 import { SeleccionarItem } from './SeleccionarItem';
-import Pagination from './components/Pagination';
 import { Wrapper } from './components/Wrapper';
 import { MainHeader } from './components/MainHeader';
 import { ContainerFlex } from './components/ContainerFlex';
 import { Card } from './components/Card';
+import { DialogHook } from './hooks/DialogHook';
+import { DialogComponent } from './components/DialogComponent';
+import { ContentMain } from './components/ContentMain';
+import { Title } from './components/Title';
+import Pagination from './components/Pagination';
 
 import './Tabla.css';
 
 export const TablaFetchData = () => {
+
+    const { dialog, setDialog } = DialogHook ( { title: '', message: '' } );
+
     const [ listaUsuarios, setListaUsuarios ] = useState( [] );
     const [ listaIDUsuarios , setListaIDUsuarios ] = useState( [] );
 
@@ -26,10 +31,6 @@ export const TablaFetchData = () => {
 
     const [showModal, setShowModal] = useState(false);
 
-    const [tituloAlerta, settituloAlerta] = useState('');
-    
-    const [MensajeAlerta, setMensajeAlerta] = useState('');
-  
     const [update, forceUpdate] = useReducer((x) => x + 1, 0);
 
     const [PaginaActual, setPaginaActual ] = useState(1);
@@ -47,21 +48,33 @@ export const TablaFetchData = () => {
       setShowModal(prev => !prev);
     };
    
+
     const openErrorModal = ( value ) => {
       
-        settituloAlerta('Error! ☠️');
-        
-        setMensajeAlerta(value);
-        
+        setDialog( { title: "Error! ☠️", message: value , AcceptHandler: () => setShowModal(false) , CancelHandler: () => setShowModal(false) } );
+
         openModal();
 
-      };
+    };
 
-      const openOptionModal = ( value ) => {
-      
-        settituloAlerta('Alerta');
+    const openOptionModal = ( value, customButtonText = "Aceptar"  ) => {
+        
+        setDialog( { title: "Alerta!", message: value , customButtonText : customButtonText, AcceptHandler: () =>  AcceptHandler() , CancelHandler: () => setShowModal(false) } );
 
-        setMensajeAlerta(value);
+        openModal();
+
+    };
+
+    const OpenDesactivarModal = ( value ) => {
+
+        const AcceptHndlr = ( ) => {
+            alert("desactivando...");
+            setShowModal(false);
+            forceUpdate(1);
+        }
+
+        setDialog( { title: "Alerta! ", message: value , AcceptHandler: () => AcceptHndlr() , CancelHandler: () => setShowModal(false) } );
+
         openModal();
 
     };
@@ -69,13 +82,14 @@ export const TablaFetchData = () => {
     const openModalListado = ( ) => {
         
         if(listaIDUsuarios === undefined || listaIDUsuarios.length == 0){
+            
             openErrorModal('No hay usuarios seleccionados');
+            
             return;
         }
 
-        settituloAlerta('Lista de usuarios seleccionados');
-        
-        setMensajeAlerta(listaIDUsuarios);
+        setDialog( { title: "Lista de usuarios seleccionados! ", message: listaIDUsuarios , AcceptHandler: () => AcceptHandler() , CancelHandler: () => setShowModal(false) } );
+
         openModal();
         
     };
@@ -126,28 +140,28 @@ export const TablaFetchData = () => {
     let navigate = useNavigate();
 
     function navigateTo(userID) {
-        navigate('/EditUser',{state:{id:userID}});
+        navigate('/EditUser',{state:{id:userID,Nombre:'Usuario1',Localizacion:'128.128.10.221',Sistema:'Aplicacion'}});
     }
     
     const options = useMemo( () => ({ campoBusqueda , limit , PaginaActual}), [campoBusqueda, limit, PaginaActual] );
 
     return (
         <>
-            <Modal showModal={showModal} setShowModal={setShowModal} >
-                <AlertComponent title={tituloAlerta} message={MensajeAlerta} cancelHandler={cancelHandler} AcceptHandler={AcceptHandler}  />
-            </Modal>
+
+            <DialogComponent dialog={ dialog } showModal={showModal}  setShowModal={setShowModal} />
 
             <Wrapper>
             
                 <MainHeader>
-                    <h1>Usuarios Controlados</h1>
-                    <div className="button btn-submit" onClick={() => { navigate('/EditUser'); }}> 
-                        <i className="ph-faders-bold"></i>
-                        <span>Crear Nuevo</span>
-                    </div>
+                    <Title title={'Usuarios Controlados'} >
+                        <div className="button btn-submit" onClick={() => { navigate('/EditUser'); }}> 
+                            <i className="ph-faders-bold"></i>
+                            <span>Crear Nuevo</span>
+                        </div>
+                    </Title>
                 </MainHeader>
                         
-                <div className="VietnamPro-Font">
+                <ContentMain>
                     <ContainerFlex>
                             <Card flex={1}>
                                 <div className="content-header-actions">
@@ -172,9 +186,10 @@ export const TablaFetchData = () => {
                                     key={ campoBusqueda } 
                                     setMaxResultados={ setMaxResultados } 
                                     forceUpdate = { update }
-                                    onError={ (value) => openErrorModal(value) }
+                                    onError={ (value) => openOptionModal(value,'Reintentar') }
                                     setUser = { (value) => navigateTo(value) }
-                                    onDelete = { (value) => openOptionModal(value) }
+                                    onDesactivar = { (value) => OpenDesactivarModal(value)}
+                                    onDelete = { (value) => openOptionModal(value)}
                                     hasActions = {true}
                                 />
                             </SeleccionarItem>
@@ -187,21 +202,17 @@ export const TablaFetchData = () => {
                     
                     <ContainerFlex>
                             <Card>
-                                <nav aria-label="">
-
-                                    <Pagination
+                                <Pagination
                                     className="pagination-bar"
                                     currentPage={PaginaActual}
                                     totalCount={maxResultados}
                                     pageSize={limit}
                                     onPageChange={page => setPaginaActual(page)}
                                     siblingCount={1}
-                                    />
-
-                                </nav>
+                                />
                             </Card>
                     </ContainerFlex>
-                </div>
+                </ContentMain>
             </Wrapper>
         </>
     );
