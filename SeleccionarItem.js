@@ -80,8 +80,9 @@ export const SeleccionarItem = ({ children  , guardarHandler , openModalListado,
                 <Listado hasListaUsuarios={hasListaUsuarios} multiSelect={multiSelect} listItems={listItems} CleanUserList={CleanUserList} onRemoveUserToList={onRemoveUserToList} openModalListado={openModalListado} />
                 {AgregarNuevo && 
                 <div className="list" style={{ marginLeft:'auto', marginRight:'0px' }}>
-                    <div className='clear-btn cursor-normal' style={{marginLeft: '0px'}}> Acciones: </div> <button className="clear-btn no-select" onClick={AgregarNuevo}>Agregar</button>
-                </div>}
+                    <div className='clear-btn cursor-normal' style={{marginLeft: '0px'}}> </div> 
+                    <button className="inline-flex justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none  focus:ring-offset-gray-100" onClick={AgregarNuevo}> Agregar </button>
+                    </div>}
             </div>
             {
                 <>
@@ -90,9 +91,9 @@ export const SeleccionarItem = ({ children  , guardarHandler , openModalListado,
             }
             { hasButtons &&
             <div className="card-footer no-border" style={{width: '100%',paddingBottom:'0'}}>
-                <div className="card-footer-actions">
-                    <button className="btn btn-neutral clear-btn" { ...minimoSeleccionable  ? {onClick: () => SaveList()} : {disabled: true} } >Guardar</button>
-                    <button className="btn btn-neutral" onClick={ () => Cancel() } > Cancelar</button>
+                <div className="card-footer-actions flex justify-end gap-2">
+                    <button className="inline-flex justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none  focus:ring-offset-gray-100" onClick={ () => Cancel() } > Cancelar</button>
+                    <button className="inline-flex justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none  focus:ring-offset-gray-100" { ...minimoSeleccionable  ? {onClick: () => SaveList()} : {disabled: true} } >Guardar</button>
                 </div>
             </div>
             }

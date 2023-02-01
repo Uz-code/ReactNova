@@ -394,7 +394,6 @@ li a {
     color: var(--secondary-bg);
     text-align: center;
     text-decoration: none;
-    height: 35px;
 }
 
 .exit{

@@ -16,6 +16,12 @@ import { useAuth } from './components/Auth';
 import { RequiredAuth } from './components/RequiredAuth';
 import { Template } from './Template';
 import { Mantenimiento } from './Mantenimiento';
+import { SobresAutorizados } from './SobresAutorizados';
+import { CrearAdministrador } from './CrearAdministrador';
+
+import AddDeleteItems  from './AddDeleteItems';
+import Email  from './Email';
+import MultiSteps  from './MultiSteps';
 
 import { BrowserRouter as Router,
 		Routes,
@@ -63,6 +69,14 @@ return (
 				<Route exact path= "/SettingsPage" element={<RequiredAuth><SettingsPage/></RequiredAuth>} />
 				<Route exact path= "/ReporteAuditoria" element={<RequiredAuth><ReporteAuditoria/></RequiredAuth>} />
 				<Route exact path= "/EditUser" element={<RequiredAuth><EditUser/></RequiredAuth>} />
+				<Route exact path= "/CrearAdministrador" element={<RequiredAuth><CrearAdministrador/></RequiredAuth>} />
+
+
+				<Route exact path= "/Email" element={<RequiredAuth><Email/></RequiredAuth>} />
+				<Route exact path= "/MultiSteps" element={<RequiredAuth><MultiSteps/></RequiredAuth>} />
+				<Route exact path= "/SobresAutorizados" element={<RequiredAuth><SobresAutorizados/></RequiredAuth>} />
+				<Route exact path= "/AddDeleteItems" element={<RequiredAuth><AddDeleteItems/></RequiredAuth>} />
+				
 				{!auth.user ? <Route exact path= "/LogIn" element={<LogIn/>} /> : <Route exact path= "/LogIn" element={<RequiredAuth><HomePage/></RequiredAuth>} />}
 					<Route path="*"
 						element={<RequiredAuth>

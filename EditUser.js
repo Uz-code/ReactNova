@@ -22,6 +22,8 @@ import { FormCheckbox } from './components/FormCheckbox';
 
 import { SelectComponent } from './components/SelectComponent';
 import { TextareaComponent } from './components/TextareaComponent';
+
+import { SimpleStyleButton } from './components/SimpleStyleButton';
 import { Button } from './components/Button';
 
 import { DialogComponent } from './components/DialogComponent';
@@ -54,10 +56,13 @@ export const EditUser = () => {
         f_Nombre = location?.state?.Nombre;
         f_Localizacion = location?.state?.Localizacion;
         f_NombreSistema = location?.state?.Sistema;
-
+        
+        f_Nombre = 'e';
+        f_Localizacion = 'e';
+        f_NombreSistema = 'Aplicacion';
+        
         EditUser = true;
     }
-
     const options = useMemo( () => ({Nombre:f_Nombre,Localizacion:f_Localizacion,NombreSistema:f_NombreSistema}), [] );
 
     const [update, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -86,7 +91,6 @@ export const EditUser = () => {
     let { user, isLoading } = useFetchUser( options , update, OnErrorReset, EditUser);
 
     useEffect (() => {
-        //console.log(user);
         (EditUser && user) && setFormState(user);
     }, [user]);
 
@@ -316,7 +320,7 @@ export const EditUser = () => {
             }
 
             {toggleCambiarComponente ?
-                <AddUF AcceptHandler={agregarUsuario} />
+                <AddUF AcceptHandler={agregarUsuario} EditUserC={ EditUser } />
             :
             <>
             {typeModal == 1 ?
@@ -373,6 +377,7 @@ export const EditUser = () => {
 			    <MainHeader>
                     <Title title= { `Usuarios Controlados / ${ EditUser ? 'Editar Usuario' : 'Crear Usuario'}`} />
                 </MainHeader>
+                    
                 <Tabs Tab={currentTab} setTab={setCurrentTab} >
                     <Tab label = "Datos del Usuario">
                         <ContainerFlex>
@@ -926,9 +931,11 @@ export const EditUser = () => {
                     
                 <ContainerFlex center={true}>
                     <div style={{ marginBottom :'2rem'}} >
-                        <Button label="Cancelar" onClick={handleBack} type="button" />
-                        <Button label="Aceptar" onClick={handleSubmit} type="submit" />
-                        <Button label="Reset" onClick={handleClear} type="button" />
+                        <div className="card-footer-actions flex justify-end gap-2">
+                            <SimpleStyleButton onClick={ () => handleBack() } >Cancelar</SimpleStyleButton>
+                            <SimpleStyleButton onClick={handleSubmit} type="submit" >Aceptar</SimpleStyleButton>
+                            
+                        </div>
                     </div>
                 </ContainerFlex>
             </Wrapper>

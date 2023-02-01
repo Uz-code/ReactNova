@@ -13,6 +13,12 @@ import { DialogComponent } from './components/DialogComponent';
 import { ContentMain } from './components/ContentMain';
 import { Title } from './components/Title';
 import Pagination from './components/Pagination';
+import { AccentButton} from './components/AccentButton';
+
+import * as Icons from "@heroicons/react/outline";
+
+import { Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
 
 import './Tabla.css';
 
@@ -145,6 +151,10 @@ export const TablaFetchData = () => {
     
     const options = useMemo( () => ({ campoBusqueda , limit , PaginaActual}), [campoBusqueda, limit, PaginaActual] );
 
+    function classNames(...classes) {
+        return classes.filter(Boolean).join(' ')
+      }
+
     return (
         <>
 
@@ -153,31 +163,74 @@ export const TablaFetchData = () => {
             <Wrapper>
             
                 <MainHeader>
-                    <Title title={'Usuarios Controlados'} >
-                        <div className="button btn-submit" onClick={() => { navigate('/EditUser'); }}> 
-                            <i className="ph-faders-bold"></i>
-                            <span>Crear Nuevo</span>
-                        </div>
+                    <Title title='Usuarios Controlados'>
+                        <AccentButton label='Crear Nuevo' onClick={() => { navigate('/EditUser'); }}  ></AccentButton>
                     </Title>
                 </MainHeader>
                         
                 <ContentMain>
                     <ContainerFlex>
                             <Card flex={1}>
-                                <div className="content-header-actions">
-                                    <AddFilter onNewCampoBusqueda={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } titulo={"Filtro"} />
-                                </div>
+                                <AddFilter onNewCampoBusqueda={ (value) => onAddCampoBusqueda(value) } onNewLimit={ (value) => onAddLimit(value) } limit = {limit} forceUpdate = { update } titulo={"Filtro"} />
                             </Card>
                     </ContainerFlex>
 
                     <ContainerFlex>
                         <div className= "card shadow border-0 flex" >
-                            <div className="card-header">
-                                <div style={ { paddingLeft: "6px" } }>
-                                    <p className="subtitulo">Usuarios</p>
-                                </div>  
-                                <button className="btn btn-primary" onClick={() => { openModalListado(); }} >Simulacion de accion masiva</button>
+                            <div class=" px-5 pt-8 grid justify-items-end ...">
+                                <Menu as="div" className="relative inline-block text-left">
+                                    <div>
+                                    <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2  text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none  focus:ring-offset-gray-100">
+                                        Acciones
+                                    <Icons.ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+                                    </Menu.Button>
+                                    </div>
 
+                                    <Transition
+                                            as={Fragment}
+                                            enter="transition ease-out duration-100"
+                                            enterFrom="transform opacity-0 scale-95"
+                                            enterTo="transform opacity-100 scale-100"
+                                            leave="transition ease-in duration-75"
+                                            leaveFrom="transform opacity-100 scale-100"
+                                            leaveTo="transform opacity-0 scale-95"
+                                        >
+                                        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <div className="py-1">
+                                            <Menu.Item>
+                                            {({ active }) => (
+                                                <a
+                                                href="#"
+                                                className={classNames(
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                    'block px-4 py-2 text-sm'
+                                                )}
+                                                onClick={() => { openModalListado(); }}
+                                                >
+                                                Editar
+                                                </a>
+                                            )}
+                                            </Menu.Item>
+                                            </div>
+                                        <div className="py-1">
+                                            <Menu.Item>
+                                            {({ active }) => (
+                                                <a
+                                                href="#"
+                                                className={classNames(
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                    'block px-4 py-2 text-sm'                                                    
+                                                )}
+                                                onClick={() => { forceUpdate(1); }}
+                                                >
+                                                Eliminar
+                                                </a>
+                                            )}
+                                            </Menu.Item>
+                                        </div>
+                                        </Menu.Items>
+                                    </Transition>
+                                </Menu>
                             </div>
 
                             <SeleccionarItem minimoSeleccion = {0} hasListaUsuarios={false}  openModalListado={openModalListado} guardarOnClick={true} listaExterna={listaUsuarios} guardarHandler = { (arr) => { guardarHandler(arr); } } cancelHandler={cancelHandler} multiSelect={true} limpiarLista={update} >

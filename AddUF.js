@@ -4,7 +4,7 @@ import Tab from './components/Tab';
 import { useState} from 'react';
 
 import { ListadoTarjetas } from './components/ListadoTarjetas';
-import { ListContent } from './components/ListContent';
+import { Title } from './components/Title';
 import { ContainerFlex } from './components/ContainerFlex';
 import { Card } from './components/Card';
 import { Wrapper } from './components/Wrapper';
@@ -22,9 +22,9 @@ import { Button } from './components/Button';
 import { DialogHook } from './hooks/DialogHook';
 import { DialogComponent } from './components/DialogComponent';
 
-export const AddUF = ( {AcceptHandler} ) => {
+export const AddUF = ( {EditUserC, AcceptHandler} ) => {
 
-	const EditUser = true;
+	const EditUser = false;
 	const id = 0;
 
     const [ currentTab, setCurrentTab ] = useState( "" );
@@ -193,7 +193,7 @@ export const AddUF = ( {AcceptHandler} ) => {
 		<DialogComponent dialog={dialog} showModal = {showModal} setShowModal = {setShowModal} />
 		<Wrapper>
 			<MainHeader>
-				<h1> Usuarios Funcionales / { EditUser ? `Editar Usuario ${id}`: 'Crear Usuario' } </h1>
+				<Title title= { ` Usuarios Controlados / ${ EditUserC ? `Editar Usuario`: 'Crear Usuario' } / Usuario Funcional`} />
 			</MainHeader>
 
 			<form onSubmit={handleSubmit}>

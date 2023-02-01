@@ -5,6 +5,7 @@ import { AlertComponent } from './components/AlertComponent';
 import { useLocation } from 'react-router'
 import { useEffect } from 'react';
 import img from './img/Object1.png';
+import { AccentButton } from './components/AccentButton';
 
 export const LogIn = () => {    
     
@@ -65,7 +66,7 @@ export const LogIn = () => {
         </Modal> 
         
         <div className="App-body"> 
-            <div className="w3-background-card flex center " style={{minHeight: '90vh'}}>
+            <div className="w3-background-card flex center" style={{minHeight: '90vh'}}>
                 <img className="w3-img" src={img} alt = "Logo" />
             
                     <div className= "FormContainer container-fluid ">   
@@ -78,7 +79,7 @@ export const LogIn = () => {
                                                 <div className='card-body' >
                                                     <div className='flex mb-6'>
                                                         <div  className="input-tag no-select">
-                                                            <label className='LabelForm'>Metodo de Autenticacion: Windows</label>
+                                                            <label className='LabelForm'>Metodo de Autenticacion: Sat Api</label>
                                                         </div>
                                                     </div>
                                 
@@ -88,31 +89,32 @@ export const LogIn = () => {
                                                             <p>Usuario</p>
                                                         </label>
                                                     </div>
-                                                    <div className='mb-3 flex'>
+                                                    <div className='mb-7 flex'>
                                                         <label className='input-group w3-input'>
                                                             <input type="password"  className="input-fancy" name="password" placeholder=" " value={password} onChange={handleChange} />
                                                             <p>Contraseña</p>
                                                         </label>
                                                     </div>
 
-                                                    <div className='flex mb-3'>
-                                                        <div  className="input-tag no-select">
-                                                            <label className='LabelForm'>Utilizar credenciales actuales: </label>
+                                                    <div className='flex  mb-8 px-3 justify-content'>
+                                                        <div class="flex">
+                                                            <div class="flex items-center">
+                                                                <input id="link-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                                                                <label for="link-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ingresar con <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">credenciales actuales</a>.</label>
+                                                            </div>
                                                         </div>
-                                                        <input type='checkbox'  name='chk' checked={false} disabled onChange={handleChange} />
                                                     </div>
-                                                </div>
 
-                                                <div className='card-body'>
-                                                    <div className= "center flex" >
-                                                            <div className='start-section center'>
-                                                                <button type='submit' className="w3-polimorfic3-btn" onClick={handleLogIn} {...(isLoading && { disabled: true })}> {isLoading ? 'Cargando...' : 'Iniciar Sesión'}</button>
+                                                    <div className='flex mt-3 mb-5 px-3 justify-content'>
+                                                        <div className= "center flex" >
+                                                                <div className='start-section center'>
+                                                                    <AccentButton onClick={handleLogIn} type="submit" {...(isLoading && { disabled: true })} label={isLoading ? 'Cargando...' : 'Iniciar Sesión'}> </AccentButton>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                     </div>
-                                    
                                 </div>
                                 {/*
                                 <div className= "main-row" >

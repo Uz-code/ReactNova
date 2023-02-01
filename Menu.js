@@ -2,6 +2,8 @@ import { useAuth } from './components/Auth';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OptionsMenu } from './components/OptionsMenu';
+import { MenuIcon } from '@heroicons/react/outline';
+
  export const Menu = ({setSidebar,sidebar}) => {
 
 	const navigate = useNavigate();
@@ -25,10 +27,11 @@ import { OptionsMenu } from './components/OptionsMenu';
 						!auth.user ? <button type='submit' className="btn btn-sm btn-neutral flex" onClick={ () => navigate('/LogIn') }> Iniciar Sesion </button>
 						: 
 						<button className="close" onClick={()=>onButtonClick()}>
-							<svg className="closeBtn" focusable="false" viewBox="0 0 24 24">
-								<path className='closeBtn' d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+							<svg className="closeBtn" focusable="false" viewBox="0 0 6 6" style={{width : '1.5rem', height : '1.5rem', margin:'0 auto'}}>
+								<MenuIcon className="h-6 w-6 text-gray-500" />
 							</svg>
 						</button>
+						
 						}
 						
 					</a>
@@ -46,7 +49,7 @@ import { OptionsMenu } from './components/OptionsMenu';
 				
 				auth.user &&
 					
-					<div className="user-profile" style = {{display: 'flex'}}>
+					<div className="user-profile gap-8 pr-[40px]" style = {{display: 'flex'}}>
 						<OptionsMenu/>
 					</div>
 					

@@ -159,6 +159,7 @@ thead, tbody, tfoot, tr, td, th {
   padding: .5rem 1rem;
   font-size: 0.875rem;
   border-radius: .375rem;
+  min-height: 32px;
 }
 
 a {
