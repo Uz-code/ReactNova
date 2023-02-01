@@ -112,7 +112,7 @@ const AuthContext = createContext(null);
         try{  
 
             const Token = await fetchToken(username)
-            
+
             const Auth = await tokenSeguridad(password, Token)
 
             user = {username, Auth}

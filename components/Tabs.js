@@ -16,7 +16,7 @@ return(
             if(child.props.label != '')
             {
                 return (
-                    <a className={activeTab === child.props.label ? "active" : "" }
+                    <a className={activeTab === child.props.label ? "active inline-flex items-center text-sm font-medium text-gray-700 " : "inline-flex items-center text-sm font-medium text-gray-700" }
                     onClick={() => toggleTab(child.props.label)} key={child.props.label} >{child.props.label}</a>
                 )
             } 

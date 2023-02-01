@@ -64,7 +64,7 @@ export const AddFilter = ({ onNewCampoBusqueda, limit, onNewLimit , forceUpdate 
             
             { titulo &&
             <div className="input-group mb-2" style={ { paddingLeft: "0.25rem" } }>
-                <p className="subtitulo"> { titulo } </p>
+                <p className="subtitulo space-y-2 h-8 text-slate-600"> { titulo } </p>
             </div> }
             
             <Row gap='3px'>

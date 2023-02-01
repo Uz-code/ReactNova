@@ -5,7 +5,7 @@ export const getUser = async( options  , onError ) => {
     const user = JSON.parse(localStorage.getItem('user'));
     
     const tokenSeguridad= user.Auth.tokenSeguridad;
-
+    console.log(tokenSeguridad);
     const url = 'https://128.128.10.221/SATXWS/SatCS/SatCS.svc/EjecutarBusquedaUsuarioControlado';
         
     const  headers = { 
@@ -48,6 +48,7 @@ export const getUser = async( options  , onError ) => {
                 throw Error(SATXWS_EjecutarBusquedaUsuarioControladoResult.DescripcionRespuesta);
             }
 
+            console.log(SATXWS_EjecutarBusquedaUsuarioControladoResult);
             let UsuarioControlado = SATXWS_EjecutarBusquedaUsuarioControladoResult.UsuarioControlado;
     
             if( !UsuarioControlado ){

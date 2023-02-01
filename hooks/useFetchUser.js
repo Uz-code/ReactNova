@@ -17,6 +17,7 @@ export const useFetchUser = ( options , forceUpdate , onError , buscarUsuario) =
                 setIsLoading(false);
                 return;
             }
+            console.log(options);
             user = await getUser( options , onError );
             
             if(user && !isEmpty(user)){setUser(user); setIsLoading( false );}

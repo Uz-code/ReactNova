@@ -24,8 +24,9 @@ export const TableItem = ({ address, fullName, email, id, university, setUser, o
         
         { hasActions && 
         <td className="last-child">
-            <button className="btn btn-sm btn-neutral" onClick={() => { setUser(id); }}> Editar </button>
-            <button className="btn btn-sm btn-neutral" onClick={() => { onDesactivar('Estas seguro de querer desactivar el usuario seleccionado?'); }}>
+            <button className="btn btn-sm btn-neutral text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none  focus:ring-offset-gray-100" onClick={() => { setUser(id); }}> Editar </button>
+
+            <button className="btn btn-sm  border btn-neutral  ..." onClick={() => { onDesactivar('Estas seguro de querer desactivar el usuario seleccionado?'); }}>
               <BsArchive/>
             </button>
             <button type="button" className="btn btn-sm btn-square btn-neutral text-danger-hover" onClick={() => { onDelete('Estas seguro de querer eliminar el usuario seleccionado?'); }}>
